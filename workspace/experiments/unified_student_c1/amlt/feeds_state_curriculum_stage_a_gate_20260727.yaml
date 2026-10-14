@@ -1,0 +1,148 @@
+# yaml-language-server: $schema=file:///home/v-yuejiali/studentmodeling/workspace/experiments/unified_student_c1/.vscode/amlt-config.schema.json
+description: Fixed C4 causal gate for the Stage A state-curriculum adapter
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-state-gate-venv
+    - /tmp/studentmodeling-state-gate-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-state-gate-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore:
+    - .git/
+    - .vscode/
+    - amlt/
+    - data/
+    - results/
+    - __pycache__/
+    - '*.pyc'
+
+storage:
+  student_data:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: false
+
+jobs:
+  - name: qwen3-32b-state-curriculum-stage-a-c4-gate
+    sku: 80G1-A100
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      export PATH="/tmp/studentmodeling-state-gate-venv/bin:$$PATH"
+      export PYTHONPATH="$$AMLT_CODE_DIR/scripts$${PYTHONPATH:+:$$PYTHONPATH}"
+      export HF_HOME=/tmp/hf_cache
+      export HF_HUB_CACHE=/tmp/hf_cache/hub
+      export HF_HUB_DISABLE_XET=1
+      export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+      export TRANSFORMERS_VERBOSITY=error
+      export LOCAL_MODEL=/tmp/Qwen3-32B
+      export ADAPTER=/mnt/amulet/studentmodeling/checkpoints/state_curriculum_stage_a_cf1_stricttoken_seed42_20260727/final_adapter
+      export C4_DATA=/mnt/amulet/studentmodeling/c4_fullopen_20260724/malrule_c1_clean
+      export PAIR_MANIFEST="$$AMLT_CODE_DIR/manifests/c4_stage_a_gate_pairs_seed42_n150_v1.json"
+      mkdir -p "$$HF_HUB_CACHE" "$$AMLT_OUTPUT_DIR/gate"
+      available_kb=$$(df --output=avail /tmp | tail -1)
+      test "$$available_kb" -ge 125829120
+      rm -rf "$$LOCAL_MODEL"
+      mkdir -p "$$LOCAL_MODEL"
+      python scripts/copy_model_parallel.py \
+        --source /mnt/amulet/studentmodeling/models/Qwen3-32B \
+        --destination "$$LOCAL_MODEL" \
+        --workers 16
+      test -f "$$LOCAL_MODEL/model.safetensors.index.json"
+      test -f "$$ADAPTER/adapter_model.safetensors"
+      test -f "$$ADAPTER/tokenizer.json"
+      test -f "$$C4_DATA/train.jsonl"
+      test -f "$$C4_DATA/test_same_template.jsonl"
+      test -f "$$C4_DATA/test_cross_template.jsonl"
+      test -f "$$PAIR_MANIFEST"
+      sha256sum \
+        "$$ADAPTER/adapter_model.safetensors" \
+        "$$C4_DATA/train.jsonl" \
+        "$$C4_DATA/test_same_template.jsonl" \
+        "$$C4_DATA/test_cross_template.jsonl" \
+        "$$PAIR_MANIFEST" \
+        | tee "$$AMLT_OUTPUT_DIR/gate/input_sha256.txt"
+      nvidia-smi --query-gpu=index,name,memory.total --format=csv,noheader
+
+      python -u scripts/evaluate_c1.py \
+        --model "$$LOCAL_MODEL" \
+        --adapter "$$ADAPTER" \
+        --train-jsonl "$$C4_DATA/train.jsonl" \
+        --eval-jsonl "$$C4_DATA/test_same_template.jsonl" \
+        --output-json "$$AMLT_OUTPUT_DIR/gate/response_same_masked.json" \
+        --tasks malrule_next_response \
+        --max-samples-per-task 300 \
+        --max-length 1536 \
+        --batch-size 2 \
+        --bottleneck-mask \
+        --bottleneck-style late_fusion \
+        --load-4bit \
+        --progress-every 50
+
+      python -u scripts/evaluate_c1.py \
+        --model "$$LOCAL_MODEL" \
+        --adapter "$$ADAPTER" \
+        --train-jsonl "$$C4_DATA/train.jsonl" \
+        --eval-jsonl "$$C4_DATA/test_cross_template.jsonl" \
+        --output-json "$$AMLT_OUTPUT_DIR/gate/response_cross_masked.json" \
+        --tasks malrule_next_response \
+        --max-samples-per-task 300 \
+        --max-length 1536 \
+        --batch-size 2 \
+        --bottleneck-mask \
+        --bottleneck-style late_fusion \
+        --load-4bit \
+        --progress-every 50
+
+      python -u scripts/probe_student_state_smoke.py \
+        --model "$$LOCAL_MODEL" \
+        --adapter "$$ADAPTER" \
+        --train-jsonl "$$C4_DATA/train.jsonl" \
+        --same-jsonl "$$C4_DATA/test_same_template.jsonl" \
+        --cross-jsonl "$$C4_DATA/test_cross_template.jsonl" \
+        --output-json "$$AMLT_OUTPUT_DIR/gate/state_probe_masked.json" \
+        --task malrule_next_response \
+        --layers 0,8,16,24,32,40,48,56,63 \
+        --train-per-label 50 \
+        --eval-per-label 15 \
+        --max-length 1536 \
+        --batch-size 2 \
+        --epochs 250 \
+        --lr 0.1 \
+        --weight-decay 1e-4 \
+        --seed 42 \
+        --bottleneck-mask \
+        --bottleneck-style late_fusion
+
+      python -u scripts/state_swap_misconception_smoke.py \
+        --model "$$LOCAL_MODEL" \
+        --adapter "$$ADAPTER" \
+        --jsonl "$$C4_DATA/test_same_template.jsonl" \
+        --output-json "$$AMLT_OUTPUT_DIR/gate/state_swap_masked.json" \
+        --task malrule_next_response \
+        --swap-target response \
+        --layers all \
+        --num-pairs 150 \
+        --pair-manifest "$$PAIR_MANIFEST" \
+        --max-length 1536 \
+        --seed 42 \
+        --bottleneck-mask \
+        --bottleneck-style late_fusion
+
+      python -u scripts/summarize_stage_a_gate.py \
+        --gate-dir "$$AMLT_OUTPUT_DIR/gate" \
+        --output-json "$$AMLT_OUTPUT_DIR/gate/stage_a_gate_summary.json"
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 86400
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml

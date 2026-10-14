@@ -1,0 +1,170 @@
+description: No-training frozen C4 layer-transport screen for the causal CF1 vision-pad
+  adapter; 50 fixed pairs, grouped residual-stream patches
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+  - python -m venv --system-site-packages /tmp/studentmodeling-state-alias-venv
+  - /tmp/studentmodeling-state-alias-venv/bin/python -m pip install --upgrade pip
+  - /tmp/studentmodeling-state-alias-venv/bin/python -m pip install -r requirements-feeds.txt
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore:
+  - .git/
+  - .vscode/
+  - amlt/
+  - data/
+  - results/
+  - __pycache__/
+  - '*.pyc'
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+jobs:
+- name: cf1-visionpad-layer-transport-singles-n50-seed42
+  sku: 80G1-A100
+  sla_tier: Standard
+  command: "set -euo pipefail\nexport PATH=\"/tmp/studentmodeling-state-alias-venv/bin:$$PATH\"\
+    \nexport PYTHONPATH=\"$$AMLT_CODE_DIR/scripts$${PYTHONPATH:+:$$PYTHONPATH}\"\n\
+    export HF_HOME=/tmp/hf_cache\nexport HF_HUB_CACHE=/tmp/hf_cache/hub\nexport HF_HUB_DISABLE_XET=1\n\
+    export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True\nexport TRANSFORMERS_VERBOSITY=error\n\
+    export LOCAL_MODEL=/tmp/Qwen3-32B\nexport TRAIN_DATA=/mnt/amulet/studentmodeling/state_curriculum_stage_a_v1/train.jsonl\n\
+    export VALID_DATA=/mnt/amulet/studentmodeling/state_curriculum_stage_a_v1/valid.jsonl\n\
+    export C4_DATA=/mnt/amulet/studentmodeling/c4_fullopen_20260724/malrule_c1_clean\n\
+    export PAIR_MANIFEST=\"$$AMLT_CODE_DIR/manifests/c4_stage_a_gate_pairs_seed42_n150_v1.json\"\
+    \nexport RUN_DIR=/mnt/amulet/studentmodeling/checkpoints/state_curriculum_stage_a_cf1_alias_visionpad_seed42_20260727\n\
+    mkdir -p \"$$HF_HUB_CACHE\" \"$$AMLT_OUTPUT_DIR/model\" \"$$AMLT_OUTPUT_DIR/gate\"\
+    \ \"$$RUN_DIR\"\navailable_kb=$$(df --output=avail /tmp | tail -1)\ntest \"$$available_kb\"\
+    \ -ge 125829120\ntest -f \"$$TRAIN_DATA\"\ntest -f \"$$VALID_DATA\"\ntest -f \"\
+    $$C4_DATA/train.jsonl\"\ntest -f \"$$C4_DATA/test_same_template.jsonl\"\ntest\
+    \ -f \"$$C4_DATA/test_cross_template.jsonl\"\ntest -f \"$$PAIR_MANIFEST\"\nsha256sum\
+    \ \\\n  \"$$TRAIN_DATA\" \\\n  \"$$VALID_DATA\" \\\n  \"$$C4_DATA/train.jsonl\"\
+    \ \\\n  \"$$C4_DATA/test_same_template.jsonl\" \\\n  \"$$C4_DATA/test_cross_template.jsonl\"\
+    \ \\\n  \"$$PAIR_MANIFEST\" \\\n  | tee \"$$AMLT_OUTPUT_DIR/input_sha256.txt\"\
+    \ntest \"$$(sha256sum \"$$TRAIN_DATA\" | cut -d' ' -f1)\" = 929487329576607572aa49b8e2daba53605b3c733749e7e631baa376a9df65f9\n\
+    test \"$$(sha256sum \"$$VALID_DATA\" | cut -d' ' -f1)\" = 4bf7117db760bcaba9790b8f7901ae89428911359f2b483f08aef39dc1fe6a36\n\
+    rm -rf \"$$LOCAL_MODEL\"\nmkdir -p \"$$LOCAL_MODEL\"\npython scripts/copy_model_parallel.py\
+    \ \\\n  --source /mnt/amulet/studentmodeling/models/Qwen3-32B \\\n  --destination\
+    \ \"$$LOCAL_MODEL\" \\\n  --workers 16\ntest -f \"$$LOCAL_MODEL/model.safetensors.index.json\"\
+    \nnvidia-smi --query-gpu=index,name,memory.total --format=csv,noheader\n\n   \
+    \   test -f \"$$RUN_DIR/final_adapter/adapter_model.safetensors\"\n      python\
+    \ -m unittest discover -s tests -p 'test_state_swap_layer_groups.py' -v\npython\
+    \ -u scripts/state_swap_misconception_smoke.py \\\n  --model \"$$LOCAL_MODEL\"\
+    \ \\\n  --adapter \"$$RUN_DIR/final_adapter\" \\\n  --jsonl \"$$C4_DATA/test_same_template.jsonl\"\
+    \ \\\n  --output-json \"$$AMLT_OUTPUT_DIR/gate/layer_transport_c4_n50.json\" \\\
+    \n  --task malrule_next_response \\\n  --swap-target response \\\n  --layers all\
+    \ \\\n        --layer-groups '$$LAYER_GROUPS' \\\n  --num-pairs 50 \\\n  --pair-manifest\
+    \ \"$$PAIR_MANIFEST\" \\\n        --allow-manifest-prefix \\\n  --max-length 1536\
+    \ \\\n  --seed 42 \\\n  --state-token-alias '<|vision_pad|>' \\\n  --bottleneck-mask\
+    \ \\\n  --bottleneck-style late_fusion\n      printf '%s\\n' 'diagnostic_only=true'\
+    \ 'frozen_prefix_n=50' \"layer_groups=$$LAYER_GROUPS\" > \"$$AMLT_OUTPUT_DIR/gate/scope.txt\"\
+    \n"
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 172800
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      LAYER_GROUPS: L56=56;L63=63
+      TRANSPORT_GROUP: singles
+  mpi: false
+  process_count_per_node: 1
+- name: cf1-visionpad-layer-transport-blocks-n50-seed42
+  sku: 80G1-A100
+  sla_tier: Standard
+  command: "set -euo pipefail\nexport PATH=\"/tmp/studentmodeling-state-alias-venv/bin:$$PATH\"\
+    \nexport PYTHONPATH=\"$$AMLT_CODE_DIR/scripts$${PYTHONPATH:+:$$PYTHONPATH}\"\n\
+    export HF_HOME=/tmp/hf_cache\nexport HF_HUB_CACHE=/tmp/hf_cache/hub\nexport HF_HUB_DISABLE_XET=1\n\
+    export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True\nexport TRANSFORMERS_VERBOSITY=error\n\
+    export LOCAL_MODEL=/tmp/Qwen3-32B\nexport TRAIN_DATA=/mnt/amulet/studentmodeling/state_curriculum_stage_a_v1/train.jsonl\n\
+    export VALID_DATA=/mnt/amulet/studentmodeling/state_curriculum_stage_a_v1/valid.jsonl\n\
+    export C4_DATA=/mnt/amulet/studentmodeling/c4_fullopen_20260724/malrule_c1_clean\n\
+    export PAIR_MANIFEST=\"$$AMLT_CODE_DIR/manifests/c4_stage_a_gate_pairs_seed42_n150_v1.json\"\
+    \nexport RUN_DIR=/mnt/amulet/studentmodeling/checkpoints/state_curriculum_stage_a_cf1_alias_visionpad_seed42_20260727\n\
+    mkdir -p \"$$HF_HUB_CACHE\" \"$$AMLT_OUTPUT_DIR/model\" \"$$AMLT_OUTPUT_DIR/gate\"\
+    \ \"$$RUN_DIR\"\navailable_kb=$$(df --output=avail /tmp | tail -1)\ntest \"$$available_kb\"\
+    \ -ge 125829120\ntest -f \"$$TRAIN_DATA\"\ntest -f \"$$VALID_DATA\"\ntest -f \"\
+    $$C4_DATA/train.jsonl\"\ntest -f \"$$C4_DATA/test_same_template.jsonl\"\ntest\
+    \ -f \"$$C4_DATA/test_cross_template.jsonl\"\ntest -f \"$$PAIR_MANIFEST\"\nsha256sum\
+    \ \\\n  \"$$TRAIN_DATA\" \\\n  \"$$VALID_DATA\" \\\n  \"$$C4_DATA/train.jsonl\"\
+    \ \\\n  \"$$C4_DATA/test_same_template.jsonl\" \\\n  \"$$C4_DATA/test_cross_template.jsonl\"\
+    \ \\\n  \"$$PAIR_MANIFEST\" \\\n  | tee \"$$AMLT_OUTPUT_DIR/input_sha256.txt\"\
+    \ntest \"$$(sha256sum \"$$TRAIN_DATA\" | cut -d' ' -f1)\" = 929487329576607572aa49b8e2daba53605b3c733749e7e631baa376a9df65f9\n\
+    test \"$$(sha256sum \"$$VALID_DATA\" | cut -d' ' -f1)\" = 4bf7117db760bcaba9790b8f7901ae89428911359f2b483f08aef39dc1fe6a36\n\
+    rm -rf \"$$LOCAL_MODEL\"\nmkdir -p \"$$LOCAL_MODEL\"\npython scripts/copy_model_parallel.py\
+    \ \\\n  --source /mnt/amulet/studentmodeling/models/Qwen3-32B \\\n  --destination\
+    \ \"$$LOCAL_MODEL\" \\\n  --workers 16\ntest -f \"$$LOCAL_MODEL/model.safetensors.index.json\"\
+    \nnvidia-smi --query-gpu=index,name,memory.total --format=csv,noheader\n\n   \
+    \   test -f \"$$RUN_DIR/final_adapter/adapter_model.safetensors\"\n      python\
+    \ -m unittest discover -s tests -p 'test_state_swap_layer_groups.py' -v\npython\
+    \ -u scripts/state_swap_misconception_smoke.py \\\n  --model \"$$LOCAL_MODEL\"\
+    \ \\\n  --adapter \"$$RUN_DIR/final_adapter\" \\\n  --jsonl \"$$C4_DATA/test_same_template.jsonl\"\
+    \ \\\n  --output-json \"$$AMLT_OUTPUT_DIR/gate/layer_transport_c4_n50.json\" \\\
+    \n  --task malrule_next_response \\\n  --swap-target response \\\n  --layers all\
+    \ \\\n        --layer-groups '$$LAYER_GROUPS' \\\n  --num-pairs 50 \\\n  --pair-manifest\
+    \ \"$$PAIR_MANIFEST\" \\\n        --allow-manifest-prefix \\\n  --max-length 1536\
+    \ \\\n  --seed 42 \\\n  --state-token-alias '<|vision_pad|>' \\\n  --bottleneck-mask\
+    \ \\\n  --bottleneck-style late_fusion\n      printf '%s\\n' 'diagnostic_only=true'\
+    \ 'frozen_prefix_n=50' \"layer_groups=$$LAYER_GROUPS\" > \"$$AMLT_OUTPUT_DIR/gate/scope.txt\"\
+    \n"
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 172800
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      LAYER_GROUPS: late8=56-63;prelate8=48-55
+      TRANSPORT_GROUP: blocks
+  mpi: false
+  process_count_per_node: 1
+- name: cf1-visionpad-layer-transport-span-n50-seed42
+  sku: 80G1-A100
+  sla_tier: Standard
+  command: "set -euo pipefail\nexport PATH=\"/tmp/studentmodeling-state-alias-venv/bin:$$PATH\"\
+    \nexport PYTHONPATH=\"$$AMLT_CODE_DIR/scripts$${PYTHONPATH:+:$$PYTHONPATH}\"\n\
+    export HF_HOME=/tmp/hf_cache\nexport HF_HUB_CACHE=/tmp/hf_cache/hub\nexport HF_HUB_DISABLE_XET=1\n\
+    export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True\nexport TRANSFORMERS_VERBOSITY=error\n\
+    export LOCAL_MODEL=/tmp/Qwen3-32B\nexport TRAIN_DATA=/mnt/amulet/studentmodeling/state_curriculum_stage_a_v1/train.jsonl\n\
+    export VALID_DATA=/mnt/amulet/studentmodeling/state_curriculum_stage_a_v1/valid.jsonl\n\
+    export C4_DATA=/mnt/amulet/studentmodeling/c4_fullopen_20260724/malrule_c1_clean\n\
+    export PAIR_MANIFEST=\"$$AMLT_CODE_DIR/manifests/c4_stage_a_gate_pairs_seed42_n150_v1.json\"\
+    \nexport RUN_DIR=/mnt/amulet/studentmodeling/checkpoints/state_curriculum_stage_a_cf1_alias_visionpad_seed42_20260727\n\
+    mkdir -p \"$$HF_HUB_CACHE\" \"$$AMLT_OUTPUT_DIR/model\" \"$$AMLT_OUTPUT_DIR/gate\"\
+    \ \"$$RUN_DIR\"\navailable_kb=$$(df --output=avail /tmp | tail -1)\ntest \"$$available_kb\"\
+    \ -ge 125829120\ntest -f \"$$TRAIN_DATA\"\ntest -f \"$$VALID_DATA\"\ntest -f \"\
+    $$C4_DATA/train.jsonl\"\ntest -f \"$$C4_DATA/test_same_template.jsonl\"\ntest\
+    \ -f \"$$C4_DATA/test_cross_template.jsonl\"\ntest -f \"$$PAIR_MANIFEST\"\nsha256sum\
+    \ \\\n  \"$$TRAIN_DATA\" \\\n  \"$$VALID_DATA\" \\\n  \"$$C4_DATA/train.jsonl\"\
+    \ \\\n  \"$$C4_DATA/test_same_template.jsonl\" \\\n  \"$$C4_DATA/test_cross_template.jsonl\"\
+    \ \\\n  \"$$PAIR_MANIFEST\" \\\n  | tee \"$$AMLT_OUTPUT_DIR/input_sha256.txt\"\
+    \ntest \"$$(sha256sum \"$$TRAIN_DATA\" | cut -d' ' -f1)\" = 929487329576607572aa49b8e2daba53605b3c733749e7e631baa376a9df65f9\n\
+    test \"$$(sha256sum \"$$VALID_DATA\" | cut -d' ' -f1)\" = 4bf7117db760bcaba9790b8f7901ae89428911359f2b483f08aef39dc1fe6a36\n\
+    rm -rf \"$$LOCAL_MODEL\"\nmkdir -p \"$$LOCAL_MODEL\"\npython scripts/copy_model_parallel.py\
+    \ \\\n  --source /mnt/amulet/studentmodeling/models/Qwen3-32B \\\n  --destination\
+    \ \"$$LOCAL_MODEL\" \\\n  --workers 16\ntest -f \"$$LOCAL_MODEL/model.safetensors.index.json\"\
+    \nnvidia-smi --query-gpu=index,name,memory.total --format=csv,noheader\n\n   \
+    \   test -f \"$$RUN_DIR/final_adapter/adapter_model.safetensors\"\n      python\
+    \ -m unittest discover -s tests -p 'test_state_swap_layer_groups.py' -v\npython\
+    \ -u scripts/state_swap_misconception_smoke.py \\\n  --model \"$$LOCAL_MODEL\"\
+    \ \\\n  --adapter \"$$RUN_DIR/final_adapter\" \\\n  --jsonl \"$$C4_DATA/test_same_template.jsonl\"\
+    \ \\\n  --output-json \"$$AMLT_OUTPUT_DIR/gate/layer_transport_c4_n50.json\" \\\
+    \n  --task malrule_next_response \\\n  --swap-target response \\\n  --layers all\
+    \ \\\n        --layer-groups '$$LAYER_GROUPS' \\\n  --num-pairs 50 \\\n  --pair-manifest\
+    \ \"$$PAIR_MANIFEST\" \\\n        --allow-manifest-prefix \\\n  --max-length 1536\
+    \ \\\n  --seed 42 \\\n  --state-token-alias '<|vision_pad|>' \\\n  --bottleneck-mask\
+    \ \\\n  --bottleneck-style late_fusion\n      printf '%s\\n' 'diagnostic_only=true'\
+    \ 'frozen_prefix_n=50' \"layer_groups=$$LAYER_GROUPS\" > \"$$AMLT_OUTPUT_DIR/gate/scope.txt\"\
+    \n"
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 172800
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      LAYER_GROUPS: late16=48-63;all=0-63
+      TRANSPORT_GROUP: span
+  mpi: false
+  process_count_per_node: 1

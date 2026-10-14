@@ -1,0 +1,2940 @@
+{
+  "protocol": "c4_freegen_novel_v1",
+  "seed": 20260905,
+  "conditions": [
+    "none",
+    "noop",
+    "swap",
+    "random_real",
+    "samemal"
+  ],
+  "rule_library_revision": "8ddedfb637405ae1dc7483b068e3df39b9b7b575",
+  "rule_library_sha256": {
+    "malrules/decimals/ignore_decimal_point/__init__.py": "9b3192578ddf4053d4e3d350fec686406a971a67f32d1d2005b13f230d918dd8",
+    "malrules/decimals/ignore_decimal_point/correct_algorithm.py": "7ab5d067ed9da3133f90e1001e326eaf018b8c373b05cf52336fba9f84100db6",
+    "malrules/decimals/ignore_decimal_point/malrule_algorithm.py": "62fa265d1a6f307656dfe702037bc19d2f1b8e27168e605ec5ca864433410059",
+    "malrules/decimals/ignore_decimal_point/problem_generator.py": "019a78b3f4ca1e06646e0b9dbb2b415c8c7440bfbb80fb2ff3a961c14df012a3",
+    "malrules/decimals/ignore_decimal_point/test_malrule.py": "2f0d13809efd80ed12f4544a02e21324e65d6b243bd6072f9f26c1c88250b428",
+    "malrules/decimals/longer_is_larger/__init__.py": "446dad9f142c87504b38afd3642e110398dbaa229ae111a8f2ed7214dcc80d94",
+    "malrules/decimals/longer_is_larger/correct_algorithm.py": "ce89b4779c75c1475d14904e4d0566bb81cdff1432f1bf1595952a2516204b64",
+    "malrules/decimals/longer_is_larger/malrule_algorithm.py": "bbc3036011382f748bc11ccae367dceca560754a9a93f0ea961d751499dc4641",
+    "malrules/decimals/longer_is_larger/problem_generator.py": "b3e8a203fc90ae75e75bdb40fc8b4969d0ca9dc6690fff55cd51f451724b12ba",
+    "malrules/decimals/longer_is_larger/test_malrule.py": "2978ead7e6f52f036e71fd73164d2b71617441bbd59b6a496f570ad6c4d7d3f9",
+    "malrules/decimals/right_align_decimals/__init__.py": "9ecf8761e8d051175b0e4a81afc821514ac3dcc4adf994e49cafd7acb1c3cec4",
+    "malrules/decimals/right_align_decimals/correct_algorithm.py": "145864ce556c74d54e37ebdc0169a3f4298f1eb292a68a1e24736d664144c60a",
+    "malrules/decimals/right_align_decimals/malrule_algorithm.py": "a06d29cd88bf4dc85e0272f6eae36993d858cd10860042a7ae6a5feb9337e89c",
+    "malrules/decimals/right_align_decimals/problem_generator.py": "17c865299082ff426d2af0418de835cc36eb2d094cf29115d4b4a31fd3ac568d",
+    "malrules/decimals/right_align_decimals/test_malrule.py": "68ee4bf5f8a5f9127e98ac55243f3aa67555dde3352b9dbd7604e31cd48f552d",
+    "malrules/decimals/shorter_is_larger/__init__.py": "d91dc3314887bb1f931b19079979ee7dfbf835d3ed529c26b0caa8d8cf116473",
+    "malrules/decimals/shorter_is_larger/correct_algorithm.py": "ee7ac3e2b078abfedbd97a1a00ea91daac74892a8890f76b0d67e4ce5cad1b10",
+    "malrules/decimals/shorter_is_larger/malrule_algorithm.py": "5eddbc47bfd34179e49b96e5db25f7830fb311714b2d29451ba0e237e7a3689d",
+    "malrules/decimals/shorter_is_larger/problem_generator.py": "7f7b541bcf23201f303a60c0f2d5f2c3febf3191efc3a5c641eb014190f09527",
+    "malrules/decimals/shorter_is_larger/test_malrule.py": "3750ca9277b8f278dd69523f7fa9c5047b0ff2c8cb1ecea52b8263146de5911a",
+    "malrules/decimals/whole_number_thinking/__init__.py": "9708d24a72f5749e8721c54fe34ebfcc05eca255112dbf3fa835e5f4d728c664",
+    "malrules/decimals/whole_number_thinking/correct_algorithm.py": "cda581d85e64ce54adc4d65eaf9e62c4d90d0f63bebe20609a2dbb6914db6ca8",
+    "malrules/decimals/whole_number_thinking/malrule_algorithm.py": "3fdab5e51cd970b9d96d4c3904a471e1a966d8effb06812483bde38b5e6047a1",
+    "malrules/decimals/whole_number_thinking/problem_generator.py": "08c4c9a2a989b5d0ea3df40257bf38936340effb2ba3a1caedc7d78ff170567f",
+    "malrules/decimals/whole_number_thinking/test_malrule.py": "313ce24538712300da67765e71198e601a6ff541c9e3b2e96ac3629f0f80a1fe",
+    "malrules/fractions/add_numerators_denominators/__init__.py": "baa335c14ba9b75a4478caa385671c916a0936addcd6428c2f42a70a1ddc341a",
+    "malrules/fractions/add_numerators_denominators/correct_algorithm.py": "9e8c9c8053cf90fd96459ee4936ca2ab305d7f66535a0b46b190fbf66b738c7d",
+    "malrules/fractions/add_numerators_denominators/malrule_algorithm.py": "ae67f83f20e03fac8e044e347bb16b40c87494672ae29e8faec87efa461627ee",
+    "malrules/fractions/add_numerators_denominators/problem_generator.py": "1228ed08e1175c83b2f7f2228794e70ca93dbcb3cdf741734e34d0d0cdff69e4",
+    "malrules/fractions/add_numerators_denominators/test_malrule.py": "b19872503d48e8e7830ecb0d6c0ef874a1acf0730563edc3df7696895fca9728",
+    "malrules/fractions/common_denominator_numerator/__init__.py": "6563d6d3d46102081641f941fae8c884f0c0dcdc276fec8f5f0276ce88a6b17e",
+    "malrules/fractions/common_denominator_numerator/correct_algorithm.py": "96b1320924bcbb721f48e78f6ff95bcd068f1bedbf41112a5397eb3db7f401b0",
+    "malrules/fractions/common_denominator_numerator/malrule_algorithm.py": "218f2d40c927377e911b5cb544bd4dda2f1d6a7b217b258d95e4e14ed9dac9f3",
+    "malrules/fractions/common_denominator_numerator/problem_generator.py": "0a7ffa9d025f3dd4f83f9eab26493e5ae7c0fd4a77d964a64aaa6260680fa25e",
+    "malrules/fractions/common_denominator_numerator/test_malrule.py": "f5aeda08d7c9bdde9ad0fd546264b9090ff2b2a272b4de2591e24e225d66cb3a",
+    "malrules/fractions/denominator_comparison_error/__init__.py": "cd6b589e06e257af95152ea0486abcba5d975a38175711615360548a6446ca4e",
+    "malrules/fractions/denominator_comparison_error/correct_algorithm.py": "4610d23e204b8af0072ccb39eea6ca201e1736ad52b148bfe478ec3a1666862b",
+    "malrules/fractions/denominator_comparison_error/malrule_algorithm.py": "834dccac93e48805473ed17906622c3bce22dd4f6c0294a2ea34d042e610e773",
+    "malrules/fractions/denominator_comparison_error/problem_generator.py": "794facaaac12d404f5fa017e7d6010d98ccd5fe0ce643aa0bdd4b8671d14b061",
+    "malrules/fractions/denominator_comparison_error/test_malrule.py": "9af72df8ff8f55d16655948153cc495f8b41dd3e2d281bfda3f8650dd3295e5a",
+    "malrules/fractions/ignore_denominators/__init__.py": "e73a0202b29fecfb1cd64cd6d3e66032efa18e67c50000d5a230ee07045a15e9",
+    "malrules/fractions/ignore_denominators/correct_algorithm.py": "66d5c38db4b8fac5297bd41aed841f3863d1aa93e1a76c2ac580317ee330a473",
+    "malrules/fractions/ignore_denominators/malrule_algorithm.py": "9b7fc943ce6522dabf7fd49f3e311f33b5732278383568d01b2cd46cf799a3c9",
+    "malrules/fractions/ignore_denominators/problem_generator.py": "8dd23debac1f00b96d29448572c43be7161c891e6cf5fa914bf4ed2909db8a8f",
+    "malrules/fractions/ignore_denominators/test_malrule.py": "4492261a3aaf65c04592cab935158d4d36fca26f26c03aac316511d1aa221fa2",
+    "malrules/fractions/keep_common_denominator_for_multiplication/__init__.py": "dd31297522849d866774f420e4382772f07d10de9523c000b03cf55cb05d2efe",
+    "malrules/fractions/keep_common_denominator_for_multiplication/correct_algorithm.py": "a266f049e6b97d8b0a9a06e59994e37690878959fdf78587b05390968b82c6c9",
+    "malrules/fractions/keep_common_denominator_for_multiplication/malrule_algorithm.py": "bc3b11f3ef43d48980c5ff379402b55c118aa88bf8396547e23cf1f298d619b4",
+    "malrules/fractions/keep_common_denominator_for_multiplication/problem_generator.py": "b968436f8c02fabefcfc87d99cf1647778e19a9fc3e658f510006252064f3d69",
+    "malrules/fractions/keep_common_denominator_for_multiplication/test_malrule.py": "2cb0febe8b5a0c4fa13e07f3e447003302a2d7bdfd66b143dd4c5f91cc5c5290",
+    "malrules/fractions/multiply_across_for_division/__init__.py": "96123fab7cb1ceaed09864ae9af98cc6d542f20bb90aa1fe26a4d4f6b97ac95c",
+    "malrules/fractions/multiply_across_for_division/correct_algorithm.py": "184b583318ece8b2d2c62288941eabbedd1fc9f44a7f0b9cb7c6155f71cfd84e",
+    "malrules/fractions/multiply_across_for_division/malrule_algorithm.py": "b37df0d28d7e915dcb9d1d1de05cefcbe6610918a5a20d508bf5e995fd93d86c",
+    "malrules/fractions/multiply_across_for_division/problem_generator.py": "a0a908cac8506659393d4878f6dc41485344e7de4ff07f6d97e07a05c3fb017f",
+    "malrules/fractions/multiply_across_for_division/test_malrule.py": "01a93dfe3275307105d41e08f4a92cc90b3e63dcfbcb401bb9f5f74c5023f7a2",
+    "malrules/fractions/natural_number_bias_numerator_only/__init__.py": "7311d901e4a3da1e31adc4cb30888121def1e5ec5a36fc4f2238f835496bf195",
+    "malrules/fractions/natural_number_bias_numerator_only/correct_algorithm.py": "861b79367d2238d7849e2912e6031c707fc4f630ad2a4edd6d9c96ed8a5ff864",
+    "malrules/fractions/natural_number_bias_numerator_only/malrule_algorithm.py": "3880f8924682228718203cea8919283893fdffc4edbbac99f0f6ca75eec479b7",
+    "malrules/fractions/natural_number_bias_numerator_only/problem_generator.py": "db19fa1a8433b0d60567b51649bd6fb682752ca0b2000f2bfeb983be86675afb",
+    "malrules/fractions/natural_number_bias_numerator_only/test_malrule.py": "5cfeaa349b1ec9ff2828372e41454ab1a0b7375185b09cb3319c210d5a1c3e12",
+    "malrules/fractions/subtract_across/__init__.py": "1b2758a242bfa69757ec89827132acce9b76cc9f68d4cc4b18911cc12c8de5c5",
+    "malrules/fractions/subtract_across/correct_algorithm.py": "6a8fc2705bcb0cdb28b1b3d8d862e4f9b88d87b6518064476b47c5b9edf120e5",
+    "malrules/fractions/subtract_across/malrule_algorithm.py": "24bd95b1ce943190c728e2cfde24cec3ff2f857d5cc4f883e16a7f329918b589",
+    "malrules/fractions/subtract_across/problem_generator.py": "71136fd351d6861d2932bcc68ba6e644b36d86035d1c4c4ce74944a224fa44fe",
+    "malrules/fractions/subtract_across/test_malrule.py": "23f76f51ac6f9f49405c8d524ba29672a5f48f95b5c6b5d827a6eb05aa5ce1c4",
+    "malrules/subtraction/always_borrow_left/__init__.py": "e289ea04e131a81da08a902b03d28c734b08701866701037c06a5bc8d58a5b15",
+    "malrules/subtraction/always_borrow_left/correct_algorithm.py": "f1646e79e9c33f1d3bb865610346ca2084f95c2651f0308d272c14f07d356ccc",
+    "malrules/subtraction/always_borrow_left/malrule_algorithm.py": "029423bccdc0e2e0170ddd6a15b9ff58521ef4b4b5ad7bbd884ea475b7cea1b8",
+    "malrules/subtraction/always_borrow_left/problem_generator.py": "2c796000bc68b426686bbd4413b86007306de03c785971e3c0b155aa1f5f92df",
+    "malrules/subtraction/always_borrow_left/test_malrule.py": "0702577314b710d47cc8da5537ce5ee72d4b1b17bdc2ae6445b4ce068b7a79a2",
+    "malrules/subtraction/borrow_from_bottom/__init__.py": "491589c83516e4b434d90c9aa51309a4bfac021b0fac29eb4eb27720eb89a3e1",
+    "malrules/subtraction/borrow_from_bottom/correct_algorithm.py": "15a7ffc48b086462cfb58a10ba5eb71c6a45152ee8964d59f72972b90efa05a1",
+    "malrules/subtraction/borrow_from_bottom/malrule_algorithm.py": "60a1f2e323cf88dd2003134f6b4d8199fd3093b984fa0679e572112b81928298",
+    "malrules/subtraction/borrow_from_bottom/problem_generator.py": "ab4479138041d22ae746d97285e8a4603d700d9d73b194dc7f86c63365fc8ad1",
+    "malrules/subtraction/borrow_from_bottom/test_malrule.py": "c4e768208e12615bf71a605cdc3ab6d2439146b8b3bcdbcbec8ddcc61c3f3123",
+    "malrules/subtraction/borrow_no_decrement/__init__.py": "0b7ee4b57acc1ad42d137b760698a2ca4a8e5d076c5e4f6742a6b3f038be974a",
+    "malrules/subtraction/borrow_no_decrement/correct_algorithm.py": "754be4487aa7b673fc7b3e2a60580614d39db24c89334037b32c3b51f8c4770d",
+    "malrules/subtraction/borrow_no_decrement/malrule_algorithm.py": "4b907900f19d3fc607e04ed67d36bf9cef8d30829d23877343e7cae7b3e92d5b",
+    "malrules/subtraction/borrow_no_decrement/problem_generator.py": "2f98fa186b4b3b24170f6276ad426ea057215e3e0a8029d1794a5a178495d505",
+    "malrules/subtraction/borrow_no_decrement/test_malrule.py": "72df17d3f4fa3748cef8759bf5965c7051c65b66c9bc80e11765c46b141d731b",
+    "malrules/subtraction/decompose_by_place_value_label/__init__.py": "646863b3fa3026c621e4dd52c904f98a1b629019d8ec7e79d50efceef7f38125",
+    "malrules/subtraction/decompose_by_place_value_label/correct_algorithm.py": "4b26ca05ab76bcfedabd42fc3bc3ec5b665f8175ea4865282ca6e81d3d639a30",
+    "malrules/subtraction/decompose_by_place_value_label/malrule_algorithm.py": "eabaf3a26ee067d03689d27570a98d391fd4665c71fe865d5fe34fb0686ecf41",
+    "malrules/subtraction/decompose_by_place_value_label/problem_generator.py": "11223fd45440fd5270e8c343708a2d25d14099a83a7512cb53c59befa0f00516",
+    "malrules/subtraction/decompose_by_place_value_label/test_malrule.py": "5cd544e10f4c32f7fd7d565a470a99da550d9811c2524e01088b57914f308864",
+    "malrules/subtraction/diff_0_n_equals_n/__init__.py": "dee6af1bada1a61c9d0e882e0c20639304e98cb996059ffc29da0f1786775f9a",
+    "malrules/subtraction/diff_0_n_equals_n/correct_algorithm.py": "1aa5cc1211c504ee23ccd43eec8dd87bdcc36c8060189d9a7ba8a61aba5ea3b1",
+    "malrules/subtraction/diff_0_n_equals_n/malrule_algorithm.py": "b22427bc8c6677127df8331350db0c5f8037d2304c97e7ff233bd464d56ed017",
+    "malrules/subtraction/diff_0_n_equals_n/problem_generator.py": "ee808d46df62f02551a87a699882eca01b6792ac691c38bf49ebeb02623f48a1",
+    "malrules/subtraction/diff_0_n_equals_n/test_malrule.py": "4bd662f0c2a5cbbfb18522becbfefcc0664e7ef7f41b65aa37c2db40223ee385",
+    "malrules/subtraction/no_column_limit/__init__.py": "8f2b72aa8e69667f9ebda2465003eb85e683ba9dada16ace2c5d819dd54e994f",
+    "malrules/subtraction/no_column_limit/correct_algorithm.py": "e92d938da46135628226a02e0c1b73843a7971e841355908f94cc804c1e0987a",
+    "malrules/subtraction/no_column_limit/malrule_algorithm.py": "d985448e3d6a32defa8649306f22cd71f1ceb49a01db7b144fdd8aa7e7aedf4d",
+    "malrules/subtraction/no_column_limit/problem_generator.py": "4feb1db5066380fc168c96603df4fdd3073a8771f6c15141dfd0e73299c1a6cb",
+    "malrules/subtraction/no_column_limit/test_malrule.py": "252f8c6380be605a76883049620f7202410097552a1e87a34ba52081c107091a",
+    "malrules/subtraction/smaller_from_larger/__init__.py": "becfa47d86a6c242568b353537ef267cd6a0a0a49e95e3e69cfa95c54955faa2",
+    "malrules/subtraction/smaller_from_larger/correct_algorithm.py": "eb1f02501a8f5fae497d085b389a4ae0685b00715657c7cc322ab3bced23b8f7",
+    "malrules/subtraction/smaller_from_larger/malrule_algorithm.py": "ec1a3c95a7975ed9f89d79425b73f86a06164cd74a19b6df15c0797796662192",
+    "malrules/subtraction/smaller_from_larger/problem_generator.py": "16d8dd7197c1e3c30682c67725c706cde7ebea7ccf3155f6e3a9b46c6f2bf491",
+    "malrules/subtraction/smaller_from_larger/test_malrule.py": "26923adf0365ba421cc45fad20b8abba02ad41276028dceb567e61e6bd30e8ac",
+    "malrules/subtraction/stops_borrow_at_zero/__init__.py": "0d86c4166b482c23bb5b419d33fe3908e1db9265bc6303e11fb80aebc7c5eb38",
+    "malrules/subtraction/stops_borrow_at_zero/correct_algorithm.py": "f7831ac533fa8bf934a5944adffba5d1024adb0a51a68ff6758883e581c90b84",
+    "malrules/subtraction/stops_borrow_at_zero/malrule_algorithm.py": "849fb77eecba990c36e41d56d7d40d47af473a006461c3cc7e0333315eb8004e",
+    "malrules/subtraction/stops_borrow_at_zero/problem_generator.py": "b15f263284e8bb847f3e56907b0354797d46d76fe61f1ad07d577696efbaf3ce",
+    "malrules/subtraction/stops_borrow_at_zero/test_malrule.py": "27c378c82d9eb8bd11d5f85026ac24e8260f408274a2732a931ab94e5e6a2c44"
+  },
+  "selection": "first unique donor in frozen manifest; up to 3 donors per rule; no model-output selection",
+  "novelty": "unordered canonical operand/numeric-text combinations absent from frozen fine-tuning, validation, and both test histories/queries; not a pretraining novelty claim",
+  "max_new_tokens": 48,
+  "decoding": "greedy, no prefill, no candidates, no query correct answer",
+  "source_lineage": [
+    {
+      "path": "data/processed/state_curriculum_stage_a_v1/train.jsonl",
+      "sha256": "929487329576607572aa49b8e2daba53605b3c733749e7e631baa376a9df65f9",
+      "rows": 6000
+    },
+    {
+      "path": "data/processed/state_curriculum_stage_a_v1/valid.jsonl",
+      "sha256": "4bf7117db760bcaba9790b8f7901ae89428911359f2b483f08aef39dc1fe6a36",
+      "rows": 600
+    },
+    {
+      "path": "data/processed/malrule_c1_clean/train.jsonl",
+      "sha256": "6fa5f4160e4a096db6228eb165136d927d0a72bae5a8e5dce9df5bda71a73dae",
+      "rows": 9000
+    },
+    {
+      "path": "data/processed/malrule_c1_clean/val.jsonl",
+      "sha256": "e928dbe191cf85a00b12a78b5b1e4bb8bd8800bd31a19d5310c4e263e3355d25",
+      "rows": 900
+    },
+    {
+      "path": "data/processed/malrule_c1_clean/test_same_template.jsonl",
+      "sha256": "079f7634cc54dfd55dfc234503bb5925ab734b1ca74aa2f2a9a17cc4375a2c2f",
+      "rows": 900
+    },
+    {
+      "path": "data/processed/malrule_c1_clean/test_cross_template.jsonl",
+      "sha256": "405446c371185d23f06b4a0530c8ef4da4d1ac9addb696180f83bdf092402779",
+      "rows": 900
+    }
+  ],
+  "pair_manifest_sha256": "edcdb934a65252557f6c569eea9ef7a85e5445549deac9fb4829c3f579e1a9b8",
+  "random_donor_source_sha256": "941aa10915de6a2ba99e994b444310d3f15eaaff55f513cc83b4fda88a10640a",
+  "adapter_sha256": "c9b463ed12f11ef84d346c1399d2588b9b396ecb9e15c5f4ca85c7f1d7fe991f",
+  "groups": [
+    {
+      "group_idx": 0,
+      "pair_idx": 1,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000203:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000054:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000032:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000044:malrule_next_response"
+      },
+      "labels": {
+        "donor": "fractions.ignore_denominators",
+        "recipient": "fractions.keep_common_denominator_for_multiplication",
+        "samemal": "fractions.keep_common_denominator_for_multiplication",
+        "random_real": "fractions.multiply_across_for_division"
+      },
+      "family": "fractions",
+      "contexts": {
+        "donor": {
+          "example_id": "malrulelib:test_same_template:0000203:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: If you shade 3/11 of a circle and 1/6 of another equal circle, what fraction is shaded in total?\nStudent answer: 4\nCorrect answer: 29/66\nOutcome: incorrect\n\nTrial 2:\nProblem: A recipe calls for 2/4 cup of sugar and another 10/12 cup of sugar. What is the total cups of sugar?\nStudent answer: 12\nCorrect answer: 4/3\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 5/6 - 2/8\nStudent answer: 3\nCorrect answer: 7/12\nOutcome: incorrect\n\nTrial 4:\nProblem: Divide: 3 6/7 ÷ 3 8/10\nStudent answer: 0\nCorrect answer: 135/133\nOutcome: incorrect\n</student_history>\n"
+        },
+        "recipient": {
+          "example_id": "malrulelib:test_same_template:0000054:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Sarah walks 3 2/6 miles per hour. If she walks for 1 4/6 hours, how far does she walk (in miles)?\nStudent answer: 100/3\nCorrect answer: 50/9\nOutcome: incorrect\n\nTrial 2:\nProblem: Multiply: 2/7 × 5/7 × 3/7\nStudent answer: 30/7\nCorrect answer: 30/343\nOutcome: incorrect\n\nTrial 3:\nProblem: Multiply: 2 1/8 × 3 2/8\nStudent answer: 221/4\nCorrect answer: 221/32\nOutcome: incorrect\n\nTrial 4:\nProblem: A book has 3/4 of its pages with illustrations. Of those, 2/4 are in color, and of the color illustrations, 3/4 are full-page. What fraction of the book's total pages are full-page color illustrations?\nStudent answer: 9/2\nCorrect answer: 9/32\nOutcome: incorrect\n</student_history>\n"
+        },
+        "samemal": {
+          "example_id": "malrulelib:test_same_template:0000032:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Multiply: 3/13 × 5/13\nStudent answer: 15/13\nCorrect answer: 15/169\nOutcome: incorrect\n\nTrial 2:\nProblem: A book has 3/8 of its pages with illustrations. Of those, 1/8 are in color, and of the color illustrations, 3/8 are full-page. What fraction of the book's total pages are full-page color illustrations?\nStudent answer: 9/8\nCorrect answer: 9/512\nOutcome: incorrect\n\nTrial 3:\nProblem: Multiply: 2/5 × 4/5 × 4/5\nStudent answer: 32/5\nCorrect answer: 32/125\nOutcome: incorrect\n\nTrial 4:\nProblem: Multiply: 5/17 × 10/17\nStudent answer: 50/17\nCorrect answer: 50/289\nOutcome: incorrect\n</student_history>\n"
+        },
+        "random_real": {
+          "example_id": "malrulelib:test_same_template:0000044:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Divide: (1/6) ÷ (4/7)\nStudent answer: 2/21\nCorrect answer: 7/24\nOutcome: incorrect\n\nTrial 2:\nProblem: You have 3/7 of a cake. If you divide it equally among 3 people, how much cake does each person get?\nStudent answer: 9/7\nCorrect answer: 1/7\nOutcome: incorrect\n\nTrial 3:\nProblem: There are 3/3 liters of juice in a container. If you pour it equally into 8 glasses, how much juice is in each glass (in liters)?\nStudent answer: 8/1\nCorrect answer: 1/8\nOutcome: incorrect\n\nTrial 4:\nProblem: Divide: 12 ÷ (4/10)\nStudent answer: 24/5\nCorrect answer: 30/1\nOutcome: incorrect\n</student_history>\n"
+        }
+      },
+      "queries": [
+        {
+          "problem_text": "Multiply: 11/20 × 4/20",
+          "operands": [
+            "11",
+            "20",
+            "4",
+            "20"
+          ],
+          "operation": "fraction_multiplication",
+          "query_idx": 0,
+          "generation_seed": 337780569,
+          "level": 9,
+          "donor_target": "44",
+          "recipient_target": "11/5",
+          "correct_target": "11/100",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Multiply: 15/19 × 8/19",
+          "operands": [
+            "15",
+            "19",
+            "8",
+            "19"
+          ],
+          "operation": "fraction_multiplication",
+          "query_idx": 1,
+          "generation_seed": 699900209,
+          "level": 9,
+          "donor_target": "120",
+          "recipient_target": "120/19",
+          "correct_target": "120/361",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "A tank is 6/7 full. You drain 6/7 of what's in the tank. What fraction of the full tank did you drain?",
+          "operands": [
+            "6",
+            "7",
+            "6",
+            "7"
+          ],
+          "operation": "fraction_multiplication",
+          "query_idx": 2,
+          "generation_seed": 931046901,
+          "level": 9,
+          "donor_target": "36",
+          "recipient_target": "36/7",
+          "correct_target": "36/49",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        }
+      ],
+      "filter_counts": {
+        "seen_number_combination": 25
+      }
+    },
+    {
+      "group_idx": 1,
+      "pair_idx": 2,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000280:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000155:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000225:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000116:malrule_next_response"
+      },
+      "labels": {
+        "donor": "subtraction.stops_borrow_at_zero",
+        "recipient": "subtraction.diff_0_n_equals_n",
+        "samemal": "subtraction.diff_0_n_equals_n",
+        "random_real": "subtraction.borrow_from_bottom"
+      },
+      "family": "subtraction",
+      "contexts": {
+        "donor": {
+          "example_id": "malrulelib:test_same_template:0000280:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 803 - 564\nStudent answer: 241\nCorrect answer: 239\nOutcome: incorrect\n\nTrial 2:\nProblem: What is 504 - 229?\nStudent answer: 285\nCorrect answer: 275\nOutcome: incorrect\n\nTrial 3:\nProblem: What is 505 - 419?\nStudent answer: 94\nCorrect answer: 86\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 80000 - 76451\nStudent answer: 4451\nCorrect answer: 3549\nOutcome: incorrect\n</student_history>\n"
+        },
+        "recipient": {
+          "example_id": "malrulelib:test_same_template:0000155:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Find the difference between 490 and 253.\nStudent answer: 243\nCorrect answer: 237\nOutcome: incorrect\n\nTrial 2:\nProblem: Sarah had $60 and spent $48. How many dollars left?\nStudent answer: 28\nCorrect answer: 12\nOutcome: incorrect\n\nTrial 3:\nProblem: Sarah baked 60 cookies and sold 39 cookies. How many cookies left?\nStudent answer: 39\nCorrect answer: 21\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 50 - 27\nStudent answer: 37\nCorrect answer: 23\nOutcome: incorrect\n</student_history>\n"
+        },
+        "samemal": {
+          "example_id": "malrulelib:test_same_template:0000225:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: A movie theater had 506 seats. 348 seats were occupied. How many seats are empty?\nStudent answer: 148\nCorrect answer: 158\nOutcome: incorrect\n\nTrial 2:\nProblem: Calculate: 90000 - 48345\nStudent answer: 58345\nCorrect answer: 41655\nOutcome: incorrect\n\nTrial 3:\nProblem: There were 300 students in the cafeteria. 137 students left to go outside. How many students remain in the cafeteria?\nStudent answer: 237\nCorrect answer: 163\nOutcome: incorrect\n\nTrial 4:\nProblem: A builder had 406 meters of fabric. After using 380 meters, how much is left?\nStudent answer: 186\nCorrect answer: 26\nOutcome: incorrect\n</student_history>\n"
+        },
+        "random_real": {
+          "example_id": "malrulelib:test_same_template:0000116:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: A red box contains 432 items and a blue box contains 339 items. What is the difference?\nStudent answer: 113\nCorrect answer: 93\nOutcome: incorrect\n\nTrial 2:\nProblem: Calculate: 6003 - 5101\nStudent answer: 2902\nCorrect answer: 902\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 702 - 675\nStudent answer: 247\nCorrect answer: 27\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 7320 - 2217\nStudent answer: 5123\nCorrect answer: 5103\nOutcome: incorrect\n</student_history>\n"
+        }
+      },
+      "queries": [
+        {
+          "problem_text": "Calculate: 59009 - 47173",
+          "operands": [
+            "59009",
+            "47173"
+          ],
+          "operation": "subtraction",
+          "query_idx": 0,
+          "generation_seed": 848036390,
+          "level": 9,
+          "donor_target": "11976",
+          "recipient_target": "12176",
+          "correct_target": "11836",
+          "random_rule_target": "12036",
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "A stadium has 3001 seats. 1650 tickets were sold. How many seats are still available?",
+          "operands": [
+            "3001",
+            "1650"
+          ],
+          "operation": "subtraction",
+          "query_idx": 1,
+          "generation_seed": 227309921,
+          "level": 9,
+          "donor_target": "1451",
+          "recipient_target": "2651",
+          "correct_target": "1351",
+          "random_rule_target": "3551",
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Calculate: 80001 - 1310",
+          "operands": [
+            "80001",
+            "1310"
+          ],
+          "operation": "subtraction",
+          "query_idx": 2,
+          "generation_seed": 355687462,
+          "level": 9,
+          "donor_target": "79311",
+          "recipient_target": "81311",
+          "correct_target": "78691",
+          "random_rule_target": "80891",
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        }
+      ],
+      "filter_counts": {
+        "non_distinct_answers": 6
+      }
+    },
+    {
+      "group_idx": 2,
+      "pair_idx": 3,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000245:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000085:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000010:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000202:malrule_next_response"
+      },
+      "labels": {
+        "donor": "subtraction.always_borrow_left",
+        "recipient": "subtraction.diff_0_n_equals_n",
+        "samemal": "subtraction.diff_0_n_equals_n",
+        "random_real": "subtraction.decompose_by_place_value_label"
+      },
+      "family": "subtraction",
+      "contexts": {
+        "donor": {
+          "example_id": "malrulelib:test_same_template:0000245:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 3004 - 2651\nStudent answer: 343\nCorrect answer: 353\nOutcome: incorrect\n\nTrial 2:\nProblem: Calculate: 89 - 61\nStudent answer: 18\nCorrect answer: 28\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 2888 - 1978\nStudent answer: 800\nCorrect answer: 910\nOutcome: incorrect\n\nTrial 4:\nProblem: What is 5119 - 3695?\nStudent answer: 1414\nCorrect answer: 1424\nOutcome: incorrect\n</student_history>\n"
+        },
+        "recipient": {
+          "example_id": "malrulelib:test_same_template:0000085:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 20208 - 13870\nStudent answer: 3478\nCorrect answer: 6338\nOutcome: incorrect\n\nTrial 2:\nProblem: Sarah collected 50 stamps and gave away 38 stamps. How many stamps remaining?\nStudent answer: 28\nCorrect answer: 12\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 103 - 184\nStudent answer: -189\nCorrect answer: -81\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 90 - 32\nStudent answer: 62\nCorrect answer: 58\nOutcome: incorrect\n</student_history>\n"
+        },
+        "samemal": {
+          "example_id": "malrulelib:test_same_template:0000010:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: What is 210 - 203?\nStudent answer: 13\nCorrect answer: 7\nOutcome: incorrect\n\nTrial 2:\nProblem: There were 300 students in the cafeteria. 266 students left to go outside. How many students remain in the cafeteria?\nStudent answer: 166\nCorrect answer: 34\nOutcome: incorrect\n\nTrial 3:\nProblem: Sarah had $60 and spent $59. How many dollars left?\nStudent answer: 19\nCorrect answer: 1\nOutcome: incorrect\n\nTrial 4:\nProblem: Find the difference between 5003 and 4497.\nStudent answer: 496\nCorrect answer: 506\nOutcome: incorrect\n</student_history>\n"
+        },
+        "random_real": {
+          "example_id": "malrulelib:test_same_template:0000202:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: What number is represented by 3 thousands 14 hundreds 7 tens 1 one?\nStudent answer: 31471\nCorrect answer: 4471\nOutcome: incorrect\n\nTrial 2:\nProblem: A student has base-10 blocks: 3 hundred-blocks, 14 ten-rods, and 1 unit cubes. What number do these blocks represent?\nStudent answer: 3141\nCorrect answer: 441\nOutcome: incorrect\n\nTrial 3:\nProblem: What number is represented by 3 thousands 11 hundreds 5 tens 7 ones?\nStudent answer: 31157\nCorrect answer: 4157\nOutcome: incorrect\n\nTrial 4:\nProblem: A student has base-10 blocks: 3 hundred-blocks, 13 ten-rods, and 4 unit cubes. What number do these blocks represent?\nStudent answer: 3134\nCorrect answer: 434\nOutcome: incorrect\n</student_history>\n"
+        }
+      },
+      "queries": [
+        {
+          "problem_text": "Calculate: 5909 - 4545",
+          "operands": [
+            "5909",
+            "4545"
+          ],
+          "operation": "subtraction",
+          "query_idx": 0,
+          "generation_seed": 621313520,
+          "level": 9,
+          "donor_target": "354",
+          "recipient_target": "1444",
+          "correct_target": "1364",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Calculate: 6029 - 1341",
+          "operands": [
+            "6029",
+            "1341"
+          ],
+          "operation": "subtraction",
+          "query_idx": 1,
+          "generation_seed": 781319366,
+          "level": 9,
+          "donor_target": "4678",
+          "recipient_target": "4388",
+          "correct_target": "4688",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Calculate: 450 - 246",
+          "operands": [
+            "450",
+            "246"
+          ],
+          "operation": "subtraction",
+          "query_idx": 2,
+          "generation_seed": 596278090,
+          "level": 9,
+          "donor_target": "104",
+          "recipient_target": "216",
+          "correct_target": "204",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        }
+      ],
+      "filter_counts": {
+        "ValueError": 4,
+        "metadata_inconsistent": 9,
+        "non_distinct_answers": 15,
+        "seen_number_combination": 1,
+        "history_copy_or_repeated_target": 1
+      }
+    },
+    {
+      "group_idx": 3,
+      "pair_idx": 4,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000224:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000019:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000114:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000129:malrule_next_response"
+      },
+      "labels": {
+        "donor": "subtraction.borrow_from_bottom",
+        "recipient": "subtraction.stops_borrow_at_zero",
+        "samemal": "subtraction.stops_borrow_at_zero",
+        "random_real": "subtraction.borrow_no_decrement"
+      },
+      "family": "subtraction",
+      "contexts": {
+        "donor": {
+          "example_id": "malrulelib:test_same_template:0000224:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 7840 - 4\nStudent answer: 7844\nCorrect answer: 7836\nOutcome: incorrect\n\nTrial 2:\nProblem: A restaurant earned $544 on Friday and spent $328 on supplies. What is the remaining amount?\nStudent answer: 236\nCorrect answer: 216\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 2006 - 1085\nStudent answer: 2921\nCorrect answer: 921\nOutcome: incorrect\n\nTrial 4:\nProblem: A stadium held 400 people. After 154 people left, how many remained?\nStudent answer: 466\nCorrect answer: 246\nOutcome: incorrect\n</student_history>\n"
+        },
+        "recipient": {
+          "example_id": "malrulelib:test_same_template:0000019:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: A library had 304 books. After lending out 86 books, how many remain?\nStudent answer: 222\nCorrect answer: 218\nOutcome: incorrect\n\nTrial 2:\nProblem: Calculate: 5000 - 1304\nStudent answer: 3704\nCorrect answer: 3696\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 908 - 769\nStudent answer: 141\nCorrect answer: 139\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 200 - 129\nStudent answer: 89\nCorrect answer: 71\nOutcome: incorrect\n</student_history>\n"
+        },
+        "samemal": {
+          "example_id": "malrulelib:test_same_template:0000114:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: A school has 402 students enrolled. If 259 students graduated, how many students remain?\nStudent answer: 157\nCorrect answer: 143\nOutcome: incorrect\n\nTrial 2:\nProblem: A piece of trip was 408 miles long. After 329 miles was already traveled, how much trip remained?\nStudent answer: 81\nCorrect answer: 79\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 56300 - 11162\nStudent answer: 45142\nCorrect answer: 45138\nOutcome: incorrect\n\nTrial 4:\nProblem: Anna scored 600 points and Ben scored 313 points. How many more points did Anna score?\nStudent answer: 293\nCorrect answer: 287\nOutcome: incorrect\n</student_history>\n"
+        },
+        "random_real": {
+          "example_id": "malrulelib:test_same_template:0000129:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 83 - 67\nStudent answer: 26\nCorrect answer: 16\nOutcome: incorrect\n\nTrial 2:\nProblem: Tom has 526 marbles and Sarah has 189 marbles. How many more marbles does Tom have than Sarah?\nStudent answer: 447\nCorrect answer: 337\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 3790 - 1973\nStudent answer: 2827\nCorrect answer: 1817\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 403 - 388\nStudent answer: 125\nCorrect answer: 15\nOutcome: incorrect\n</student_history>\n"
+        }
+      },
+      "queries": [
+        {
+          "problem_text": "A movie theater had 401 seats. 282 seats were occupied. How many seats are empty?",
+          "operands": [
+            "401",
+            "282"
+          ],
+          "operation": "subtraction",
+          "query_idx": 0,
+          "generation_seed": 70640713,
+          "level": 9,
+          "donor_target": "339",
+          "recipient_target": "121",
+          "correct_target": "119",
+          "random_rule_target": "229",
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "A movie theater had 505 seats. 398 seats were occupied. How many seats are empty?",
+          "operands": [
+            "505",
+            "398"
+          ],
+          "operation": "subtraction",
+          "query_idx": 1,
+          "generation_seed": 693771196,
+          "level": 9,
+          "donor_target": "327",
+          "recipient_target": "113",
+          "correct_target": "107",
+          "random_rule_target": "217",
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Building A is 600 feet tall and Building B is 499 feet tall. What is the difference in height?",
+          "operands": [
+            "600",
+            "499"
+          ],
+          "operation": "subtraction",
+          "query_idx": 2,
+          "generation_seed": 951490921,
+          "level": 9,
+          "donor_target": "321",
+          "recipient_target": "119",
+          "correct_target": "101",
+          "random_rule_target": "211",
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        }
+      ],
+      "filter_counts": {
+        "non_distinct_answers": 34,
+        "metadata_inconsistent": 28,
+        "ValueError": 5
+      }
+    },
+    {
+      "group_idx": 4,
+      "pair_idx": 5,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000211:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000203:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000205:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000200:malrule_next_response"
+      },
+      "labels": {
+        "donor": "fractions.multiply_across_for_division",
+        "recipient": "fractions.ignore_denominators",
+        "samemal": "fractions.ignore_denominators",
+        "random_real": "fractions.common_denominator_numerator"
+      },
+      "family": "fractions",
+      "contexts": {
+        "donor": {
+          "example_id": "malrulelib:test_same_template:0000211:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Divide: (1/10) ÷ (3/10)\nStudent answer: 3/100\nCorrect answer: 1/3\nOutcome: incorrect\n\nTrial 2:\nProblem: Divide: 3 6/9 ÷ 2 5/6\nStudent answer: 187/18\nCorrect answer: 22/17\nOutcome: incorrect\n\nTrial 3:\nProblem: Divide: (9/2) ÷ (1/9)\nStudent answer: 1/2\nCorrect answer: 81/2\nOutcome: incorrect\n\nTrial 4:\nProblem: You have 6 cups of flour. Each recipe requires 10/8 cup. How many recipes can you make?\nStudent answer: 15/2\nCorrect answer: 24/5\nOutcome: incorrect\n</student_history>\n"
+        },
+        "recipient": {
+          "example_id": "malrulelib:test_same_template:0000203:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: If you shade 3/11 of a circle and 1/6 of another equal circle, what fraction is shaded in total?\nStudent answer: 4\nCorrect answer: 29/66\nOutcome: incorrect\n\nTrial 2:\nProblem: A recipe calls for 2/4 cup of sugar and another 10/12 cup of sugar. What is the total cups of sugar?\nStudent answer: 12\nCorrect answer: 4/3\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 5/6 - 2/8\nStudent answer: 3\nCorrect answer: 7/12\nOutcome: incorrect\n\nTrial 4:\nProblem: Divide: 3 6/7 ÷ 3 8/10\nStudent answer: 0\nCorrect answer: 135/133\nOutcome: incorrect\n</student_history>\n"
+        },
+        "samemal": {
+          "example_id": "malrulelib:test_same_template:0000205:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: A tank can hold 4/2 gallon of water. Currently it is 9/10 full. How many gallons of water are in the tank?\nStudent answer: 36\nCorrect answer: 9/5\nOutcome: incorrect\n\nTrial 2:\nProblem: A recipe calls for 5/7 cup of sugar and 3/4 cup of flour. How many cups of ingredients in total?\nStudent answer: 8\nCorrect answer: 41/28\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 1/3 + 2/7\nStudent answer: 3\nCorrect answer: 13/21\nOutcome: incorrect\n\nTrial 4:\nProblem: Multiply: 1/9 × 3/9\nStudent answer: 3\nCorrect answer: 1/27\nOutcome: incorrect\n</student_history>\n"
+        },
+        "random_real": {
+          "example_id": "malrulelib:test_same_template:0000200:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 2/3 + 1/7\nStudent answer: 3/10\nCorrect answer: 17/21\nOutcome: incorrect\n\nTrial 2:\nProblem: Calculate: 3/7 + 3/9 + 1/5\nStudent answer: 1/3\nCorrect answer: 101/105\nOutcome: incorrect\n\nTrial 3:\nProblem: A chef is making a sauce that requires 4/9 cup of tomatoes, 4/6 cup of onions, and 1/2 cup of peppers. How many total cups of vegetables are needed?\nStudent answer: 9/17\nCorrect answer: 29/18\nOutcome: incorrect\n\nTrial 4:\nProblem: A recipe calls for 2/4 cup of sugar and another 3/5 cup of sugar. What is the total cups of sugar?\nStudent answer: 5/9\nCorrect answer: 11/10\nOutcome: incorrect\n</student_history>\n"
+        }
+      },
+      "queries": [
+        {
+          "problem_text": "Divide: 2 5/8 ÷ 1 1/2",
+          "operands": [
+            "21",
+            "8",
+            "3",
+            "2"
+          ],
+          "operation": "fraction_division",
+          "query_idx": 0,
+          "generation_seed": 454173113,
+          "level": 9,
+          "donor_target": "63/16",
+          "recipient_target": "7",
+          "correct_target": "7/4",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Divide: 2 7/10 ÷ 2 1/2",
+          "operands": [
+            "27",
+            "10",
+            "5",
+            "2"
+          ],
+          "operation": "fraction_division",
+          "query_idx": 1,
+          "generation_seed": 9926835,
+          "level": 9,
+          "donor_target": "27/4",
+          "recipient_target": "5",
+          "correct_target": "27/25",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Divide: 3 9/10 ÷ 2 1/2",
+          "operands": [
+            "39",
+            "10",
+            "5",
+            "2"
+          ],
+          "operation": "fraction_division",
+          "query_idx": 2,
+          "generation_seed": 171845358,
+          "level": 9,
+          "donor_target": "39/4",
+          "recipient_target": "7",
+          "correct_target": "39/25",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        }
+      ],
+      "filter_counts": {
+        "seen_number_combination": 2186,
+        "history_copy_or_repeated_target": 218,
+        "ValueError": 74,
+        "non_distinct_answers": 4
+      }
+    },
+    {
+      "group_idx": 5,
+      "pair_idx": 6,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000241:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000110:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000299:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000120:malrule_next_response"
+      },
+      "labels": {
+        "donor": "subtraction.borrow_from_bottom",
+        "recipient": "subtraction.always_borrow_left",
+        "samemal": "subtraction.always_borrow_left",
+        "random_real": "subtraction.stops_borrow_at_zero"
+      },
+      "family": "subtraction",
+      "contexts": {
+        "donor": {
+          "example_id": "malrulelib:test_same_template:0000241:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Find the difference between 4725 and 1817.\nStudent answer: 4928\nCorrect answer: 2908\nOutcome: incorrect\n\nTrial 2:\nProblem: Calculate: 6940 - 5222\nStudent answer: 1738\nCorrect answer: 1718\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 6006 - 4476\nStudent answer: 3730\nCorrect answer: 1530\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 6440 - 3122\nStudent answer: 3338\nCorrect answer: 3318\nOutcome: incorrect\n</student_history>\n"
+        },
+        "recipient": {
+          "example_id": "malrulelib:test_same_template:0000110:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Emma collected 506 trading cards. She traded away 176 cards. How many cards does she have now?\nStudent answer: 320\nCorrect answer: 330\nOutcome: incorrect\n\nTrial 2:\nProblem: School A has 450 students and School B has 133 students. How many more students does School A have?\nStudent answer: 217\nCorrect answer: 317\nOutcome: incorrect\n\nTrial 3:\nProblem: What is 2589 - 1602?\nStudent answer: 877\nCorrect answer: 987\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 60001 - 43770\nStudent answer: 16221\nCorrect answer: 16231\nOutcome: incorrect\n</student_history>\n"
+        },
+        "samemal": {
+          "example_id": "malrulelib:test_same_template:0000299:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: What is 4462 - 1087?\nStudent answer: 2375\nCorrect answer: 3375\nOutcome: incorrect\n\nTrial 2:\nProblem: Calculate: 9810 - 2725\nStudent answer: 6085\nCorrect answer: 7085\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 7953 - 6610\nStudent answer: 233\nCorrect answer: 1343\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 6390 - 3119\nStudent answer: 2171\nCorrect answer: 3271\nOutcome: incorrect\n</student_history>\n"
+        },
+        "random_real": {
+          "example_id": "malrulelib:test_same_template:0000120:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Emma collected 503 trading cards. She traded away 465 cards. How many cards does she have now?\nStudent answer: 42\nCorrect answer: 38\nOutcome: incorrect\n\nTrial 2:\nProblem: Subtract 177 from 204.\nStudent answer: 33\nCorrect answer: 27\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 200 - 122\nStudent answer: 82\nCorrect answer: 78\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 60030 - 26109\nStudent answer: 34121\nCorrect answer: 33921\nOutcome: incorrect\n</student_history>\n"
+        }
+      },
+      "queries": [
+        {
+          "problem_text": "Calculate: 40705 - 29143",
+          "operands": [
+            "40705",
+            "29143"
+          ],
+          "operation": "subtraction",
+          "query_idx": 0,
+          "generation_seed": 4075103,
+          "level": 9,
+          "donor_target": "31762",
+          "recipient_target": "10552",
+          "correct_target": "11562",
+          "random_rule_target": "11562",
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Calculate: 2002 - 841",
+          "operands": [
+            "2002",
+            "841"
+          ],
+          "operation": "subtraction",
+          "query_idx": 1,
+          "generation_seed": 780536976,
+          "level": 9,
+          "donor_target": "2761",
+          "recipient_target": "1151",
+          "correct_target": "1161",
+          "random_rule_target": "1241",
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Calculate: 4006 - 2534",
+          "operands": [
+            "4006",
+            "2534"
+          ],
+          "operation": "subtraction",
+          "query_idx": 2,
+          "generation_seed": 727580985,
+          "level": 9,
+          "donor_target": "3672",
+          "recipient_target": "1462",
+          "correct_target": "1472",
+          "random_rule_target": "1532",
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        }
+      ],
+      "filter_counts": {
+        "non_distinct_answers": 5
+      }
+    },
+    {
+      "group_idx": 6,
+      "pair_idx": 7,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000008:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000206:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000069:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000120:malrule_next_response"
+      },
+      "labels": {
+        "donor": "subtraction.smaller_from_larger",
+        "recipient": "subtraction.borrow_no_decrement",
+        "samemal": "subtraction.borrow_no_decrement",
+        "random_real": "subtraction.stops_borrow_at_zero"
+      },
+      "family": "subtraction",
+      "contexts": {
+        "donor": {
+          "example_id": "malrulelib:test_same_template:0000008:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 40086 - 37374\nStudent answer: 17312\nCorrect answer: 2712\nOutcome: incorrect\n\nTrial 2:\nProblem: Calculate: 80405 - 54917\nStudent answer: 34512\nCorrect answer: 25488\nOutcome: incorrect\n\nTrial 3:\nProblem: Sarah had $63 and spent $28. How many dollars left?\nStudent answer: 45\nCorrect answer: 35\nOutcome: incorrect\n\nTrial 4:\nProblem: School A has 442 students and School B has 143 students. How many more students does School A have?\nStudent answer: 301\nCorrect answer: 299\nOutcome: incorrect\n</student_history>\n"
+        },
+        "recipient": {
+          "example_id": "malrulelib:test_same_template:0000206:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 503 - 256\nStudent answer: 357\nCorrect answer: 247\nOutcome: incorrect\n\nTrial 2:\nProblem: A stadium holds 5706 people. If 3979 seats are empty, how many are filled?\nStudent answer: 2837\nCorrect answer: 1727\nOutcome: incorrect\n\nTrial 3:\nProblem: Maria earned $263 from her job. She paid $215 for rent. How much does she have remaining?\nStudent answer: 58\nCorrect answer: 48\nOutcome: incorrect\n\nTrial 4:\nProblem: Sarah had 96 points and lost 47 points. How many points now?\nStudent answer: 59\nCorrect answer: 49\nOutcome: incorrect\n</student_history>\n"
+        },
+        "samemal": {
+          "example_id": "malrulelib:test_same_template:0000069:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: The red team has 508 members and the blue team has 228 members. How many fewer members does the blue team have?\nStudent answer: 380\nCorrect answer: 280\nOutcome: incorrect\n\nTrial 2:\nProblem: Subtract 4041 from 9605.\nStudent answer: 5664\nCorrect answer: 5564\nOutcome: incorrect\n\nTrial 3:\nProblem: Subtract 185 from 231.\nStudent answer: 156\nCorrect answer: 46\nOutcome: incorrect\n\nTrial 4:\nProblem: A factory produced 5918 items. If 4026 items were sold, how many remain?\nStudent answer: 1992\nCorrect answer: 1892\nOutcome: incorrect\n</student_history>\n"
+        },
+        "random_real": {
+          "example_id": "malrulelib:test_same_template:0000120:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Emma collected 503 trading cards. She traded away 465 cards. How many cards does she have now?\nStudent answer: 42\nCorrect answer: 38\nOutcome: incorrect\n\nTrial 2:\nProblem: Subtract 177 from 204.\nStudent answer: 33\nCorrect answer: 27\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 200 - 122\nStudent answer: 82\nCorrect answer: 78\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 60030 - 26109\nStudent answer: 34121\nCorrect answer: 33921\nOutcome: incorrect\n</student_history>\n"
+        }
+      },
+      "queries": [
+        {
+          "problem_text": "Sarah has 63 pages and read 57 pages. How many pages to go?",
+          "operands": [
+            "63",
+            "57"
+          ],
+          "operation": "subtraction",
+          "query_idx": 0,
+          "generation_seed": 275502460,
+          "level": 9,
+          "donor_target": "14",
+          "recipient_target": "16",
+          "correct_target": "6",
+          "random_rule_target": "6",
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Sarah had 63 points and lost 55 points. How many points now?",
+          "operands": [
+            "63",
+            "55"
+          ],
+          "operation": "subtraction",
+          "query_idx": 1,
+          "generation_seed": 597118222,
+          "level": 9,
+          "donor_target": "12",
+          "recipient_target": "18",
+          "correct_target": "8",
+          "random_rule_target": "8",
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Calculate: 92 - 25",
+          "operands": [
+            "92",
+            "25"
+          ],
+          "operation": "subtraction",
+          "query_idx": 2,
+          "generation_seed": 702182555,
+          "level": 9,
+          "donor_target": "73",
+          "recipient_target": "77",
+          "correct_target": "67",
+          "random_rule_target": "67",
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        }
+      ],
+      "filter_counts": {
+        "seen_number_combination": 13,
+        "metadata_inconsistent": 32,
+        "history_copy_or_repeated_target": 3
+      }
+    },
+    {
+      "group_idx": 7,
+      "pair_idx": 8,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000196:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000230:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000143:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000232:malrule_next_response"
+      },
+      "labels": {
+        "donor": "subtraction.borrow_no_decrement",
+        "recipient": "subtraction.smaller_from_larger",
+        "samemal": "subtraction.smaller_from_larger",
+        "random_real": "subtraction.decompose_by_place_value_label"
+      },
+      "family": "subtraction",
+      "contexts": {
+        "donor": {
+          "example_id": "malrulelib:test_same_template:0000196:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 704 - 495\nStudent answer: 319\nCorrect answer: 209\nOutcome: incorrect\n\nTrial 2:\nProblem: Subtract 134 from 203.\nStudent answer: 179\nCorrect answer: 69\nOutcome: incorrect\n\nTrial 3:\nProblem: A school has 317 students. If 238 students are absent, how many are present?\nStudent answer: 189\nCorrect answer: 79\nOutcome: incorrect\n\nTrial 4:\nProblem: Sarah has 94 pages and read 48 pages. How many pages to go?\nStudent answer: 56\nCorrect answer: 46\nOutcome: incorrect\n</student_history>\n"
+        },
+        "recipient": {
+          "example_id": "malrulelib:test_same_template:0000230:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Subtract 3057 from 5482.\nStudent answer: 2435\nCorrect answer: 2425\nOutcome: incorrect\n\nTrial 2:\nProblem: Calculate: 53110 - 22002\nStudent answer: 31112\nCorrect answer: 31108\nOutcome: incorrect\n\nTrial 3:\nProblem: What is 224 - 119?\nStudent answer: 115\nCorrect answer: 105\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 3188 - 1383\nStudent answer: 2205\nCorrect answer: 1805\nOutcome: incorrect\n</student_history>\n"
+        },
+        "samemal": {
+          "example_id": "malrulelib:test_same_template:0000143:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Subtract 209 from 330.\nStudent answer: 139\nCorrect answer: 121\nOutcome: incorrect\n\nTrial 2:\nProblem: Find the difference between 9216 and 6226.\nStudent answer: 3010\nCorrect answer: 2990\nOutcome: incorrect\n\nTrial 3:\nProblem: Tom has 429 marbles and Sarah has 139 marbles. How many more marbles does Tom have than Sarah?\nStudent answer: 310\nCorrect answer: 290\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 7003 - 2426\nStudent answer: 5423\nCorrect answer: 4577\nOutcome: incorrect\n</student_history>\n"
+        },
+        "random_real": {
+          "example_id": "malrulelib:test_same_template:0000232:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: What number is represented by 1 hundred 13 tens 8 ones?\nStudent answer: 1138\nCorrect answer: 238\nOutcome: incorrect\n\nTrial 2:\nProblem: What number is represented by 3 thousands 14 hundreds 4 tens 8 ones?\nStudent answer: 31448\nCorrect answer: 4448\nOutcome: incorrect\n\nTrial 3:\nProblem: What number is represented by 1 hundred 16 tens 1 one?\nStudent answer: 1161\nCorrect answer: 261\nOutcome: incorrect\n\nTrial 4:\nProblem: What number is represented by 3 hundreds 14 tens 17 ones?\nStudent answer: 31417\nCorrect answer: 457\nOutcome: incorrect\n</student_history>\n"
+        }
+      },
+      "queries": [
+        {
+          "problem_text": "Subtract 2622 from 5380.",
+          "operands": [
+            "5380",
+            "2622"
+          ],
+          "operation": "subtraction",
+          "query_idx": 0,
+          "generation_seed": 78238831,
+          "level": 9,
+          "donor_target": "3768",
+          "recipient_target": "3362",
+          "correct_target": "2758",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Sarah had $245. She spent $181 on books. How much money does she have left?",
+          "operands": [
+            "245",
+            "181"
+          ],
+          "operation": "subtraction",
+          "query_idx": 1,
+          "generation_seed": 784911266,
+          "level": 9,
+          "donor_target": "164",
+          "recipient_target": "144",
+          "correct_target": "64",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Find the difference between 200 and 141.",
+          "operands": [
+            "200",
+            "141"
+          ],
+          "operation": "subtraction",
+          "query_idx": 2,
+          "generation_seed": 330333173,
+          "level": 9,
+          "donor_target": "169",
+          "recipient_target": "141",
+          "correct_target": "59",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        }
+      ],
+      "filter_counts": {
+        "ValueError": 1
+      }
+    },
+    {
+      "group_idx": 8,
+      "pair_idx": 9,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000129:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000187:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000131:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000075:malrule_next_response"
+      },
+      "labels": {
+        "donor": "subtraction.borrow_no_decrement",
+        "recipient": "subtraction.stops_borrow_at_zero",
+        "samemal": "subtraction.stops_borrow_at_zero",
+        "random_real": "NONE"
+      },
+      "family": "subtraction",
+      "contexts": {
+        "donor": {
+          "example_id": "malrulelib:test_same_template:0000129:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 83 - 67\nStudent answer: 26\nCorrect answer: 16\nOutcome: incorrect\n\nTrial 2:\nProblem: Tom has 526 marbles and Sarah has 189 marbles. How many more marbles does Tom have than Sarah?\nStudent answer: 447\nCorrect answer: 337\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 3790 - 1973\nStudent answer: 2827\nCorrect answer: 1817\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 403 - 388\nStudent answer: 125\nCorrect answer: 15\nOutcome: incorrect\n</student_history>\n"
+        },
+        "recipient": {
+          "example_id": "malrulelib:test_same_template:0000187:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 60058 - 53514\nStudent answer: 7544\nCorrect answer: 6544\nOutcome: incorrect\n\nTrial 2:\nProblem: Calculate: 50000 - 23441\nStudent answer: 27441\nCorrect answer: 26559\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 6002 - 3323\nStudent answer: 2721\nCorrect answer: 2679\nOutcome: incorrect\n\nTrial 4:\nProblem: Building A is 403 feet tall and Building B is 297 feet tall. What is the difference in height?\nStudent answer: 114\nCorrect answer: 106\nOutcome: incorrect\n</student_history>\n"
+        },
+        "samemal": {
+          "example_id": "malrulelib:test_same_template:0000131:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Find the difference between 204 and 105.\nStudent answer: 101\nCorrect answer: 99\nOutcome: incorrect\n\nTrial 2:\nProblem: Calculate: 47009 - 36546\nStudent answer: 10543\nCorrect answer: 10463\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 6034 - 1748\nStudent answer: 4326\nCorrect answer: 4286\nOutcome: incorrect\n\nTrial 4:\nProblem: Subtract 242 from 401.\nStudent answer: 161\nCorrect answer: 159\nOutcome: incorrect\n</student_history>\n"
+        },
+        "random_real": {
+          "example_id": "malrulelib:test_same_template:0000075:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: What is 5570 - 2871?\nStudent answer: 2699\nCorrect answer: 2699\nOutcome: correct\n\nTrial 2:\nProblem: Tom saved $253 and then spent $166 on a new game. How much money does he have now?\nStudent answer: 87\nCorrect answer: 87\nOutcome: correct\n\nTrial 3:\nProblem: What is 204 - 167?\nStudent answer: 37\nCorrect answer: 37\nOutcome: correct\n\nTrial 4:\nProblem: Calculate: 300 - 50\nStudent answer: 250\nCorrect answer: 250\nOutcome: correct\n</student_history>\n"
+        }
+      },
+      "queries": [
+        {
+          "problem_text": "Subtract 4671 from 7015.",
+          "operands": [
+            "7015",
+            "4671"
+          ],
+          "operation": "subtraction",
+          "query_idx": 0,
+          "generation_seed": 343191434,
+          "level": 9,
+          "donor_target": "3444",
+          "recipient_target": "2464",
+          "correct_target": "2344",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "A movie theater had 504 seats. 299 seats were occupied. How many seats are empty?",
+          "operands": [
+            "504",
+            "299"
+          ],
+          "operation": "subtraction",
+          "query_idx": 1,
+          "generation_seed": 184045329,
+          "level": 9,
+          "donor_target": "315",
+          "recipient_target": "215",
+          "correct_target": "205",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "What is 204 - 178?",
+          "operands": [
+            "204",
+            "178"
+          ],
+          "operation": "subtraction",
+          "query_idx": 2,
+          "generation_seed": 499115508,
+          "level": 9,
+          "donor_target": "136",
+          "recipient_target": "34",
+          "correct_target": "26",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        }
+      ],
+      "filter_counts": {
+        "metadata_inconsistent": 22,
+        "non_distinct_answers": 38,
+        "ValueError": 5,
+        "seen_number_combination": 1
+      }
+    },
+    {
+      "group_idx": 9,
+      "pair_idx": 10,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000278:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000195:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000004:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000006:malrule_next_response"
+      },
+      "labels": {
+        "donor": "subtraction.smaller_from_larger",
+        "recipient": "subtraction.borrow_no_decrement",
+        "samemal": "subtraction.borrow_no_decrement",
+        "random_real": "subtraction.stops_borrow_at_zero"
+      },
+      "family": "subtraction",
+      "contexts": {
+        "donor": {
+          "example_id": "malrulelib:test_same_template:0000278:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 90909 - 73278\nStudent answer: 23771\nCorrect answer: 17631\nOutcome: incorrect\n\nTrial 2:\nProblem: Anna scored 424 points and Ben scored 216 points. How many more points did Anna score?\nStudent answer: 212\nCorrect answer: 208\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 60008 - 54880\nStudent answer: 14888\nCorrect answer: 5128\nOutcome: incorrect\n\nTrial 4:\nProblem: Tom has 440 marbles and Sarah has 427 marbles. How many more marbles does Tom have than Sarah?\nStudent answer: 27\nCorrect answer: 13\nOutcome: incorrect\n</student_history>\n"
+        },
+        "recipient": {
+          "example_id": "malrulelib:test_same_template:0000195:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Sarah baked 77 cookies and sold 48 cookies. How many cookies left?\nStudent answer: 39\nCorrect answer: 29\nOutcome: incorrect\n\nTrial 2:\nProblem: A stadium has 3037 seats. 604 tickets were sold. How many seats are still available?\nStudent answer: 3433\nCorrect answer: 2433\nOutcome: incorrect\n\nTrial 3:\nProblem: Subtract 4008 from 5790.\nStudent answer: 1792\nCorrect answer: 1782\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 52 - 25\nStudent answer: 37\nCorrect answer: 27\nOutcome: incorrect\n</student_history>\n"
+        },
+        "samemal": {
+          "example_id": "malrulelib:test_same_template:0000004:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Anna scored 268 points and Ben scored 197 points. How many more points did Anna score?\nStudent answer: 171\nCorrect answer: 71\nOutcome: incorrect\n\nTrial 2:\nProblem: Calculate: 250 - 203\nStudent answer: 57\nCorrect answer: 47\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 50502 - 46228\nStudent answer: 14384\nCorrect answer: 4274\nOutcome: incorrect\n\nTrial 4:\nProblem: The red team has 344 members and the blue team has 317 members. How many fewer members does the blue team have?\nStudent answer: 37\nCorrect answer: 27\nOutcome: incorrect\n</student_history>\n"
+        },
+        "random_real": {
+          "example_id": "malrulelib:test_same_template:0000006:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: A factory produced 5701 items. If 4959 items were sold, how many remain?\nStudent answer: 758\nCorrect answer: 742\nOutcome: incorrect\n\nTrial 2:\nProblem: Calculate: 200 - 198\nStudent answer: 18\nCorrect answer: 2\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 50091 - 37640\nStudent answer: 13651\nCorrect answer: 12451\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 500 - 492\nStudent answer: 12\nCorrect answer: 8\nOutcome: incorrect\n</student_history>\n"
+        }
+      },
+      "queries": [
+        {
+          "problem_text": "A road is 701 meters long. After paving 155 meters, how much is left?",
+          "operands": [
+            "701",
+            "155"
+          ],
+          "operation": "subtraction",
+          "query_idx": 0,
+          "generation_seed": 706793273,
+          "level": 9,
+          "donor_target": "654",
+          "recipient_target": "656",
+          "correct_target": "546",
+          "random_rule_target": "554",
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Calculate: 30401 - 19896",
+          "operands": [
+            "30401",
+            "19896"
+          ],
+          "operation": "subtraction",
+          "query_idx": 1,
+          "generation_seed": 777251935,
+          "level": 9,
+          "donor_target": "29495",
+          "recipient_target": "21615",
+          "correct_target": "10505",
+          "random_rule_target": "11515",
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Calculate: 2004 - 1513",
+          "operands": [
+            "2004",
+            "1513"
+          ],
+          "operation": "subtraction",
+          "query_idx": 2,
+          "generation_seed": 223878119,
+          "level": 9,
+          "donor_target": "1511",
+          "recipient_target": "1591",
+          "correct_target": "491",
+          "random_rule_target": "511",
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        }
+      ],
+      "filter_counts": {}
+    },
+    {
+      "group_idx": 10,
+      "pair_idx": 11,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000181:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000058:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000069:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000128:malrule_next_response"
+      },
+      "labels": {
+        "donor": "subtraction.smaller_from_larger",
+        "recipient": "subtraction.borrow_no_decrement",
+        "samemal": "subtraction.borrow_no_decrement",
+        "random_real": "NONE"
+      },
+      "family": "subtraction",
+      "contexts": {
+        "donor": {
+          "example_id": "malrulelib:test_same_template:0000181:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: A factory produced 5504 items. If 2242 items were sold, how many remain?\nStudent answer: 3342\nCorrect answer: 3262\nOutcome: incorrect\n\nTrial 2:\nProblem: Emma collected 503 trading cards. She traded away 217 cards. How many cards does she have now?\nStudent answer: 314\nCorrect answer: 286\nOutcome: incorrect\n\nTrial 3:\nProblem: Subtract 346 from 434.\nStudent answer: 112\nCorrect answer: 88\nOutcome: incorrect\n\nTrial 4:\nProblem: A store had $601 in sales. After $187 in expenses, what is the profit?\nStudent answer: 586\nCorrect answer: 414\nOutcome: incorrect\n</student_history>\n"
+        },
+        "recipient": {
+          "example_id": "malrulelib:test_same_template:0000058:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: A factory produced 5517 items. If 1524 items were sold, how many remain?\nStudent answer: 4093\nCorrect answer: 3993\nOutcome: incorrect\n\nTrial 2:\nProblem: What is 330 - 229?\nStudent answer: 111\nCorrect answer: 101\nOutcome: incorrect\n\nTrial 3:\nProblem: A red box contains 432 items and a blue box contains 247 items. What is the difference?\nStudent answer: 295\nCorrect answer: 185\nOutcome: incorrect\n\nTrial 4:\nProblem: Sarah had $52 and spent $37. How many dollars left?\nStudent answer: 25\nCorrect answer: 15\nOutcome: incorrect\n</student_history>\n"
+        },
+        "samemal": {
+          "example_id": "malrulelib:test_same_template:0000069:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: The red team has 508 members and the blue team has 228 members. How many fewer members does the blue team have?\nStudent answer: 380\nCorrect answer: 280\nOutcome: incorrect\n\nTrial 2:\nProblem: Subtract 4041 from 9605.\nStudent answer: 5664\nCorrect answer: 5564\nOutcome: incorrect\n\nTrial 3:\nProblem: Subtract 185 from 231.\nStudent answer: 156\nCorrect answer: 46\nOutcome: incorrect\n\nTrial 4:\nProblem: A factory produced 5918 items. If 4026 items were sold, how many remain?\nStudent answer: 1992\nCorrect answer: 1892\nOutcome: incorrect\n</student_history>\n"
+        },
+        "random_real": {
+          "example_id": "malrulelib:test_same_template:0000128:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: What number is represented by 2 tens 14 ones?\nStudent answer: 34\nCorrect answer: 34\nOutcome: correct\n\nTrial 2:\nProblem: What number is represented by 6 tens 14 ones?\nStudent answer: 74\nCorrect answer: 74\nOutcome: correct\n\nTrial 3:\nProblem: What number is represented by 2 tens 18 ones?\nStudent answer: 38\nCorrect answer: 38\nOutcome: correct\n\nTrial 4:\nProblem: What number is represented by 3 thousands 17 hundreds 6 tens 7 ones?\nStudent answer: 4767\nCorrect answer: 4767\nOutcome: correct\n</student_history>\n"
+        }
+      },
+      "queries": [
+        {
+          "problem_text": "Subtract 2734 from 5953.",
+          "operands": [
+            "5953",
+            "2734"
+          ],
+          "operation": "subtraction",
+          "query_idx": 0,
+          "generation_seed": 392851344,
+          "level": 9,
+          "donor_target": "3221",
+          "recipient_target": "3229",
+          "correct_target": "3219",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Emma collected 420 trading cards. She traded away 183 cards. How many cards does she have now?",
+          "operands": [
+            "420",
+            "183"
+          ],
+          "operation": "subtraction",
+          "query_idx": 1,
+          "generation_seed": 879445899,
+          "level": 9,
+          "donor_target": "363",
+          "recipient_target": "347",
+          "correct_target": "237",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Emma collected 488 trading cards. She traded away 392 cards. How many cards does she have now?",
+          "operands": [
+            "488",
+            "392"
+          ],
+          "operation": "subtraction",
+          "query_idx": 2,
+          "generation_seed": 354886086,
+          "level": 9,
+          "donor_target": "116",
+          "recipient_target": "196",
+          "correct_target": "96",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        }
+      ],
+      "filter_counts": {
+        "metadata_inconsistent": 3,
+        "history_copy_or_repeated_target": 1
+      }
+    },
+    {
+      "group_idx": 11,
+      "pair_idx": 12,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000295:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000019:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000280:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000196:malrule_next_response"
+      },
+      "labels": {
+        "donor": "subtraction.borrow_from_bottom",
+        "recipient": "subtraction.stops_borrow_at_zero",
+        "samemal": "subtraction.stops_borrow_at_zero",
+        "random_real": "subtraction.borrow_no_decrement"
+      },
+      "family": "subtraction",
+      "contexts": {
+        "donor": {
+          "example_id": "malrulelib:test_same_template:0000295:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: What is 5725 - 1814?\nStudent answer: 5911\nCorrect answer: 3911\nOutcome: incorrect\n\nTrial 2:\nProblem: Calculate: 60008 - 7351\nStudent answer: 66857\nCorrect answer: 52657\nOutcome: incorrect\n\nTrial 3:\nProblem: Find the difference between 381 and 207.\nStudent answer: 394\nCorrect answer: 174\nOutcome: incorrect\n\nTrial 4:\nProblem: Subtract 198 from 333.\nStudent answer: 355\nCorrect answer: 135\nOutcome: incorrect\n</student_history>\n"
+        },
+        "recipient": {
+          "example_id": "malrulelib:test_same_template:0000019:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: A library had 304 books. After lending out 86 books, how many remain?\nStudent answer: 222\nCorrect answer: 218\nOutcome: incorrect\n\nTrial 2:\nProblem: Calculate: 5000 - 1304\nStudent answer: 3704\nCorrect answer: 3696\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 908 - 769\nStudent answer: 141\nCorrect answer: 139\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 200 - 129\nStudent answer: 89\nCorrect answer: 71\nOutcome: incorrect\n</student_history>\n"
+        },
+        "samemal": {
+          "example_id": "malrulelib:test_same_template:0000280:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 803 - 564\nStudent answer: 241\nCorrect answer: 239\nOutcome: incorrect\n\nTrial 2:\nProblem: What is 504 - 229?\nStudent answer: 285\nCorrect answer: 275\nOutcome: incorrect\n\nTrial 3:\nProblem: What is 505 - 419?\nStudent answer: 94\nCorrect answer: 86\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 80000 - 76451\nStudent answer: 4451\nCorrect answer: 3549\nOutcome: incorrect\n</student_history>\n"
+        },
+        "random_real": {
+          "example_id": "malrulelib:test_same_template:0000196:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 704 - 495\nStudent answer: 319\nCorrect answer: 209\nOutcome: incorrect\n\nTrial 2:\nProblem: Subtract 134 from 203.\nStudent answer: 179\nCorrect answer: 69\nOutcome: incorrect\n\nTrial 3:\nProblem: A school has 317 students. If 238 students are absent, how many are present?\nStudent answer: 189\nCorrect answer: 79\nOutcome: incorrect\n\nTrial 4:\nProblem: Sarah has 94 pages and read 48 pages. How many pages to go?\nStudent answer: 56\nCorrect answer: 46\nOutcome: incorrect\n</student_history>\n"
+        }
+      },
+      "queries": [
+        {
+          "problem_text": "What is 206 - 198?",
+          "operands": [
+            "206",
+            "198"
+          ],
+          "operation": "subtraction",
+          "query_idx": 0,
+          "generation_seed": 657715247,
+          "level": 9,
+          "donor_target": "228",
+          "recipient_target": "12",
+          "correct_target": "8",
+          "random_rule_target": "118",
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Maria earned $500 from her job. She paid $302 for rent. How much does she have remaining?",
+          "operands": [
+            "500",
+            "302"
+          ],
+          "operation": "subtraction",
+          "query_idx": 1,
+          "generation_seed": 244825150,
+          "level": 9,
+          "donor_target": "418",
+          "recipient_target": "202",
+          "correct_target": "198",
+          "random_rule_target": "208",
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "There were 504 students in the cafeteria. 126 students left to go outside. How many students remain in the cafeteria?",
+          "operands": [
+            "504",
+            "126"
+          ],
+          "operation": "subtraction",
+          "query_idx": 2,
+          "generation_seed": 38484253,
+          "level": 9,
+          "donor_target": "598",
+          "recipient_target": "382",
+          "correct_target": "378",
+          "random_rule_target": "488",
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        }
+      ],
+      "filter_counts": {
+        "metadata_inconsistent": 18,
+        "ValueError": 5,
+        "non_distinct_answers": 20
+      }
+    },
+    {
+      "group_idx": 12,
+      "pair_idx": 14,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000119:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000233:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000210:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000250:malrule_next_response"
+      },
+      "labels": {
+        "donor": "subtraction.diff_0_n_equals_n",
+        "recipient": "subtraction.borrow_from_bottom",
+        "samemal": "subtraction.borrow_from_bottom",
+        "random_real": "NONE"
+      },
+      "family": "subtraction",
+      "contexts": {
+        "donor": {
+          "example_id": "malrulelib:test_same_template:0000119:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 6850 - 3624\nStudent answer: 3234\nCorrect answer: 3226\nOutcome: incorrect\n\nTrial 2:\nProblem: Calculate: 6540 - 4427\nStudent answer: 2127\nCorrect answer: 2113\nOutcome: incorrect\n\nTrial 3:\nProblem: Subtract 1716 from 3052.\nStudent answer: 2736\nCorrect answer: 1336\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 503 - 324\nStudent answer: 129\nCorrect answer: 179\nOutcome: incorrect\n</student_history>\n"
+        },
+        "recipient": {
+          "example_id": "malrulelib:test_same_template:0000233:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 6670 - 412\nStudent answer: 6278\nCorrect answer: 6258\nOutcome: incorrect\n\nTrial 2:\nProblem: Calculate: 51 - 33\nStudent answer: 38\nCorrect answer: 18\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 303 - 275\nStudent answer: 248\nCorrect answer: 28\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 200 - 127\nStudent answer: 293\nCorrect answer: 73\nOutcome: incorrect\n</student_history>\n"
+        },
+        "samemal": {
+          "example_id": "malrulelib:test_same_template:0000210:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: A bakery made 533 cookies. After selling 479 cookies, how many are left?\nStudent answer: 274\nCorrect answer: 54\nOutcome: incorrect\n\nTrial 2:\nProblem: Calculate: 70303 - 63879\nStudent answer: 28644\nCorrect answer: 6424\nOutcome: incorrect\n\nTrial 3:\nProblem: Find the difference between 214 and 121.\nStudent answer: 293\nCorrect answer: 93\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 302 - 194\nStudent answer: 328\nCorrect answer: 108\nOutcome: incorrect\n</student_history>\n"
+        },
+        "random_real": {
+          "example_id": "malrulelib:test_same_template:0000250:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 60609 - 42911\nStudent answer: 17698\nCorrect answer: 17698\nOutcome: correct\n\nTrial 2:\nProblem: Calculate: 60608 - 53185\nStudent answer: 7423\nCorrect answer: 7423\nOutcome: correct\n\nTrial 3:\nProblem: Calculate: 607 - 318\nStudent answer: 289\nCorrect answer: 289\nOutcome: correct\n\nTrial 4:\nProblem: Calculate: 3007 - 1618\nStudent answer: 1389\nCorrect answer: 1389\nOutcome: correct\n</student_history>\n"
+        }
+      },
+      "queries": [
+        {
+          "problem_text": "Calculate: 260 - 244",
+          "operands": [
+            "260",
+            "244"
+          ],
+          "operation": "subtraction",
+          "query_idx": 0,
+          "generation_seed": 766706595,
+          "level": 9,
+          "donor_target": "24",
+          "recipient_target": "36",
+          "correct_target": "16",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Find the difference between 4160 and 1074.",
+          "operands": [
+            "4160",
+            "1074"
+          ],
+          "operation": "subtraction",
+          "query_idx": 1,
+          "generation_seed": 221870649,
+          "level": 9,
+          "donor_target": "3094",
+          "recipient_target": "3106",
+          "correct_target": "3086",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Calculate: 340 - 251",
+          "operands": [
+            "340",
+            "251"
+          ],
+          "operation": "subtraction",
+          "query_idx": 2,
+          "generation_seed": 490255795,
+          "level": 9,
+          "donor_target": "91",
+          "recipient_target": "109",
+          "correct_target": "89",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        }
+      ],
+      "filter_counts": {
+        "non_distinct_answers": 13
+      }
+    },
+    {
+      "group_idx": 13,
+      "pair_idx": 15,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000206:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000242:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000057:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000132:malrule_next_response"
+      },
+      "labels": {
+        "donor": "subtraction.borrow_no_decrement",
+        "recipient": "subtraction.always_borrow_left",
+        "samemal": "subtraction.always_borrow_left",
+        "random_real": "subtraction.stops_borrow_at_zero"
+      },
+      "family": "subtraction",
+      "contexts": {
+        "donor": {
+          "example_id": "malrulelib:test_same_template:0000206:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 503 - 256\nStudent answer: 357\nCorrect answer: 247\nOutcome: incorrect\n\nTrial 2:\nProblem: A stadium holds 5706 people. If 3979 seats are empty, how many are filled?\nStudent answer: 2837\nCorrect answer: 1727\nOutcome: incorrect\n\nTrial 3:\nProblem: Maria earned $263 from her job. She paid $215 for rent. How much does she have remaining?\nStudent answer: 58\nCorrect answer: 48\nOutcome: incorrect\n\nTrial 4:\nProblem: Sarah had 96 points and lost 47 points. How many points now?\nStudent answer: 59\nCorrect answer: 49\nOutcome: incorrect\n</student_history>\n"
+        },
+        "recipient": {
+          "example_id": "malrulelib:test_same_template:0000242:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: What is 2063 - 1638?\nStudent answer: 325\nCorrect answer: 425\nOutcome: incorrect\n\nTrial 2:\nProblem: The red team has 215 members and the blue team has 160 members. How many fewer members does the blue team have?\nStudent answer: 45\nCorrect answer: 55\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 9009 - 6878\nStudent answer: 2121\nCorrect answer: 2131\nOutcome: incorrect\n\nTrial 4:\nProblem: A red box contains 418 items and a blue box contains 266 items. What is the difference?\nStudent answer: 142\nCorrect answer: 152\nOutcome: incorrect\n</student_history>\n"
+        },
+        "samemal": {
+          "example_id": "malrulelib:test_same_template:0000057:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 8333 - 4043\nStudent answer: 3280\nCorrect answer: 4290\nOutcome: incorrect\n\nTrial 2:\nProblem: Find the difference between 9280 and 6877.\nStudent answer: 2303\nCorrect answer: 2403\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 10801 - 9696\nStudent answer: 105\nCorrect answer: 1105\nOutcome: incorrect\n\nTrial 4:\nProblem: What is 9770 - 3322?\nStudent answer: 5348\nCorrect answer: 6448\nOutcome: incorrect\n</student_history>\n"
+        },
+        "random_real": {
+          "example_id": "malrulelib:test_same_template:0000132:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 8801 - 3172\nStudent answer: 5631\nCorrect answer: 5629\nOutcome: incorrect\n\nTrial 2:\nProblem: What is 306 - 267?\nStudent answer: 41\nCorrect answer: 39\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 903 - 728\nStudent answer: 185\nCorrect answer: 175\nOutcome: incorrect\n\nTrial 4:\nProblem: A road is 900 meters long. After paving 481 meters, how much is left?\nStudent answer: 421\nCorrect answer: 419\nOutcome: incorrect\n</student_history>\n"
+        }
+      },
+      "queries": [
+        {
+          "problem_text": "Calculate: 40804 - 33115",
+          "operands": [
+            "40804",
+            "33115"
+          ],
+          "operation": "subtraction",
+          "query_idx": 0,
+          "generation_seed": 948278817,
+          "level": 9,
+          "donor_target": "17799",
+          "recipient_target": "6689",
+          "correct_target": "7689",
+          "random_rule_target": "7691",
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Calculate: 2008 - 1872",
+          "operands": [
+            "2008",
+            "1872"
+          ],
+          "operation": "subtraction",
+          "query_idx": 1,
+          "generation_seed": 675091951,
+          "level": 9,
+          "donor_target": "1236",
+          "recipient_target": "126",
+          "correct_target": "136",
+          "random_rule_target": "276",
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Calculate: 40207 - 35697",
+          "operands": [
+            "40207",
+            "35697"
+          ],
+          "operation": "subtraction",
+          "query_idx": 2,
+          "generation_seed": 998574716,
+          "level": 9,
+          "donor_target": "15610",
+          "recipient_target": "4500",
+          "correct_target": "4510",
+          "random_rule_target": "5510",
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        }
+      ],
+      "filter_counts": {
+        "non_distinct_answers": 6
+      }
+    },
+    {
+      "group_idx": 14,
+      "pair_idx": 17,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000015:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000132:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000041:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000252:malrule_next_response"
+      },
+      "labels": {
+        "donor": "subtraction.diff_0_n_equals_n",
+        "recipient": "subtraction.stops_borrow_at_zero",
+        "samemal": "subtraction.stops_borrow_at_zero",
+        "random_real": "subtraction.decompose_by_place_value_label"
+      },
+      "family": "subtraction",
+      "contexts": {
+        "donor": {
+          "example_id": "malrulelib:test_same_template:0000015:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 6810 - 4106\nStudent answer: 2716\nCorrect answer: 2704\nOutcome: incorrect\n\nTrial 2:\nProblem: A concert venue has 250 seats. If 213 tickets were sold, how many seats are empty?\nStudent answer: 43\nCorrect answer: 37\nOutcome: incorrect\n\nTrial 3:\nProblem: Sarah has 60 pages and read 47 pages. How many pages to go?\nStudent answer: 27\nCorrect answer: 13\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 80004 - 19972\nStudent answer: 79972\nCorrect answer: 60032\nOutcome: incorrect\n</student_history>\n"
+        },
+        "recipient": {
+          "example_id": "malrulelib:test_same_template:0000132:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 8801 - 3172\nStudent answer: 5631\nCorrect answer: 5629\nOutcome: incorrect\n\nTrial 2:\nProblem: What is 306 - 267?\nStudent answer: 41\nCorrect answer: 39\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 903 - 728\nStudent answer: 185\nCorrect answer: 175\nOutcome: incorrect\n\nTrial 4:\nProblem: A road is 900 meters long. After paving 481 meters, how much is left?\nStudent answer: 421\nCorrect answer: 419\nOutcome: incorrect\n</student_history>\n"
+        },
+        "samemal": {
+          "example_id": "malrulelib:test_same_template:0000041:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Emma collected 200 trading cards. She traded away 137 cards. How many cards does she have now?\nStudent answer: 77\nCorrect answer: 63\nOutcome: incorrect\n\nTrial 2:\nProblem: Calculate: 5108 - 4279\nStudent answer: 831\nCorrect answer: 829\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 502 - 344\nStudent answer: 162\nCorrect answer: 158\nOutcome: incorrect\n\nTrial 4:\nProblem: There were 504 students in the cafeteria. 448 students left to go outside. How many students remain in the cafeteria?\nStudent answer: 64\nCorrect answer: 56\nOutcome: incorrect\n</student_history>\n"
+        },
+        "random_real": {
+          "example_id": "malrulelib:test_same_template:0000252:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: What number is represented by 3 thousands 11 hundreds 7 tens 1 one?\nStudent answer: 31171\nCorrect answer: 4171\nOutcome: incorrect\n\nTrial 2:\nProblem: A student has base-10 blocks: 3 hundred-blocks, 12 ten-rods, and 9 unit cubes. What number do these blocks represent?\nStudent answer: 3129\nCorrect answer: 429\nOutcome: incorrect\n\nTrial 3:\nProblem: What number is represented by 2 tens 19 ones?\nStudent answer: 219\nCorrect answer: 39\nOutcome: incorrect\n\nTrial 4:\nProblem: A student has base-10 blocks: 3 hundred-blocks, 14 ten-rods, and 3 unit cubes. What number do these blocks represent?\nStudent answer: 3143\nCorrect answer: 443\nOutcome: incorrect\n</student_history>\n"
+        }
+      },
+      "queries": [
+        {
+          "problem_text": "Find the difference between 201 and 142.",
+          "operands": [
+            "201",
+            "142"
+          ],
+          "operation": "subtraction",
+          "query_idx": 0,
+          "generation_seed": 432962496,
+          "level": 9,
+          "donor_target": "49",
+          "recipient_target": "61",
+          "correct_target": "59",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Calculate: 2601 - 1789",
+          "operands": [
+            "2601",
+            "1789"
+          ],
+          "operation": "subtraction",
+          "query_idx": 1,
+          "generation_seed": 948054864,
+          "level": 9,
+          "donor_target": "882",
+          "recipient_target": "828",
+          "correct_target": "812",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Sarah had $200. She spent $196 on books. How much money does she have left?",
+          "operands": [
+            "200",
+            "196"
+          ],
+          "operation": "subtraction",
+          "query_idx": 2,
+          "generation_seed": 430768314,
+          "level": 9,
+          "donor_target": "196",
+          "recipient_target": "16",
+          "correct_target": "4",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        }
+      ],
+      "filter_counts": {
+        "non_distinct_answers": 54,
+        "metadata_inconsistent": 23,
+        "ValueError": 1,
+        "seen_number_combination": 1
+      }
+    },
+    {
+      "group_idx": 15,
+      "pair_idx": 18,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000057:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000195:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000196:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000138:malrule_next_response"
+      },
+      "labels": {
+        "donor": "subtraction.always_borrow_left",
+        "recipient": "subtraction.borrow_no_decrement",
+        "samemal": "subtraction.borrow_no_decrement",
+        "random_real": "subtraction.borrow_from_bottom"
+      },
+      "family": "subtraction",
+      "contexts": {
+        "donor": {
+          "example_id": "malrulelib:test_same_template:0000057:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 8333 - 4043\nStudent answer: 3280\nCorrect answer: 4290\nOutcome: incorrect\n\nTrial 2:\nProblem: Find the difference between 9280 and 6877.\nStudent answer: 2303\nCorrect answer: 2403\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 10801 - 9696\nStudent answer: 105\nCorrect answer: 1105\nOutcome: incorrect\n\nTrial 4:\nProblem: What is 9770 - 3322?\nStudent answer: 5348\nCorrect answer: 6448\nOutcome: incorrect\n</student_history>\n"
+        },
+        "recipient": {
+          "example_id": "malrulelib:test_same_template:0000195:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Sarah baked 77 cookies and sold 48 cookies. How many cookies left?\nStudent answer: 39\nCorrect answer: 29\nOutcome: incorrect\n\nTrial 2:\nProblem: A stadium has 3037 seats. 604 tickets were sold. How many seats are still available?\nStudent answer: 3433\nCorrect answer: 2433\nOutcome: incorrect\n\nTrial 3:\nProblem: Subtract 4008 from 5790.\nStudent answer: 1792\nCorrect answer: 1782\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 52 - 25\nStudent answer: 37\nCorrect answer: 27\nOutcome: incorrect\n</student_history>\n"
+        },
+        "samemal": {
+          "example_id": "malrulelib:test_same_template:0000196:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 704 - 495\nStudent answer: 319\nCorrect answer: 209\nOutcome: incorrect\n\nTrial 2:\nProblem: Subtract 134 from 203.\nStudent answer: 179\nCorrect answer: 69\nOutcome: incorrect\n\nTrial 3:\nProblem: A school has 317 students. If 238 students are absent, how many are present?\nStudent answer: 189\nCorrect answer: 79\nOutcome: incorrect\n\nTrial 4:\nProblem: Sarah has 94 pages and read 48 pages. How many pages to go?\nStudent answer: 56\nCorrect answer: 46\nOutcome: incorrect\n</student_history>\n"
+        },
+        "random_real": {
+          "example_id": "malrulelib:test_same_template:0000138:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: A store had 461 items in stock. After selling 283 items, how many remain?\nStudent answer: 398\nCorrect answer: 178\nOutcome: incorrect\n\nTrial 2:\nProblem: What is 4863 - 4692?\nStudent answer: 371\nCorrect answer: 171\nOutcome: incorrect\n\nTrial 3:\nProblem: School A has 265 students and School B has 175 students. How many more students does School A have?\nStudent answer: 290\nCorrect answer: 90\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 83 - 57\nStudent answer: 46\nCorrect answer: 26\nOutcome: incorrect\n</student_history>\n"
+        }
+      },
+      "queries": [
+        {
+          "problem_text": "Calculate: 5007 - 4103",
+          "operands": [
+            "5007",
+            "4103"
+          ],
+          "operation": "subtraction",
+          "query_idx": 0,
+          "generation_seed": 965575588,
+          "level": 9,
+          "donor_target": "894",
+          "recipient_target": "1904",
+          "correct_target": "904",
+          "random_rule_target": "2904",
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Calculate: 90902 - 86252",
+          "operands": [
+            "90902",
+            "86252"
+          ],
+          "operation": "subtraction",
+          "query_idx": 1,
+          "generation_seed": 424597926,
+          "level": 9,
+          "donor_target": "3640",
+          "recipient_target": "14750",
+          "correct_target": "4650",
+          "random_rule_target": "24850",
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Calculate: 5004 - 3954",
+          "operands": [
+            "5004",
+            "3954"
+          ],
+          "operation": "subtraction",
+          "query_idx": 2,
+          "generation_seed": 246312322,
+          "level": 9,
+          "donor_target": "1040",
+          "recipient_target": "2150",
+          "correct_target": "1050",
+          "random_rule_target": "3250",
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        }
+      ],
+      "filter_counts": {
+        "seen_number_combination": 1,
+        "non_distinct_answers": 5
+      }
+    },
+    {
+      "group_idx": 16,
+      "pair_idx": 19,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000299:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000108:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000208:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000024:malrule_next_response"
+      },
+      "labels": {
+        "donor": "subtraction.always_borrow_left",
+        "recipient": "subtraction.smaller_from_larger",
+        "samemal": "subtraction.smaller_from_larger",
+        "random_real": "subtraction.diff_0_n_equals_n"
+      },
+      "family": "subtraction",
+      "contexts": {
+        "donor": {
+          "example_id": "malrulelib:test_same_template:0000299:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: What is 4462 - 1087?\nStudent answer: 2375\nCorrect answer: 3375\nOutcome: incorrect\n\nTrial 2:\nProblem: Calculate: 9810 - 2725\nStudent answer: 6085\nCorrect answer: 7085\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 7953 - 6610\nStudent answer: 233\nCorrect answer: 1343\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 6390 - 3119\nStudent answer: 2171\nCorrect answer: 3271\nOutcome: incorrect\n</student_history>\n"
+        },
+        "recipient": {
+          "example_id": "malrulelib:test_same_template:0000108:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 7910 - 1401\nStudent answer: 6511\nCorrect answer: 6509\nOutcome: incorrect\n\nTrial 2:\nProblem: A piece of fabric was 267 meters long. After 195 meters was sold, how much fabric remained?\nStudent answer: 132\nCorrect answer: 72\nOutcome: incorrect\n\nTrial 3:\nProblem: Subtract 265 from 311.\nStudent answer: 154\nCorrect answer: 46\nOutcome: incorrect\n\nTrial 4:\nProblem: Sarah collected 60 stamps and gave away 31 stamps. How many stamps remaining?\nStudent answer: 31\nCorrect answer: 29\nOutcome: incorrect\n</student_history>\n"
+        },
+        "samemal": {
+          "example_id": "malrulelib:test_same_template:0000208:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 908 - 89\nStudent answer: 981\nCorrect answer: 819\nOutcome: incorrect\n\nTrial 2:\nProblem: Calculate: 5006 - 2342\nStudent answer: 3344\nCorrect answer: 2664\nOutcome: incorrect\n\nTrial 3:\nProblem: Subtract 283 from 302.\nStudent answer: 181\nCorrect answer: 19\nOutcome: incorrect\n\nTrial 4:\nProblem: Building A is 314 feet tall and Building B is 169 feet tall. What is the difference in height?\nStudent answer: 255\nCorrect answer: 145\nOutcome: incorrect\n</student_history>\n"
+        },
+        "random_real": {
+          "example_id": "malrulelib:test_same_template:0000024:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Subtract 2172 from 4640.\nStudent answer: 2472\nCorrect answer: 2468\nOutcome: incorrect\n\nTrial 2:\nProblem: Sarah collected 70 stamps and gave away 37 stamps. How many stamps remaining?\nStudent answer: 47\nCorrect answer: 33\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 48000 - 36991\nStudent answer: 12991\nCorrect answer: 11009\nOutcome: incorrect\n\nTrial 4:\nProblem: A school has 306 students enrolled. If 228 students graduated, how many students remain?\nStudent answer: 28\nCorrect answer: 78\nOutcome: incorrect\n</student_history>\n"
+        }
+      },
+      "queries": [
+        {
+          "problem_text": "Calculate: 7009 - 6394",
+          "operands": [
+            "7009",
+            "6394"
+          ],
+          "operation": "subtraction",
+          "query_idx": 0,
+          "generation_seed": 992064499,
+          "level": 9,
+          "donor_target": "605",
+          "recipient_target": "1395",
+          "correct_target": "615",
+          "random_rule_target": "1395",
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Calculate: 90208 - 50943",
+          "operands": [
+            "90208",
+            "50943"
+          ],
+          "operation": "subtraction",
+          "query_idx": 1,
+          "generation_seed": 230955976,
+          "level": 9,
+          "donor_target": "39255",
+          "recipient_target": "40745",
+          "correct_target": "39265",
+          "random_rule_target": "39345",
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Calculate: 509 - 169",
+          "operands": [
+            "509",
+            "169"
+          ],
+          "operation": "subtraction",
+          "query_idx": 2,
+          "generation_seed": 80368264,
+          "level": 9,
+          "donor_target": "330",
+          "recipient_target": "460",
+          "correct_target": "340",
+          "random_rule_target": "460",
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        }
+      ],
+      "filter_counts": {
+        "non_distinct_answers": 4
+      }
+    },
+    {
+      "group_idx": 17,
+      "pair_idx": 20,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000293:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000203:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000197:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000273:malrule_next_response"
+      },
+      "labels": {
+        "donor": "fractions.multiply_across_for_division",
+        "recipient": "fractions.ignore_denominators",
+        "samemal": "fractions.ignore_denominators",
+        "random_real": "fractions.natural_number_bias_numerator_only"
+      },
+      "family": "fractions",
+      "contexts": {
+        "donor": {
+          "example_id": "malrulelib:test_same_template:0000293:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: You have 2 2/4 cups of flour. Each muffin needs 3 5/7 cups. How many muffins can you make?\nStudent answer: 65/7\nCorrect answer: 35/52\nOutcome: incorrect\n\nTrial 2:\nProblem: A ribbon is 3/3 meter long. You cut it into 3 equal pieces. How long is each piece (in meters)?\nStudent answer: 3/1\nCorrect answer: 1/3\nOutcome: incorrect\n\nTrial 3:\nProblem: You have 2 1/2 cups of flour. Each muffin needs 1 3/4 cups. How many muffins can you make?\nStudent answer: 35/8\nCorrect answer: 10/7\nOutcome: incorrect\n\nTrial 4:\nProblem: Divide: (9/2) ÷ (7/2)\nStudent answer: 63/4\nCorrect answer: 9/7\nOutcome: incorrect\n</student_history>\n"
+        },
+        "recipient": {
+          "example_id": "malrulelib:test_same_template:0000203:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: If you shade 3/11 of a circle and 1/6 of another equal circle, what fraction is shaded in total?\nStudent answer: 4\nCorrect answer: 29/66\nOutcome: incorrect\n\nTrial 2:\nProblem: A recipe calls for 2/4 cup of sugar and another 10/12 cup of sugar. What is the total cups of sugar?\nStudent answer: 12\nCorrect answer: 4/3\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 5/6 - 2/8\nStudent answer: 3\nCorrect answer: 7/12\nOutcome: incorrect\n\nTrial 4:\nProblem: Divide: 3 6/7 ÷ 3 8/10\nStudent answer: 0\nCorrect answer: 135/133\nOutcome: incorrect\n</student_history>\n"
+        },
+        "samemal": {
+          "example_id": "malrulelib:test_same_template:0000197:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: A recipe calls for 3 3/7 cups of flour per batch. If you make 1 3/7 batches, how much flour do you need in total (in cups)?\nStudent answer: 240\nCorrect answer: 240/49\nOutcome: incorrect\n\nTrial 2:\nProblem: If you shade 10/11 of a circle and 10/12 of another equal circle, what fraction is shaded in total?\nStudent answer: 20\nCorrect answer: 115/66\nOutcome: incorrect\n\nTrial 3:\nProblem: Divide: (1/7) ÷ (7/6)\nStudent answer: 0\nCorrect answer: 6/49\nOutcome: incorrect\n\nTrial 4:\nProblem: Divide: (1/5) ÷ (3/6)\nStudent answer: 0\nCorrect answer: 2/5\nOutcome: incorrect\n</student_history>\n"
+        },
+        "random_real": {
+          "example_id": "malrulelib:test_same_template:0000273:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Compare: 6/12 ___ 3/5\nStudent answer: 6/12\nCorrect answer: 3/5\nOutcome: incorrect\n\nTrial 2:\nProblem: Three books have different amounts read. Book 1 is 8/4 read, Book 2 is 11/14 read, and Book 3 is 14/16 read. Order these fractions from least to greatest.\nStudent answer: 8/4, 11/14, 14/16\nCorrect answer: 11/14, 14/16, 8/4\nOutcome: incorrect\n\nTrial 3:\nProblem: A container has 6/9 liter of juice. If each serving is 10/6 liter, how many servings can you make?\nStudent answer: 10/6\nCorrect answer: 2/5\nOutcome: incorrect\n\nTrial 4:\nProblem: Which is larger: 1/6 or 1/4?\nStudent answer: equal\nCorrect answer: 1/4\nOutcome: incorrect\n</student_history>\n"
+        }
+      },
+      "queries": [
+        {
+          "problem_text": "Divide: 3 6/10 ÷ 3 1/2",
+          "operands": [
+            "36",
+            "10",
+            "7",
+            "2"
+          ],
+          "operation": "fraction_division",
+          "query_idx": 0,
+          "generation_seed": 90873131,
+          "level": 9,
+          "donor_target": "63/5",
+          "recipient_target": "5",
+          "correct_target": "36/35",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Divide: 2 6/7 ÷ 1 1/2",
+          "operands": [
+            "20",
+            "7",
+            "3",
+            "2"
+          ],
+          "operation": "fraction_division",
+          "query_idx": 1,
+          "generation_seed": 921065143,
+          "level": 9,
+          "donor_target": "30/7",
+          "recipient_target": "6",
+          "correct_target": "40/21",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Divide: 3 6/7 ÷ 1 2/3",
+          "operands": [
+            "27",
+            "7",
+            "5",
+            "3"
+          ],
+          "operation": "fraction_division",
+          "query_idx": 2,
+          "generation_seed": 562894472,
+          "level": 9,
+          "donor_target": "45/7",
+          "recipient_target": "5",
+          "correct_target": "81/35",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        }
+      ],
+      "filter_counts": {
+        "seen_number_combination": 285,
+        "history_copy_or_repeated_target": 26,
+        "ValueError": 11,
+        "non_distinct_answers": 1
+      }
+    },
+    {
+      "group_idx": 18,
+      "pair_idx": 28,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000040:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000115:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000122:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000215:malrule_next_response"
+      },
+      "labels": {
+        "donor": "subtraction.diff_0_n_equals_n",
+        "recipient": "subtraction.borrow_no_decrement",
+        "samemal": "subtraction.borrow_no_decrement",
+        "random_real": "NONE"
+      },
+      "family": "subtraction",
+      "contexts": {
+        "donor": {
+          "example_id": "malrulelib:test_same_template:0000040:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: A town has 8201 residents. After 2130 people moved away, how many remain?\nStudent answer: 6131\nCorrect answer: 6071\nOutcome: incorrect\n\nTrial 2:\nProblem: Calculate: 7560 - 5316\nStudent answer: 2256\nCorrect answer: 2244\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 50 - 39\nStudent answer: 29\nCorrect answer: 11\nOutcome: incorrect\n\nTrial 4:\nProblem: A stadium has 5055 seats. 4532 tickets were sold. How many seats are still available?\nStudent answer: 1523\nCorrect answer: 523\nOutcome: incorrect\n</student_history>\n"
+        },
+        "recipient": {
+          "example_id": "malrulelib:test_same_template:0000115:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Subtract 1634 from 9127.\nStudent answer: 8593\nCorrect answer: 7493\nOutcome: incorrect\n\nTrial 2:\nProblem: Subtract 151 from 217.\nStudent answer: 166\nCorrect answer: 66\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 205 - 168\nStudent answer: 147\nCorrect answer: 37\nOutcome: incorrect\n\nTrial 4:\nProblem: A road is 305 meters long. After paving 136 meters, how much is left?\nStudent answer: 279\nCorrect answer: 169\nOutcome: incorrect\n</student_history>\n"
+        },
+        "samemal": {
+          "example_id": "malrulelib:test_same_template:0000122:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 1623 - 1319\nStudent answer: 314\nCorrect answer: 304\nOutcome: incorrect\n\nTrial 2:\nProblem: Tom has 436 marbles and Sarah has 369 marbles. How many more marbles does Tom have than Sarah?\nStudent answer: 177\nCorrect answer: 67\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 308 - 289\nStudent answer: 129\nCorrect answer: 19\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 10205 - 7290\nStudent answer: 13015\nCorrect answer: 2915\nOutcome: incorrect\n</student_history>\n"
+        },
+        "random_real": {
+          "example_id": "malrulelib:test_same_template:0000215:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Add: 58 + 63\nStudent answer: 121\nCorrect answer: 121\nOutcome: correct\n\nTrial 2:\nProblem: There are 27 students in one class and 19 in another. How many students total?\nStudent answer: 46 students\nCorrect answer: 46 students\nOutcome: correct\n\nTrial 3:\nProblem: Add: 68 + 88\nStudent answer: 156\nCorrect answer: 156\nOutcome: correct\n\nTrial 4:\nProblem: What is 17 + 39?\nStudent answer: 56\nCorrect answer: 56\nOutcome: correct\n</student_history>\n"
+        }
+      },
+      "queries": [
+        {
+          "problem_text": "A school has 320 students. If 162 students are absent, how many are present?",
+          "operands": [
+            "320",
+            "162"
+          ],
+          "operation": "subtraction",
+          "query_idx": 0,
+          "generation_seed": 394670137,
+          "level": 9,
+          "donor_target": "162",
+          "recipient_target": "268",
+          "correct_target": "158",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "What is 205 - 195?",
+          "operands": [
+            "205",
+            "195"
+          ],
+          "operation": "subtraction",
+          "query_idx": 1,
+          "generation_seed": 375588212,
+          "level": 9,
+          "donor_target": "190",
+          "recipient_target": "110",
+          "correct_target": "10",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Find the difference between 950 and 191.",
+          "operands": [
+            "950",
+            "191"
+          ],
+          "operation": "subtraction",
+          "query_idx": 2,
+          "generation_seed": 830783889,
+          "level": 9,
+          "donor_target": "761",
+          "recipient_target": "869",
+          "correct_target": "759",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        }
+      ],
+      "filter_counts": {
+        "non_distinct_answers": 10,
+        "metadata_inconsistent": 6,
+        "ValueError": 2
+      }
+    },
+    {
+      "group_idx": 19,
+      "pair_idx": 29,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000019:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000181:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000230:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000129:malrule_next_response"
+      },
+      "labels": {
+        "donor": "subtraction.stops_borrow_at_zero",
+        "recipient": "subtraction.smaller_from_larger",
+        "samemal": "subtraction.smaller_from_larger",
+        "random_real": "subtraction.borrow_no_decrement"
+      },
+      "family": "subtraction",
+      "contexts": {
+        "donor": {
+          "example_id": "malrulelib:test_same_template:0000019:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: A library had 304 books. After lending out 86 books, how many remain?\nStudent answer: 222\nCorrect answer: 218\nOutcome: incorrect\n\nTrial 2:\nProblem: Calculate: 5000 - 1304\nStudent answer: 3704\nCorrect answer: 3696\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 908 - 769\nStudent answer: 141\nCorrect answer: 139\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 200 - 129\nStudent answer: 89\nCorrect answer: 71\nOutcome: incorrect\n</student_history>\n"
+        },
+        "recipient": {
+          "example_id": "malrulelib:test_same_template:0000181:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: A factory produced 5504 items. If 2242 items were sold, how many remain?\nStudent answer: 3342\nCorrect answer: 3262\nOutcome: incorrect\n\nTrial 2:\nProblem: Emma collected 503 trading cards. She traded away 217 cards. How many cards does she have now?\nStudent answer: 314\nCorrect answer: 286\nOutcome: incorrect\n\nTrial 3:\nProblem: Subtract 346 from 434.\nStudent answer: 112\nCorrect answer: 88\nOutcome: incorrect\n\nTrial 4:\nProblem: A store had $601 in sales. After $187 in expenses, what is the profit?\nStudent answer: 586\nCorrect answer: 414\nOutcome: incorrect\n</student_history>\n"
+        },
+        "samemal": {
+          "example_id": "malrulelib:test_same_template:0000230:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Subtract 3057 from 5482.\nStudent answer: 2435\nCorrect answer: 2425\nOutcome: incorrect\n\nTrial 2:\nProblem: Calculate: 53110 - 22002\nStudent answer: 31112\nCorrect answer: 31108\nOutcome: incorrect\n\nTrial 3:\nProblem: What is 224 - 119?\nStudent answer: 115\nCorrect answer: 105\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 3188 - 1383\nStudent answer: 2205\nCorrect answer: 1805\nOutcome: incorrect\n</student_history>\n"
+        },
+        "random_real": {
+          "example_id": "malrulelib:test_same_template:0000129:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 83 - 67\nStudent answer: 26\nCorrect answer: 16\nOutcome: incorrect\n\nTrial 2:\nProblem: Tom has 526 marbles and Sarah has 189 marbles. How many more marbles does Tom have than Sarah?\nStudent answer: 447\nCorrect answer: 337\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 3790 - 1973\nStudent answer: 2827\nCorrect answer: 1817\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 403 - 388\nStudent answer: 125\nCorrect answer: 15\nOutcome: incorrect\n</student_history>\n"
+        }
+      },
+      "queries": [
+        {
+          "problem_text": "Emma collected 503 trading cards. She traded away 275 cards. How many cards does she have now?",
+          "operands": [
+            "503",
+            "275"
+          ],
+          "operation": "subtraction",
+          "query_idx": 0,
+          "generation_seed": 534571908,
+          "level": 9,
+          "donor_target": "232",
+          "recipient_target": "372",
+          "correct_target": "228",
+          "random_rule_target": "338",
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Building A is 200 feet tall and Building B is 117 feet tall. What is the difference in height?",
+          "operands": [
+            "200",
+            "117"
+          ],
+          "operation": "subtraction",
+          "query_idx": 1,
+          "generation_seed": 367398471,
+          "level": 9,
+          "donor_target": "97",
+          "recipient_target": "117",
+          "correct_target": "83",
+          "random_rule_target": "193",
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "There were 503 students in the cafeteria. 319 students left to go outside. How many students remain in the cafeteria?",
+          "operands": [
+            "503",
+            "319"
+          ],
+          "operation": "subtraction",
+          "query_idx": 2,
+          "generation_seed": 520284468,
+          "level": 9,
+          "donor_target": "196",
+          "recipient_target": "216",
+          "correct_target": "184",
+          "random_rule_target": "294",
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        }
+      ],
+      "filter_counts": {
+        "non_distinct_answers": 71,
+        "metadata_inconsistent": 41,
+        "ValueError": 13,
+        "seen_number_combination": 2
+      }
+    },
+    {
+      "group_idx": 20,
+      "pair_idx": 31,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000081:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000002:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000155:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000110:malrule_next_response"
+      },
+      "labels": {
+        "donor": "subtraction.stops_borrow_at_zero",
+        "recipient": "subtraction.diff_0_n_equals_n",
+        "samemal": "subtraction.diff_0_n_equals_n",
+        "random_real": "subtraction.always_borrow_left"
+      },
+      "family": "subtraction",
+      "contexts": {
+        "donor": {
+          "example_id": "malrulelib:test_same_template:0000081:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: A red box contains 502 items and a blue box contains 303 items. What is the difference?\nStudent answer: 201\nCorrect answer: 199\nOutcome: incorrect\n\nTrial 2:\nProblem: Anna scored 501 points and Ben scored 193 points. How many more points did Anna score?\nStudent answer: 312\nCorrect answer: 308\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 404 - 277\nStudent answer: 133\nCorrect answer: 127\nOutcome: incorrect\n\nTrial 4:\nProblem: A town has 5603 residents. After 1984 people moved away, how many remain?\nStudent answer: 3621\nCorrect answer: 3619\nOutcome: incorrect\n</student_history>\n"
+        },
+        "recipient": {
+          "example_id": "malrulelib:test_same_template:0000002:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 7060 - 1033\nStudent answer: 6033\nCorrect answer: 6027\nOutcome: incorrect\n\nTrial 2:\nProblem: Calculate: 203 - 114\nStudent answer: 19\nCorrect answer: 89\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 90 - 72\nStudent answer: 22\nCorrect answer: 18\nOutcome: incorrect\n\nTrial 4:\nProblem: Emma collected 503 trading cards. She traded away 157 cards. How many cards does she have now?\nStudent answer: 356\nCorrect answer: 346\nOutcome: incorrect\n</student_history>\n"
+        },
+        "samemal": {
+          "example_id": "malrulelib:test_same_template:0000155:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Find the difference between 490 and 253.\nStudent answer: 243\nCorrect answer: 237\nOutcome: incorrect\n\nTrial 2:\nProblem: Sarah had $60 and spent $48. How many dollars left?\nStudent answer: 28\nCorrect answer: 12\nOutcome: incorrect\n\nTrial 3:\nProblem: Sarah baked 60 cookies and sold 39 cookies. How many cookies left?\nStudent answer: 39\nCorrect answer: 21\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 50 - 27\nStudent answer: 37\nCorrect answer: 23\nOutcome: incorrect\n</student_history>\n"
+        },
+        "random_real": {
+          "example_id": "malrulelib:test_same_template:0000110:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Emma collected 506 trading cards. She traded away 176 cards. How many cards does she have now?\nStudent answer: 320\nCorrect answer: 330\nOutcome: incorrect\n\nTrial 2:\nProblem: School A has 450 students and School B has 133 students. How many more students does School A have?\nStudent answer: 217\nCorrect answer: 317\nOutcome: incorrect\n\nTrial 3:\nProblem: What is 2589 - 1602?\nStudent answer: 877\nCorrect answer: 987\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 60001 - 43770\nStudent answer: 16221\nCorrect answer: 16231\nOutcome: incorrect\n</student_history>\n"
+        }
+      },
+      "queries": [
+        {
+          "problem_text": "Calculate: 50002 - 22960",
+          "operands": [
+            "50002",
+            "22960"
+          ],
+          "operation": "subtraction",
+          "query_idx": 0,
+          "generation_seed": 67109279,
+          "level": 9,
+          "donor_target": "28962",
+          "recipient_target": "32962",
+          "correct_target": "27042",
+          "random_rule_target": "27032",
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "A stadium has 4700 seats. 1396 tickets were sold. How many seats are still available?",
+          "operands": [
+            "4700",
+            "1396"
+          ],
+          "operation": "subtraction",
+          "query_idx": 1,
+          "generation_seed": 61191769,
+          "level": 9,
+          "donor_target": "3316",
+          "recipient_target": "3496",
+          "correct_target": "3304",
+          "random_rule_target": "2304",
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Calculate: 60051 - 45930",
+          "operands": [
+            "60051",
+            "45930"
+          ],
+          "operation": "subtraction",
+          "query_idx": 2,
+          "generation_seed": 671337458,
+          "level": 9,
+          "donor_target": "15921",
+          "recipient_target": "25921",
+          "correct_target": "14121",
+          "random_rule_target": "14011",
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        }
+      ],
+      "filter_counts": {
+        "non_distinct_answers": 1
+      }
+    },
+    {
+      "group_idx": 21,
+      "pair_idx": 52,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000194:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000291:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000246:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000292:malrule_next_response"
+      },
+      "labels": {
+        "donor": "decimals.longer_is_larger",
+        "recipient": "decimals.whole_number_thinking",
+        "samemal": "decimals.whole_number_thinking",
+        "random_real": "decimals.right_align_decimals"
+      },
+      "family": "decimals",
+      "contexts": {
+        "donor": {
+          "example_id": "malrulelib:test_same_template:0000194:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Which is larger: 0.7 or 0.52?\nStudent answer: 0.52\nCorrect answer: 0.7\nOutcome: incorrect\n\nTrial 2:\nProblem: A rope is 0.45 meters long and another is 0.249 meters long. Which rope is longer?\nStudent answer: 0.249\nCorrect answer: 0.45\nOutcome: incorrect\n\nTrial 3:\nProblem: Which is larger: 0.7 or 0.34?\nStudent answer: 0.34\nCorrect answer: 0.7\nOutcome: incorrect\n\nTrial 4:\nProblem: Which is larger: 0.7 or 0.65?\nStudent answer: 0.65\nCorrect answer: 0.7\nOutcome: incorrect\n</student_history>\n"
+        },
+        "recipient": {
+          "example_id": "malrulelib:test_same_template:0000291:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Which is the largest: 6.1, 6.11, or 6.113?\nStudent answer: 6.1\nCorrect answer: 6.113\nOutcome: incorrect\n\nTrial 2:\nProblem: Calculate: 18.88 - 4.6\nStudent answer: 184.2\nCorrect answer: 14.28\nOutcome: incorrect\n\nTrial 3:\nProblem: A rope is 0.4 meters long and another is 0.167 meters long. Which rope is longer?\nStudent answer: 4\nCorrect answer: 0.4\nOutcome: incorrect\n\nTrial 4:\nProblem: Order from smallest to largest: 0.5, 0.39, 0.38\nStudent answer: 0.39\nCorrect answer: 0.5\nOutcome: incorrect\n</student_history>\n"
+        },
+        "samemal": {
+          "example_id": "malrulelib:test_same_template:0000246:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: John's plant grew 0.9 inches and Mary's grew 0.73 inches. Whose plant grew more?\nStudent answer: 0.73\nCorrect answer: 0.9\nOutcome: incorrect\n\nTrial 2:\nProblem: Sarah earned $6.6 on Monday and $1.8 on Tuesday. How much did she earn in total?\nStudent answer: 84\nCorrect answer: 8.4\nOutcome: incorrect\n\nTrial 3:\nProblem: Which is larger: 0.57 or 0.6?\nStudent answer: 0.57\nCorrect answer: 0.6\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 4.7 ÷ 2.4\nStudent answer: 1\nCorrect answer: 1.96\nOutcome: incorrect\n</student_history>\n"
+        },
+        "random_real": {
+          "example_id": "malrulelib:test_same_template:0000292:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 5.5 + 58.73\nStudent answer: 592.8\nCorrect answer: 64.23\nOutcome: incorrect\n\nTrial 2:\nProblem: Calculate: 21.62 - 10.4\nStudent answer: 205.8\nCorrect answer: 11.22\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 39.2 + 47.14 - 29.2\nStudent answer: 481.4\nCorrect answer: 57.14\nOutcome: incorrect\n\nTrial 4:\nProblem: Sarah earned $14.3 on Monday, $20.31 on Tuesday, and spent $23.6 on Wednesday. How much does she have?\nStudent answer: 193.8\nCorrect answer: 11.01\nOutcome: incorrect\n</student_history>\n"
+        }
+      },
+      "queries": [
+        {
+          "problem_text": "A rope is 0.9 meters long and another is 0.897 meters long. Which rope is longer?",
+          "operands": [
+            "0.9",
+            "0.897"
+          ],
+          "operation": "decimal_comparison",
+          "query_idx": 0,
+          "generation_seed": 994968680,
+          "level": 9,
+          "donor_target": "897/1000",
+          "recipient_target": "9",
+          "correct_target": "9/10",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Maria has $0.55 and Tom has $0.527. Who has more money?",
+          "operands": [
+            "0.55",
+            "0.527"
+          ],
+          "operation": "decimal_comparison",
+          "query_idx": 1,
+          "generation_seed": 852994802,
+          "level": 9,
+          "donor_target": "527/1000",
+          "recipient_target": "55",
+          "correct_target": "11/20",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Which is heavier: a package weighing 0.31 kg or one weighing 0.281 kg?",
+          "operands": [
+            "0.31",
+            "0.281"
+          ],
+          "operation": "decimal_comparison",
+          "query_idx": 2,
+          "generation_seed": 518139774,
+          "level": 9,
+          "donor_target": "281/1000",
+          "recipient_target": "31",
+          "correct_target": "31/100",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        }
+      ],
+      "filter_counts": {
+        "non_distinct_answers": 28,
+        "metadata_inconsistent": 15,
+        "ValueError": 5,
+        "seen_number_combination": 2,
+        "history_copy_or_repeated_target": 1
+      }
+    },
+    {
+      "group_idx": 22,
+      "pair_idx": 75,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000266:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000205:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000018:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000140:malrule_next_response"
+      },
+      "labels": {
+        "donor": "fractions.natural_number_bias_numerator_only",
+        "recipient": "fractions.ignore_denominators",
+        "samemal": "fractions.ignore_denominators",
+        "random_real": "fractions.multiply_across_for_division"
+      },
+      "family": "fractions",
+      "contexts": {
+        "donor": {
+          "example_id": "malrulelib:test_same_template:0000266:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Which is larger: 3/2 or 6/13?\nStudent answer: 6/13\nCorrect answer: 3/2\nOutcome: incorrect\n\nTrial 2:\nProblem: Rectangle A is split into 4 equal pieces, 5 are colored. Rectangle B is split into 19 equal pieces, 10 are colored. Which has more colored area?\nStudent answer: 10/19\nCorrect answer: 5/4\nOutcome: incorrect\n\nTrial 3:\nProblem: Maria ate 1/10 of a pizza and John ate 1/7 of a pizza. Which fraction is larger?\nStudent answer: equal\nCorrect answer: 1/7\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 9/2 - 1/9\nStudent answer: 9/2\nCorrect answer: 79/18\nOutcome: incorrect\n</student_history>\n"
+        },
+        "recipient": {
+          "example_id": "malrulelib:test_same_template:0000205:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: A tank can hold 4/2 gallon of water. Currently it is 9/10 full. How many gallons of water are in the tank?\nStudent answer: 36\nCorrect answer: 9/5\nOutcome: incorrect\n\nTrial 2:\nProblem: A recipe calls for 5/7 cup of sugar and 3/4 cup of flour. How many cups of ingredients in total?\nStudent answer: 8\nCorrect answer: 41/28\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 1/3 + 2/7\nStudent answer: 3\nCorrect answer: 13/21\nOutcome: incorrect\n\nTrial 4:\nProblem: Multiply: 1/9 × 3/9\nStudent answer: 3\nCorrect answer: 1/27\nOutcome: incorrect\n</student_history>\n"
+        },
+        "samemal": {
+          "example_id": "malrulelib:test_same_template:0000018:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 7/4 ÷ 2/10\nStudent answer: 3\nCorrect answer: 35/4\nOutcome: incorrect\n\nTrial 2:\nProblem: A tank is 4/5 full. You drain 4/5 of what's in the tank. What fraction of the full tank did you drain?\nStudent answer: 16\nCorrect answer: 16/25\nOutcome: incorrect\n\nTrial 3:\nProblem: A recipe calls for 1/6 cup of flour per batch. If you make 3/3 of a batch, how much flour do you need (in cups)?\nStudent answer: 3\nCorrect answer: 1/6\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 5/5 - 4/11\nStudent answer: 1\nCorrect answer: 7/11\nOutcome: incorrect\n</student_history>\n"
+        },
+        "random_real": {
+          "example_id": "malrulelib:test_same_template:0000140:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: You have 8/6 hours to complete tasks. Each task takes 3/7 hours. How many tasks can you complete?\nStudent answer: 4/7\nCorrect answer: 28/9\nOutcome: incorrect\n\nTrial 2:\nProblem: Divide: (1/10) ÷ (6/2)\nStudent answer: 3/10\nCorrect answer: 1/30\nOutcome: incorrect\n\nTrial 3:\nProblem: Divide: 2 2/3 ÷ 2 4/7\nStudent answer: 48/7\nCorrect answer: 28/27\nOutcome: incorrect\n\nTrial 4:\nProblem: Divide: (2/7) ÷ 7\nStudent answer: 2/1\nCorrect answer: 2/49\nOutcome: incorrect\n</student_history>\n"
+        }
+      },
+      "queries": [
+        {
+          "problem_text": "Calculate: 11/2 - 2/10",
+          "operands": [
+            "11",
+            "2",
+            "2",
+            "10"
+          ],
+          "operation": "fraction_subtraction",
+          "query_idx": 0,
+          "generation_seed": 666718048,
+          "level": 9,
+          "donor_target": "11/2",
+          "recipient_target": "9",
+          "correct_target": "53/10",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Calculate: 11/10 - 5/5",
+          "operands": [
+            "11",
+            "10",
+            "5",
+            "5"
+          ],
+          "operation": "fraction_subtraction",
+          "query_idx": 1,
+          "generation_seed": 446172292,
+          "level": 9,
+          "donor_target": "11/10",
+          "recipient_target": "6",
+          "correct_target": "1/10",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Calculate: 12/5 + 8/12",
+          "operands": [
+            "12",
+            "5",
+            "8",
+            "12"
+          ],
+          "operation": "fraction_addition",
+          "query_idx": 2,
+          "generation_seed": 737493097,
+          "level": 9,
+          "donor_target": "12/5",
+          "recipient_target": "20",
+          "correct_target": "46/15",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        }
+      ],
+      "filter_counts": {
+        "seen_number_combination": 80,
+        "history_copy_or_repeated_target": 2
+      }
+    },
+    {
+      "group_idx": 23,
+      "pair_idx": 84,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000137:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000222:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000130:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000026:malrule_next_response"
+      },
+      "labels": {
+        "donor": "fractions.ignore_denominators",
+        "recipient": "fractions.common_denominator_numerator",
+        "samemal": "fractions.common_denominator_numerator",
+        "random_real": "fractions.multiply_across_for_division"
+      },
+      "family": "fractions",
+      "contexts": {
+        "donor": {
+          "example_id": "malrulelib:test_same_template:0000137:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Alex walked 2/4 of a mile and then walked 6/8 of a mile more. What is the total miles walked?\nStudent answer: 8\nCorrect answer: 5/4\nOutcome: incorrect\n\nTrial 2:\nProblem: Sarah ate 3/5 of a pizza and Jake ate 7/12 of the same pizza. What is the fraction of the pizza eaten?\nStudent answer: 10\nCorrect answer: 71/60\nOutcome: incorrect\n\nTrial 3:\nProblem: Sarah walks 3 3/7 miles per hour. If she walks for 1 1/7 hours, how far does she walk (in miles)?\nStudent answer: 192\nCorrect answer: 192/49\nOutcome: incorrect\n\nTrial 4:\nProblem: Sarah walks 3 3/8 miles per hour. If she walks for 3 3/8 hours, how far does she walk (in miles)?\nStudent answer: 729\nCorrect answer: 729/64\nOutcome: incorrect\n</student_history>\n"
+        },
+        "recipient": {
+          "example_id": "malrulelib:test_same_template:0000222:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: A chef is making a sauce that requires 1/8 cup of tomatoes, 1/2 cup of onions, and 8/10 cup of peppers. How many total cups of vegetables are needed?\nStudent answer: 1/2\nCorrect answer: 57/40\nOutcome: incorrect\n\nTrial 2:\nProblem: If you shade 1/11 of a circle and 5/8 of another equal circle, what fraction is shaded in total?\nStudent answer: 6/19\nCorrect answer: 63/88\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 1/2 + 4/8\nStudent answer: 1/2\nCorrect answer: 1/1\nOutcome: incorrect\n\nTrial 4:\nProblem: A chef is making a sauce that requires 5/8 cup of tomatoes, 6/9 cup of onions, and 2/6 cup of peppers. How many total cups of vegetables are needed?\nStudent answer: 13/23\nCorrect answer: 13/8\nOutcome: incorrect\n</student_history>\n"
+        },
+        "samemal": {
+          "example_id": "malrulelib:test_same_template:0000130:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: 3/4 of the class are boys and 1/7 of the class wear glasses. What is the fraction of class that are boys or wear glasses?\nStudent answer: 4/11\nCorrect answer: 25/28\nOutcome: incorrect\n\nTrial 2:\nProblem: Alex walked 1/4 of a mile and then walked 9/12 of a mile more. What is the total miles walked?\nStudent answer: 5/8\nCorrect answer: 1/1\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 1/2 + 7/11\nStudent answer: 8/13\nCorrect answer: 25/22\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 5/6 + 6/12 + 6/11\nStudent answer: 17/29\nCorrect answer: 62/33\nOutcome: incorrect\n</student_history>\n"
+        },
+        "random_real": {
+          "example_id": "malrulelib:test_same_template:0000026:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: A ribbon is 9/4 meter long. You cut it into 6 equal pieces. How long is each piece (in meters)?\nStudent answer: 27/2\nCorrect answer: 3/8\nOutcome: incorrect\n\nTrial 2:\nProblem: You have 2 1/2 cups of flour. Each muffin needs 3 4/6 cups. How many muffins can you make?\nStudent answer: 55/6\nCorrect answer: 15/22\nOutcome: incorrect\n\nTrial 3:\nProblem: A rope is 2 1/6 meters long. You need pieces that are 3 2/8 meters each. How many pieces can you cut?\nStudent answer: 169/24\nCorrect answer: 2/3\nOutcome: incorrect\n\nTrial 4:\nProblem: A ribbon is 10/4 meter long. You cut it into 7 equal pieces. How long is each piece (in meters)?\nStudent answer: 35/2\nCorrect answer: 5/14\nOutcome: incorrect\n</student_history>\n"
+        }
+      },
+      "queries": [
+        {
+          "problem_text": "4/5 of the class are boys and 5/9 of the class wear glasses. What is the fraction of class that are boys or wear glasses?",
+          "operands": [
+            "4",
+            "5",
+            "5",
+            "9"
+          ],
+          "operation": "fraction_addition",
+          "query_idx": 0,
+          "generation_seed": 489660029,
+          "level": 9,
+          "donor_target": "9",
+          "recipient_target": "9/14",
+          "correct_target": "61/45",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "If you shade 9/10 of a circle and 8/9 of another equal circle, what fraction is shaded in total?",
+          "operands": [
+            "9",
+            "10",
+            "8",
+            "9"
+          ],
+          "operation": "fraction_addition",
+          "query_idx": 1,
+          "generation_seed": 454531265,
+          "level": 9,
+          "donor_target": "17",
+          "recipient_target": "17/19",
+          "correct_target": "161/90",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "1/5 of the class are boys and 11/12 of the class wear glasses. What is the fraction of class that are boys or wear glasses?",
+          "operands": [
+            "1",
+            "5",
+            "11",
+            "12"
+          ],
+          "operation": "fraction_addition",
+          "query_idx": 2,
+          "generation_seed": 28184898,
+          "level": 9,
+          "donor_target": "12",
+          "recipient_target": "12/17",
+          "correct_target": "67/60",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        }
+      ],
+      "filter_counts": {
+        "seen_number_combination": 180,
+        "metadata_inconsistent": 37,
+        "ValueError": 37,
+        "history_copy_or_repeated_target": 1
+      }
+    },
+    {
+      "group_idx": 24,
+      "pair_idx": 85,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000054:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000137:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000018:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000045:malrule_next_response"
+      },
+      "labels": {
+        "donor": "fractions.keep_common_denominator_for_multiplication",
+        "recipient": "fractions.ignore_denominators",
+        "samemal": "fractions.ignore_denominators",
+        "random_real": "fractions.denominator_comparison_error"
+      },
+      "family": "fractions",
+      "contexts": {
+        "donor": {
+          "example_id": "malrulelib:test_same_template:0000054:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Sarah walks 3 2/6 miles per hour. If she walks for 1 4/6 hours, how far does she walk (in miles)?\nStudent answer: 100/3\nCorrect answer: 50/9\nOutcome: incorrect\n\nTrial 2:\nProblem: Multiply: 2/7 × 5/7 × 3/7\nStudent answer: 30/7\nCorrect answer: 30/343\nOutcome: incorrect\n\nTrial 3:\nProblem: Multiply: 2 1/8 × 3 2/8\nStudent answer: 221/4\nCorrect answer: 221/32\nOutcome: incorrect\n\nTrial 4:\nProblem: A book has 3/4 of its pages with illustrations. Of those, 2/4 are in color, and of the color illustrations, 3/4 are full-page. What fraction of the book's total pages are full-page color illustrations?\nStudent answer: 9/2\nCorrect answer: 9/32\nOutcome: incorrect\n</student_history>\n"
+        },
+        "recipient": {
+          "example_id": "malrulelib:test_same_template:0000137:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Alex walked 2/4 of a mile and then walked 6/8 of a mile more. What is the total miles walked?\nStudent answer: 8\nCorrect answer: 5/4\nOutcome: incorrect\n\nTrial 2:\nProblem: Sarah ate 3/5 of a pizza and Jake ate 7/12 of the same pizza. What is the fraction of the pizza eaten?\nStudent answer: 10\nCorrect answer: 71/60\nOutcome: incorrect\n\nTrial 3:\nProblem: Sarah walks 3 3/7 miles per hour. If she walks for 1 1/7 hours, how far does she walk (in miles)?\nStudent answer: 192\nCorrect answer: 192/49\nOutcome: incorrect\n\nTrial 4:\nProblem: Sarah walks 3 3/8 miles per hour. If she walks for 3 3/8 hours, how far does she walk (in miles)?\nStudent answer: 729\nCorrect answer: 729/64\nOutcome: incorrect\n</student_history>\n"
+        },
+        "samemal": {
+          "example_id": "malrulelib:test_same_template:0000018:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 7/4 ÷ 2/10\nStudent answer: 3\nCorrect answer: 35/4\nOutcome: incorrect\n\nTrial 2:\nProblem: A tank is 4/5 full. You drain 4/5 of what's in the tank. What fraction of the full tank did you drain?\nStudent answer: 16\nCorrect answer: 16/25\nOutcome: incorrect\n\nTrial 3:\nProblem: A recipe calls for 1/6 cup of flour per batch. If you make 3/3 of a batch, how much flour do you need (in cups)?\nStudent answer: 3\nCorrect answer: 1/6\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 5/5 - 4/11\nStudent answer: 1\nCorrect answer: 7/11\nOutcome: incorrect\n</student_history>\n"
+        },
+        "random_real": {
+          "example_id": "malrulelib:test_same_template:0000045:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Compare: 1/7 ___ 1/6\nStudent answer: 1/7\nCorrect answer: 1/6\nOutcome: incorrect\n\nTrial 2:\nProblem: Tank A is 4/8 full of water. Tank B contains 6/5 of its capacity in water. If the tanks are the same size, which has more water?\nStudent answer: 4/8\nCorrect answer: 6/5\nOutcome: incorrect\n\nTrial 3:\nProblem: John ran 1/4 of a lap around the track. Maria ran 4/2 of a lap. Who ran farther?\nStudent answer: 1/4\nCorrect answer: 4/2\nOutcome: incorrect\n\nTrial 4:\nProblem: A tank can hold 9/9 gallon of water. Currently it is 9/4 full. How many gallons of water are in the tank?\nStudent answer: 9/9\nCorrect answer: 9/4\nOutcome: incorrect\n</student_history>\n"
+        }
+      },
+      "queries": [
+        {
+          "problem_text": "Multiply: 14/19 × 17/19",
+          "operands": [
+            "14",
+            "19",
+            "17",
+            "19"
+          ],
+          "operation": "fraction_multiplication",
+          "query_idx": 0,
+          "generation_seed": 500032030,
+          "level": 9,
+          "donor_target": "238/19",
+          "recipient_target": "238",
+          "correct_target": "238/361",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "A recipe calls for 3 1/6 cups of flour per batch. If you make 1 1/6 batches, how much flour do you need in total (in cups)?",
+          "operands": [
+            "19",
+            "6",
+            "7",
+            "6"
+          ],
+          "operation": "fraction_multiplication",
+          "query_idx": 1,
+          "generation_seed": 715700290,
+          "level": 9,
+          "donor_target": "133/6",
+          "recipient_target": "133",
+          "correct_target": "133/36",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Multiply: 11/15 × 14/15",
+          "operands": [
+            "11",
+            "15",
+            "14",
+            "15"
+          ],
+          "operation": "fraction_multiplication",
+          "query_idx": 2,
+          "generation_seed": 887324937,
+          "level": 9,
+          "donor_target": "154/15",
+          "recipient_target": "154",
+          "correct_target": "154/225",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        }
+      ],
+      "filter_counts": {
+        "seen_number_combination": 54,
+        "history_copy_or_repeated_target": 1
+      }
+    },
+    {
+      "group_idx": 25,
+      "pair_idx": 111,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000055:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000291:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000053:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000039:malrule_next_response"
+      },
+      "labels": {
+        "donor": "decimals.longer_is_larger",
+        "recipient": "decimals.whole_number_thinking",
+        "samemal": "decimals.whole_number_thinking",
+        "random_real": "NONE"
+      },
+      "family": "decimals",
+      "contexts": {
+        "donor": {
+          "example_id": "malrulelib:test_same_template:0000055:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: A pencil is 0.8 cm and a pen is 0.31 cm. Which is longer?\nStudent answer: 0.31\nCorrect answer: 0.8\nOutcome: incorrect\n\nTrial 2:\nProblem: Arrange in ascending order: 0.9, 0.62, 0.729\nStudent answer: 0.729\nCorrect answer: 0.9\nOutcome: incorrect\n\nTrial 3:\nProblem: Which is larger: 0.7 or 0.61?\nStudent answer: 0.61\nCorrect answer: 0.7\nOutcome: incorrect\n\nTrial 4:\nProblem: Sarah scored 0.33, Tom scored 0.116, and Lisa scored 0.23. Order them from highest to lowest score.\nStudent answer: 0.116\nCorrect answer: 0.33\nOutcome: incorrect\n</student_history>\n"
+        },
+        "recipient": {
+          "example_id": "malrulelib:test_same_template:0000291:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Which is the largest: 6.1, 6.11, or 6.113?\nStudent answer: 6.1\nCorrect answer: 6.113\nOutcome: incorrect\n\nTrial 2:\nProblem: Calculate: 18.88 - 4.6\nStudent answer: 184.2\nCorrect answer: 14.28\nOutcome: incorrect\n\nTrial 3:\nProblem: A rope is 0.4 meters long and another is 0.167 meters long. Which rope is longer?\nStudent answer: 4\nCorrect answer: 0.4\nOutcome: incorrect\n\nTrial 4:\nProblem: Order from smallest to largest: 0.5, 0.39, 0.38\nStudent answer: 0.39\nCorrect answer: 0.5\nOutcome: incorrect\n</student_history>\n"
+        },
+        "samemal": {
+          "example_id": "malrulelib:test_same_template:0000053:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 19.96 - 19.4\nStudent answer: 180.2\nCorrect answer: 0.56\nOutcome: incorrect\n\nTrial 2:\nProblem: What is 5.0 - 1.5?\nStudent answer: 35\nCorrect answer: 3.5\nOutcome: incorrect\n\nTrial 3:\nProblem: Maria has $0.8 and Tom has $0.48. Who has more money?\nStudent answer: 8\nCorrect answer: 0.8\nOutcome: incorrect\n\nTrial 4:\nProblem: Which is the largest: 4.4, 4.47, or 4.479?\nStudent answer: 4.4\nCorrect answer: 4.479\nOutcome: incorrect\n</student_history>\n"
+        },
+        "random_real": {
+          "example_id": "malrulelib:test_same_template:0000039:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: A container has 25.6 liters, receives 14.1 more liters, then 5.9 liters are removed. How much remains?\nStudent answer: 33.8\nCorrect answer: 33.8\nOutcome: correct\n\nTrial 2:\nProblem: A plant grew 22.6 cm in week 1, 12.4 cm in week 2, and shrank 19.9 cm in week 3. What is the net growth?\nStudent answer: 15.1\nCorrect answer: 15.1\nOutcome: correct\n\nTrial 3:\nProblem: Calculate: 3.6 + 17.37\nStudent answer: 20.97\nCorrect answer: 20.97\nOutcome: correct\n\nTrial 4:\nProblem: Calculate: 10.8 + 32.68\nStudent answer: 43.48\nCorrect answer: 43.48\nOutcome: correct\n</student_history>\n"
+        }
+      },
+      "queries": [
+        {
+          "problem_text": "Which is heavier: a package weighing 0.66 kg or one weighing 0.299 kg?",
+          "operands": [
+            "0.66",
+            "0.299"
+          ],
+          "operation": "decimal_comparison",
+          "query_idx": 0,
+          "generation_seed": 696928683,
+          "level": 9,
+          "donor_target": "299/1000",
+          "recipient_target": "66",
+          "correct_target": "33/50",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": false,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "A rope is 0.7 meters long and another is 0.699 meters long. Which rope is longer?",
+          "operands": [
+            "0.7",
+            "0.699"
+          ],
+          "operation": "decimal_comparison",
+          "query_idx": 1,
+          "generation_seed": 248319228,
+          "level": 9,
+          "donor_target": "699/1000",
+          "recipient_target": "7",
+          "correct_target": "7/10",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Which is heavier: a package weighing 0.67 kg or one weighing 0.119 kg?",
+          "operands": [
+            "0.67",
+            "0.119"
+          ],
+          "operation": "decimal_comparison",
+          "query_idx": 2,
+          "generation_seed": 143418535,
+          "level": 9,
+          "donor_target": "119/1000",
+          "recipient_target": "67",
+          "correct_target": "67/100",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        }
+      ],
+      "filter_counts": {
+        "metadata_inconsistent": 90,
+        "non_distinct_answers": 95,
+        "seen_number_combination": 10,
+        "ValueError": 26,
+        "history_copy_or_repeated_target": 3
+      }
+    },
+    {
+      "group_idx": 26,
+      "pair_idx": 142,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000273:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000018:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000203:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000180:malrule_next_response"
+      },
+      "labels": {
+        "donor": "fractions.natural_number_bias_numerator_only",
+        "recipient": "fractions.ignore_denominators",
+        "samemal": "fractions.ignore_denominators",
+        "random_real": "fractions.add_numerators_denominators"
+      },
+      "family": "fractions",
+      "contexts": {
+        "donor": {
+          "example_id": "malrulelib:test_same_template:0000273:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Compare: 6/12 ___ 3/5\nStudent answer: 6/12\nCorrect answer: 3/5\nOutcome: incorrect\n\nTrial 2:\nProblem: Three books have different amounts read. Book 1 is 8/4 read, Book 2 is 11/14 read, and Book 3 is 14/16 read. Order these fractions from least to greatest.\nStudent answer: 8/4, 11/14, 14/16\nCorrect answer: 11/14, 14/16, 8/4\nOutcome: incorrect\n\nTrial 3:\nProblem: A container has 6/9 liter of juice. If each serving is 10/6 liter, how many servings can you make?\nStudent answer: 10/6\nCorrect answer: 2/5\nOutcome: incorrect\n\nTrial 4:\nProblem: Which is larger: 1/6 or 1/4?\nStudent answer: equal\nCorrect answer: 1/4\nOutcome: incorrect\n</student_history>\n"
+        },
+        "recipient": {
+          "example_id": "malrulelib:test_same_template:0000018:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: Calculate: 7/4 ÷ 2/10\nStudent answer: 3\nCorrect answer: 35/4\nOutcome: incorrect\n\nTrial 2:\nProblem: A tank is 4/5 full. You drain 4/5 of what's in the tank. What fraction of the full tank did you drain?\nStudent answer: 16\nCorrect answer: 16/25\nOutcome: incorrect\n\nTrial 3:\nProblem: A recipe calls for 1/6 cup of flour per batch. If you make 3/3 of a batch, how much flour do you need (in cups)?\nStudent answer: 3\nCorrect answer: 1/6\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 5/5 - 4/11\nStudent answer: 1\nCorrect answer: 7/11\nOutcome: incorrect\n</student_history>\n"
+        },
+        "samemal": {
+          "example_id": "malrulelib:test_same_template:0000203:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: If you shade 3/11 of a circle and 1/6 of another equal circle, what fraction is shaded in total?\nStudent answer: 4\nCorrect answer: 29/66\nOutcome: incorrect\n\nTrial 2:\nProblem: A recipe calls for 2/4 cup of sugar and another 10/12 cup of sugar. What is the total cups of sugar?\nStudent answer: 12\nCorrect answer: 4/3\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 5/6 - 2/8\nStudent answer: 3\nCorrect answer: 7/12\nOutcome: incorrect\n\nTrial 4:\nProblem: Divide: 3 6/7 ÷ 3 8/10\nStudent answer: 0\nCorrect answer: 135/133\nOutcome: incorrect\n</student_history>\n"
+        },
+        "random_real": {
+          "example_id": "malrulelib:test_same_template:0000180:malrule_next_response",
+          "seg_instruction": "You are modeling one student's mathematical behavior. Predict the exact answer this same student would give on the next problem. Return exactly one <predicted_response> tag.\n",
+          "seg_history": "<student_history>\nTrial 1:\nProblem: A recipe calls for 1/2 cup of flour and 1/10 cup of sugar. How many cups of dry ingredients are needed in total?\nStudent answer: 1/6\nCorrect answer: 3/5\nOutcome: incorrect\n\nTrial 2:\nProblem: Emma spent 1 hours studying math and 2 3/5 hours studying science. How many hours did she study altogether?\nStudent answer: 7/3\nCorrect answer: 18/5\nOutcome: incorrect\n\nTrial 3:\nProblem: Calculate: 1/2 + 1/2 + 1/6\nStudent answer: 3/10\nCorrect answer: 7/6\nOutcome: incorrect\n\nTrial 4:\nProblem: Calculate: 6/5 + 3/2\nStudent answer: 9/7\nCorrect answer: 27/10\nOutcome: incorrect\n</student_history>\n"
+        }
+      },
+      "queries": [
+        {
+          "problem_text": "Calculate: 3/2 - 11/8",
+          "operands": [
+            "3",
+            "2",
+            "11",
+            "8"
+          ],
+          "operation": "fraction_subtraction",
+          "query_idx": 0,
+          "generation_seed": 964447652,
+          "level": 9,
+          "donor_target": "11/8",
+          "recipient_target": "-8",
+          "correct_target": "1/8",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Calculate: 11/12 - 2/7",
+          "operands": [
+            "11",
+            "12",
+            "2",
+            "7"
+          ],
+          "operation": "fraction_subtraction",
+          "query_idx": 1,
+          "generation_seed": 174658028,
+          "level": 9,
+          "donor_target": "11/12",
+          "recipient_target": "9",
+          "correct_target": "53/84",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        },
+        {
+          "problem_text": "Calculate: 11/3 + 3/10",
+          "operands": [
+            "11",
+            "3",
+            "3",
+            "10"
+          ],
+          "operation": "fraction_addition",
+          "query_idx": 2,
+          "generation_seed": 717314919,
+          "level": 9,
+          "donor_target": "11/3",
+          "recipient_target": "14",
+          "correct_target": "119/30",
+          "random_rule_target": null,
+          "target_seen_in_finetuning_answers": true,
+          "number_combination_unseen": true,
+          "answer_exclusion_pass": true
+        }
+      ],
+      "filter_counts": {
+        "seen_number_combination": 139,
+        "history_copy_or_repeated_target": 2
+      }
+    }
+  ],
+  "excluded_groups": [
+    {
+      "pair_idx": 83,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000007:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000000:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000179:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000200:malrule_next_response"
+      },
+      "labels": {
+        "donor": "fractions.natural_number_bias_numerator_only",
+        "recipient": "fractions.denominator_comparison_error",
+        "samemal": "fractions.denominator_comparison_error",
+        "random_real": "fractions.common_denominator_numerator"
+      },
+      "reason": "fewer_than_three_eligible_numeric_queries",
+      "eligible": 0,
+      "filter_counts": {
+        "ValueError": 2995,
+        "seen_number_combination": 6503,
+        "non_distinct_answers": 502
+      }
+    },
+    {
+      "pair_idx": 98,
+      "ids": {
+        "donor": "malrulelib:test_same_template:0000082:malrule_next_response",
+        "recipient": "malrulelib:test_same_template:0000045:malrule_next_response",
+        "samemal": "malrulelib:test_same_template:0000237:malrule_next_response",
+        "random_real": "malrulelib:test_same_template:0000298:malrule_next_response"
+      },
+      "labels": {
+        "donor": "fractions.ignore_denominators",
+        "recipient": "fractions.denominator_comparison_error",
+        "samemal": "fractions.denominator_comparison_error",
+        "random_real": "fractions.common_denominator_numerator"
+      },
+      "reason": "fewer_than_three_eligible_numeric_queries",
+      "eligible": 0,
+      "filter_counts": {
+        "seen_number_combination": 9553,
+        "ValueError": 444,
+        "history_copy_or_repeated_target": 1,
+        "non_distinct_answers": 2
+      }
+    }
+  ],
+  "n_selected": 29,
+  "n_groups": 27,
+  "n_queries": 81,
+  "hypothesis": "positive directed-minus-real-random exact numeric agreement; donor-cluster bootstrap; no comparison to candidate-score 0.411"
+}

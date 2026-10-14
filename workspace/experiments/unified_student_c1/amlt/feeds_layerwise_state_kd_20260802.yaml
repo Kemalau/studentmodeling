@@ -1,0 +1,46 @@
+# Generated from `amlt template -t Feeds -n 1 -f /tmp/feeds_layerwise_state_kd_20260802.generated.yaml -y`.
+# yaml-language-server: $schema=file:///home/v-yuejiali/studentmodeling/workspace/experiments/unified_student_c1/.vscode/amlt-config.schema.json
+description: Closed-state KD diagnostic with direct replay removed
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-layerwise-state-kd-venv
+    - /tmp/studentmodeling-layerwise-state-kd-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-layerwise-state-kd-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: layerwise-eedi-dense-state-kd-seed42
+    sku: 80G4-A100
+    process_count_per_node: -1
+    mpi: true
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      bash scripts/run_layerwise_task_retention_rehearsal.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-layerwise-state-kd-venv
+        BRANCH: eedi_dense
+        LOSS_PROFILE: state_kd
+        MANIFEST: manifests/layerwise_task_retention_eedi_dense_seed42_v1.json
+        MANIFEST_SHA256: cc484d7f7b6db02cfdf1e530866e029a721896d9c57103313e581f504c7bc16e

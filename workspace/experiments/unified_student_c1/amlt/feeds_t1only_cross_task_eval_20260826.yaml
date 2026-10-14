@@ -1,0 +1,89 @@
+# Generated from the validated Feeds formal-evaluation template.
+description: Frozen T1-only Qwen3-32B adapter evaluated on held-out T2-T5 formal tasks
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-t1only-cross-eval-venv
+    - /tmp/studentmodeling-t1only-cross-eval-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-t1only-cross-eval-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: t1only-cross-eval-t2-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: &command |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_t1only_cross_task_eval.sh | cut -d' ' -f1)" = 274674aad7f9b7d4e188a1740b9909b69d736c9df81d9f72e34c03dfa8f136d7
+      bash scripts/run_t1only_cross_task_eval.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 86400
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        EVAL_PUBLIC_TASK: T2
+        EVAL_TASK: predict_response
+        EVAL_EXPECTED_ROWS: '3693'
+
+  - name: t1only-cross-eval-t3-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 86400
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        EVAL_PUBLIC_TASK: T3
+        EVAL_TASK: diagnose_misconception
+        EVAL_EXPECTED_ROWS: '1494'
+
+  - name: t1only-cross-eval-t4-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 86400
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        EVAL_PUBLIC_TASK: T4
+        EVAL_TASK: predict_prospective_error
+        EVAL_EXPECTED_ROWS: '4600'
+
+  - name: t1only-cross-eval-t5-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 86400
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        EVAL_PUBLIC_TASK: T5
+        EVAL_TASK: predict_error_persistence
+        EVAL_EXPECTED_ROWS: '976'

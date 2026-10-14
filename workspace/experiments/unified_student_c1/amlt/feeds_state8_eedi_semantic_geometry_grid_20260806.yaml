@@ -1,0 +1,71 @@
+# Specialized from the approved State8 semantic-causal Feeds template.
+description: State8 strong-base EEDI state-semantic geometry grid
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-state8-eedi-semantic-venv
+    - /tmp/studentmodeling-state8-eedi-semantic-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-state8-eedi-semantic-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: state8-eedi-geometry-g005-seed45
+    sku: 80G4-A100
+    process_count_per_node: -1
+    mpi: true
+    sla_tier: Standard
+    command: &command |
+      set -euo pipefail
+      trap 'rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc" "$${BASH_COMMAND}" >&2; exit "$$rc"' ERR
+      bash scripts/run_state8_stateonly_repair_ab.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env: &common_env
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-eedi-semantic-venv
+        REPAIR_ARM: trajectory01
+        TRAIN_ENTRYPOINT: scripts/train_state8_semantic_causal_repair.py
+        STUDENT_ROOT: /mnt/amulet/studentmodeling/checkpoints/state8_diagnosis_causal_rescue_seed43_v1_20260806
+        STUDENT_MODEL_DIR: /mnt/amulet/studentmodeling/checkpoints/state8_diagnosis_causal_rescue_seed43_v1_20260806/final_adapter
+        STUDENT_STATE_PATH: /mnt/amulet/studentmodeling/checkpoints/state8_diagnosis_causal_rescue_seed43_v1_20260806/recurrent_state.pt
+        STUDENT_RECEIPT: /mnt/amulet/studentmodeling/checkpoints/state8_diagnosis_causal_rescue_seed43_v1_20260806/completion.json
+        EXPECTED_STUDENT_ADAPTER_SHA256: bbd43f677c8fd68b1b5425968747f7ae6e11f55dba6d9a9c0d2332e1609dbb17
+        EXPECTED_STUDENT_STATE_SHA256: 40a75e9152d054ef3f2d599c72a85cd1e081529ce2be5fa4075abf48de9ec3f4
+        RUN_TAG: semantic_causal_strongbase_eedi_g005_v1
+        TRAIN_SEED: '45'
+        STATE8_CAUSAL_LABEL_WEIGHT: '4.0'
+        STATE8_RANDOM_NEUTRAL: '1'
+        STATE8_GEOMETRY_WEIGHT: '0.10'
+        STATE8_EEDI_GEOMETRY_WEIGHT: '0.05'
+        STATE8_DIFFERENT_MAX_COSINE: '0.90'
+
+  - name: state8-eedi-geometry-g010-seed45
+    sku: 80G4-A100
+    process_count_per_node: -1
+    mpi: true
+    sla_tier: Standard
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env:
+        <<: *common_env
+        RUN_TAG: semantic_causal_strongbase_eedi_g010_v1
+        STATE8_EEDI_GEOMETRY_WEIGHT: '0.10'

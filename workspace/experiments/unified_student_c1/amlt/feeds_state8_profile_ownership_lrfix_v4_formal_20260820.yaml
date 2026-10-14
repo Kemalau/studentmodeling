@@ -1,0 +1,64 @@
+# Promoted only after the bounded DBE lrfix-v4 development diagnostic passes.
+# This run deliberately does not read the frozen XES confirmatory profile test.
+description: State8 ownership lrfix v4, one exact 1000-row DBE development epoch with complete development evaluation
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-state8-profile-ownership-lrfix-v4-formal-venv
+    - /tmp/studentmodeling-state8-profile-ownership-lrfix-v4-formal-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-state8-profile-ownership-lrfix-v4-formal-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore:
+    - .git/
+    - .vscode/
+    - .pytest_cache/
+    - amlt/
+    - data/
+    - results/
+    - reports/
+    - state8_exact_scientific_rescue_bundle_20260808/
+    - state8_midpoint_diagnosis_first_bundle_20260808/
+    - strong1_rescue_bundle_20260808/
+    - task_anchor_bundle_20260808/
+    - __pycache__/
+    - '*.pyc'
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: state8-profile-ownership-lrfix-v4-formal-seed8801
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_state8_student_profile_readout.sh | cut -d' ' -f1)" = 75079712bac1d7211c341482592fda48bc056e54e549adc11b99b11fd844087e
+      unset PROFILE_READOUT_DIAGNOSTIC_MAX_MICRO_STEPS PROFILE_READOUT_DIAGNOSTIC_STOP_ROUND PROFILE_READOUT_RESUME_FROM PROFILE_READOUT_EVAL_ONLY
+      export PROFILE_READOUT_RUN_DIR=/mnt/amulet/studentmodeling/checkpoints/state8_profile_ownership_lrfix_v4_formal_seed8801
+      export PROFILE_READOUT_STABLE_DIR=/mnt/amulet/studentmodeling/diagnostics/state8_profile_ownership_lrfix_v4_formal_seed8801
+      export STATE8_PROFILE_OWNERSHIP_HEAD_LEARNING_RATE=3e-4
+      export STATE8_PROFILE_OWNERSHIP_RESET_HEAD=1
+      export STATE8_PROFILE_OWNERSHIP_FEATURE_NORMALIZATION=layernorm
+      export STATE8_PROFILE_OWNERSHIP_MIN_KC_TRAIN_SUPPORT=4
+      export STATE8_PROFILE_OWNERSHIP_BIAS_PRIOR_STRENGTH=8
+      bash scripts/run_state8_student_profile_readout.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-profile-ownership-lrfix-v4-formal-venv

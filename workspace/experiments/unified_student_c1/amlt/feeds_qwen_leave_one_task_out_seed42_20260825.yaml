@@ -1,0 +1,111 @@
+# Generated with `amlt template -t Feeds -y`, then filled from the approved
+# student-modeling Qwen3-32B one-epoch training configuration.
+description: Five seed-42 Qwen3-32B leave-one-task-out training and T1-T5 formal evaluations
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-loo-venv
+    - /tmp/studentmodeling-loo-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-loo-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: qwen3-32b-loo-t1-oneepoch-formal-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: &command |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_qwen_leave_one_task_out.sh | cut -d' ' -f1)" = bedace05f4b44cce7c38829d398747a2e3ed3ae0592255be620887bc98a4c1e9
+      test "$$(sha256sum scripts/train_c1_lora.py | cut -d' ' -f1)" = 115fded0ef080c4b7a58f5e616a971660791826f8cc53cb4275edcfd1005d9ed
+      bash scripts/run_qwen_leave_one_task_out.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        EXCLUDED_PUBLIC_TASK: T1
+        EXCLUDED_TASK: predict_correctness
+        EXPECTED_TRAIN_ROWS: '149320'
+        EXPECTED_OPTIMIZER_STEPS: '37330'
+
+  - name: qwen3-32b-loo-t2-oneepoch-formal-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        EXCLUDED_PUBLIC_TASK: T2
+        EXCLUDED_TASK: predict_response
+        EXPECTED_TRAIN_ROWS: '204276'
+        EXPECTED_OPTIMIZER_STEPS: '51069'
+
+  - name: qwen3-32b-loo-t3-oneepoch-formal-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        EXCLUDED_PUBLIC_TASK: T3
+        EXCLUDED_TASK: diagnose_misconception
+        EXPECTED_TRAIN_ROWS: '253069'
+        EXPECTED_OPTIMIZER_STEPS: '63268'
+
+  - name: qwen3-32b-loo-t4-oneepoch-formal-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        EXCLUDED_PUBLIC_TASK: T4
+        EXCLUDED_TASK: predict_prospective_error
+        EXPECTED_TRAIN_ROWS: '181245'
+        EXPECTED_OPTIMIZER_STEPS: '45312'
+
+  - name: qwen3-32b-loo-t5-oneepoch-formal-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        EXCLUDED_PUBLIC_TASK: T5
+        EXCLUDED_TASK: predict_error_persistence
+        EXPECTED_TRAIN_ROWS: '251470'
+        EXPECTED_OPTIMIZER_STEPS: '62868'

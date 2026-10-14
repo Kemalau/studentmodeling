@@ -1,0 +1,42 @@
+# Generated from the Feeds AMLT template, then specialized and hash-bound.
+description: Finalize the completed State8 checkpoint-3000 semantic rescue after the single-device resume history audit fix
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-state8-matched-cp3000-finalizer-venv
+    - /tmp/studentmodeling-state8-matched-cp3000-finalizer-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-state8-matched-cp3000-finalizer-venv/bin/python -m pip install -r requirements-feeds.txt
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+jobs:
+  - name: state8-matched-cp3000-rescue-semantic-preserve
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_state8_matched_checkpoint3000_semantic_finalizer.sh | cut -d' ' -f1)" = 2e2c8e2c7822070543988d58a3d47c31881e65a1a42abf7cb3cd58376e683017
+      bash scripts/run_state8_matched_checkpoint3000_semantic_finalizer.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 86400
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-matched-cp3000-finalizer-venv
+        MATCHED_CHECKPOINT_ROOT: /mnt/amulet/studentmodeling/checkpoints/state8_qualified_teacher_curriculum_seed42_exact5000_rounds1250_kd1_v2_20260805_taxonomy_semantic_v1_diagnosis_first_matched_teacher_seed67_single_ga4/checkpoint-3000
+        EXPECTED_STUDENT_ADAPTER_SHA256: '3f2d86dff15cc892232f4810fbba05d854660ab42513d76d08cb6831a6767f8f'
+        EXPECTED_STUDENT_STATE_SHA256: 'e61eccba80c9d28b083c5b6374f2bee1369ccb25dcccd8e3607c8ef9df9714c5'
+        STATE8_RESCUE_MODE: semantic_preserve
+        RUN_TAG: matched_cp3000_semantic_preserve_v1

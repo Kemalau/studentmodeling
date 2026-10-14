@@ -1,0 +1,110 @@
+# Specialized from the AMLT 11.14.2 Feeds/Manifold template.  One resumable
+# answer-C4 job and five disjoint diagnosis-C4 shards evaluate one immutable
+# State8 checkpoint.  Each job uses exactly one A100 80GB.
+description: Resilient exact State8 step-2000 answer and diagnosis C4 evaluation
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-state8-exact-c4-resilient-venv
+    - /tmp/studentmodeling-state8-exact-c4-resilient-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-state8-exact-c4-resilient-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - &answer
+    name: state8-exact-midpoint-step2000-answer-c4-resumable
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      trap 'rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc" "$${BASH_COMMAND}" >&2; exit "$$rc"' ERR
+      bash scripts/run_state8_exact_midpoint_answer_c4_resumable.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env: &common_env
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-exact-c4-resilient-venv
+        STATE8_EXACT_CHECKPOINT_ROOT: /mnt/amulet/studentmodeling/checkpoints/state8_qualified_teacher_curriculum_seed42_exact5000_rounds1250_kd1_v2_20260805_taxonomy_semantic_v1_exact_diagnosis_first_seed64_single_ga4/checkpoint-2000
+        STATE8_EXACT_ADAPTER_SHA256: a80766e8dae4881fc8b4fb8dcebd14b4e95d059bf3246b120fd050c856c4d587
+        STATE8_EXACT_STATE_SHA256: 9088dbc32437b1feb5b27bf1a4dd6502bff99b15d608c10977feb6f5cef10426
+        EXACT_DIAGNOSIS_C4_SHA256: 7eef90e079d698c94f1f8655a1df3fe6bd93cedbb175ba4e7082a49bb8069c8b
+        STATE8_EXACT_ANSWER_C4_SHA256: 69fd4f2f4943a78a0afe9a701533d9ab034f247f87c7a09327f7523e310b7a52
+        STATE8_EXACT_ANSWER_PROGRESS_DIR: /mnt/amulet/studentmodeling/eval_progress/state8_exact_diagnosis_midpoint_step2000_answer_c4_a80766e8_9088dbc3
+        STATE8_EXACT_ANSWER_PROGRESS_KEY: state8-exact-midpoint-step2000-answer-c4-a80766e8-9088dbc3-pairs50-seed42-v1
+
+  - &diagnosis
+    name: state8-exact-midpoint-step2000-diagnosis-c4-shard00
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: &diagnosis_command |
+      set -euo pipefail
+      trap 'rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc" "$${BASH_COMMAND}" >&2; exit "$$rc"' ERR
+      bash scripts/run_state8_exact_midpoint_diagnosis_c4_shard.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env: &diagnosis_env
+        <<: *common_env
+        PAIR_START: '0'
+        PAIR_COUNT: '10'
+
+  - <<: *diagnosis
+    name: state8-exact-midpoint-step2000-diagnosis-c4-shard10
+    command: *diagnosis_command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env:
+        <<: *diagnosis_env
+        PAIR_START: '10'
+
+  - <<: *diagnosis
+    name: state8-exact-midpoint-step2000-diagnosis-c4-shard20
+    command: *diagnosis_command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env:
+        <<: *diagnosis_env
+        PAIR_START: '20'
+
+  - <<: *diagnosis
+    name: state8-exact-midpoint-step2000-diagnosis-c4-shard30
+    command: *diagnosis_command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env:
+        <<: *diagnosis_env
+        PAIR_START: '30'
+
+  - <<: *diagnosis
+    name: state8-exact-midpoint-step2000-diagnosis-c4-shard40
+    command: *diagnosis_command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env:
+        <<: *diagnosis_env
+        PAIR_START: '40'

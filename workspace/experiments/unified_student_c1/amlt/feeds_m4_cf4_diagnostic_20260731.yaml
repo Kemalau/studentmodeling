@@ -1,0 +1,343 @@
+description: 'CF4 balanced multi-query recurrent causal diagnostic: each accepted
+  donor state supervises 2-4 distinct queries; compare bootstrap-to-symmetric against
+  persistent donor-directional at matched weight'
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+  - python -m venv --system-site-packages /tmp/studentmodeling-m4-causal-strength-venv
+  - /tmp/studentmodeling-m4-causal-strength-venv/bin/python -m pip install --upgrade
+    pip
+  - /tmp/studentmodeling-m4-causal-strength-venv/bin/python -m pip install -r requirements-feeds.txt
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore:
+  - .git/
+  - .vscode/
+  - amlt/
+  - data/
+  - results/
+  - __pycache__/
+  - '*.pyc'
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+jobs:
+- name: m4-causal-cf4-bootstrap-symmetric-w1-round0to250-seed42
+  sku: 80G4-A100
+  process_count_per_node: -1
+  mpi: true
+  sla_tier: Standard
+  command: "set -euo pipefail\nexport PATH=\"/tmp/studentmodeling-m4-causal-strength-venv/bin:$$PATH\"\
+    \nexport PYTHONPATH=\"$$AMLT_CODE_DIR/scripts$${PYTHONPATH:+:$$PYTHONPATH}\"\n\
+    export HF_HOME=/tmp/hf_cache\nexport HF_HUB_CACHE=/tmp/hf_cache/hub\nexport HF_HUB_DISABLE_XET=1\n\
+    export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True\nexport TRANSFORMERS_VERBOSITY=error\n\
+    export LOCAL_MODEL=/tmp/Qwen3-32B\nexport SOURCE_DATA=/mnt/amulet/studentmodeling/method_small_v1\n\
+    export BASE_DATA=/mnt/amulet/studentmodeling/c4_fullopen_20260724/malrule_c1_clean\n\
+    export UNIFIED_DATA=/tmp/unified_recurrent_method_small_fixedu4_v2_full\nexport\
+    \ CAUSAL_DATA=/tmp/recurrent_causal_pairs_cf4_balanced_v1\nexport M3_RUN_DIR=/mnt/amulet/studentmodeling/checkpoints/world_model_v1_m3_generation_kd_trainable_seed42_fixedu4_v2_20260730\n\
+    export CACHE_DIR=/mnt/amulet/studentmodeling/world_model_v1/m4/teacher_cache_train_n12000_top256_fixedu4_v2_20260730\n\
+    export RUN_DIR=\"/mnt/amulet/studentmodeling/diagnostics/world_model_v1_m4_causal_cf4_$${BRANCH}_seed42_round250_20260731\"\
+    \nmkdir -p \"$$HF_HUB_CACHE\" \"$$UNIFIED_DATA\" \"$$CAUSAL_DATA\" \"$$RUN_DIR\"\
+    \ \\\n  \"$$AMLT_OUTPUT_DIR/model\" \"$$AMLT_OUTPUT_DIR/metrics\" \"$$AMLT_OUTPUT_DIR/eval/c4\"\
+    \ntest \"$$(df --output=avail /tmp | tail -1)\" -ge 125829120\ntest -f \"$$SOURCE_DATA/train.jsonl\"\
+    \ntest -f \"$$SOURCE_DATA/valid.jsonl\"\ntest -f \"$$BASE_DATA/train.jsonl\"\n\
+    test -f \"$$BASE_DATA/val.jsonl\"\ntest -f \"$$BASE_DATA/test_same_template.jsonl\"\
+    \ntest -f \"$$M3_RUN_DIR/final_adapter/adapter_model.safetensors\"\ntest -f \"\
+    $$M3_RUN_DIR/recurrent_state.pt\"\ntest -f \"$$CACHE_DIR/integrity.json\"\ntest\
+    \ \"$$(sha256sum manifests/cf4_balanced_paired_state_swap_train_seed20260731_v1.json\
+    \ | cut -d' ' -f1)\" = 4e7907cf4d74eced4f4c5c2dddf7213a2649cddca081fd2b4a51f35934b35773\n\
+    test \"$$(sha256sum scripts/train_recurrent_student_m4.py | cut -d' ' -f1)\" =\
+    \ 865c12219deb23cf9db145c797244969721fce80323050dcd987b33d96cbfb1b\ntest \"$$(sha256sum\
+    \ scripts/recurrent_student_model.py | cut -d' ' -f1)\" = 9e0431dccb524f67b401f7ea911e11c96fc3061432ffdc73e0cac2bbc2acc5a0\n\
+    test \"$$(sha256sum scripts/build_unified_recurrent_manifest.py | cut -d' ' -f1)\"\
+    \ = 8bc822ec33165037dff8353707a037a0edc12679cd67b66885aa94a4288542f6\ntest \"\
+    $$(sha256sum scripts/audit_unified_recurrent_manifest.py | cut -d' ' -f1)\" =\
+    \ 6de4fcab57aa8dbd0b56f07972e341f64b60668474f03069cc47878a80e434a0\ntest \"$$(sha256sum\
+    \ scripts/build_recurrent_causal_pairs.py | cut -d' ' -f1)\" = 2daed709603a63a487705bce87539b58c7e01d239397758305d3b023f5eb26b7\n\
+    test \"$$(sha256sum scripts/evaluate_recurrent_causal_gate.py | cut -d' ' -f1)\"\
+    \ = 9dca3271d29153baf66b440239467e6889c0f2c64677c4e31fd4e2d8a5710c10\ntest \"\
+    $$(sha256sum manifests/c4_stage_a_gate_pairs_seed42_n150_v1.json | cut -d' ' -f1)\"\
+    \ = edcdb934a65252557f6c569eea9ef7a85e5445549deac9fb4829c3f579e1a9b8\npython -m\
+    \ unittest discover -s tests -p 'test_train_recurrent_student_m4.py' -v\npython\
+    \ -m unittest discover -s tests -p 'test_recurrent_student_model.py' -v\n\nexec\
+    \ 7>/tmp/m4-causal-branch-data.lock\nflock -x 7\nif [[ ! -f /tmp/m4-causal-branch-data.complete\
+    \ ]]; then\n  python scripts/build_unified_recurrent_manifest.py \\\n    --train-jsonl\
+    \ \"$$SOURCE_DATA/train.jsonl\" \\\n    --valid-jsonl \"$$SOURCE_DATA/valid.jsonl\"\
+    \ \\\n    --output-dir \"$$UNIFIED_DATA\" \\\n    --max-updates 4 \\\n    --seed\
+    \ 20260730\n  python scripts/audit_unified_recurrent_manifest.py \\\n    --train-jsonl\
+    \ \"$$UNIFIED_DATA/train.jsonl\" \\\n    --valid-jsonl \"$$UNIFIED_DATA/valid.jsonl\"\
+    \ \\\n    --output-json \"$$UNIFIED_DATA/audit.json\"\n  python scripts/build_recurrent_causal_pairs.py\
+    \ \\\n    --train-source \"$$BASE_DATA/train.jsonl\" \\\n    --valid-source \"\
+    $$BASE_DATA/val.jsonl\" \\\n    --train-pairs manifests/cf4_balanced_paired_state_swap_train_seed20260731_v1.json\
+    \ \\\n    --valid-pairs manifests/cf_paired_state_swap_valid_seed20260731_v1.json\
+    \ \\\n    --output-dir \"$$CAUSAL_DATA\" \\\n    --max-updates 4\n  touch /tmp/m4-causal-branch-data.complete\n\
+    fi\nflock -u 7\ntest \"$$(sha256sum \"$$UNIFIED_DATA/train.jsonl\" | cut -d' '\
+    \ -f1)\" = 18f2a05be56a93bb63f5ac552559502f29770158356faf906020911d5e9e2e6d\n\
+    test \"$$(sha256sum \"$$UNIFIED_DATA/valid.jsonl\" | cut -d' ' -f1)\" = 9079207606ebab4fe85a47926d8fb38332970af12d78cc647dcda965f4522069\n\
+    test \"$$(sha256sum \"$$CAUSAL_DATA/train.jsonl\" | cut -d' ' -f1)\" = 30f68f54120e5a9ada0a37b1dba2b6480de0f8eaeac98d0b7ed7c627429f9766\n\
+    test \"$$(sha256sum \"$$CAUSAL_DATA/valid.jsonl\" | cut -d' ' -f1)\" = 3e6b5fbcab3d232d5b3a65a005fbf9ba5719a8a4f8251d6ea85b861a7c1c3e22\n\
+    \nexec 6>/tmp/m4-causal-branch-model-copy.lock\nflock -x 6\nif [[ ! -f /tmp/Qwen3-32B.m4-causal-branch-copy-complete\
+    \ ]]; then\n  rm -rf \"$$LOCAL_MODEL\"\n  mkdir -p \"$$LOCAL_MODEL\"\n  python\
+    \ scripts/copy_model_parallel.py \\\n    --source /mnt/amulet/studentmodeling/models/Qwen3-32B\
+    \ \\\n    --destination \"$$LOCAL_MODEL\" \\\n    --workers 16\n  touch /tmp/Qwen3-32B.m4-causal-branch-copy-complete\n\
+    fi\nflock -u 6\ntest -f \"$$LOCAL_MODEL/model.safetensors.index.json\"\nnvidia-smi\
+    \ --query-gpu=index,name,memory.total --format=csv,noheader\n\nif [[ ! -f \"$$RUN_DIR/completion.json\"\
+    \ ]]; then\n  resume_args=()\n  latest_checkpoint=\"\"\n  mapfile -t branch_checkpoints\
+    \ < <(find \"$$RUN_DIR\" -mindepth 1 -maxdepth 1 \\\n    -type d -name 'checkpoint-round-*'\
+    \ | sort -V)\n  for ((i=$${#branch_checkpoints[@]}-1; i>=0; i--)); do\n    candidate=\"\
+    $${branch_checkpoints[$$i]}\"\n    if [[ -f \"$$candidate/checkpoint_completion.json\"\
+    \ \\\n          && -f \"$$candidate/adapter/adapter_model.safetensors\" \\\n \
+    \         && -f \"$$candidate/recurrent_state.pt\" ]]; then\n      latest_checkpoint=\"\
+    $$candidate\"\n      break\n    fi\n  done\n  if [[ -n \"$$latest_checkpoint\"\
+    \ ]]; then\n    python - \"$$latest_checkpoint\" \"$$BRANCH\" \"$$CAUSAL_WEIGHT\"\
+    \ <<'PY'\nimport hashlib, json, sys, torch\nroot, branch = sys.argv[1], sys.argv[2]\n\
+    receipt = json.load(open(root + '/checkpoint_completion.json', encoding='utf-8'))\n\
+    payload = torch.load(root + '/recurrent_state.pt', map_location='cpu', weights_only=False)\n\
+    digest = lambda path: hashlib.sha256(open(path, 'rb').read()).hexdigest()\nassert\
+    \ receipt.get('status') == 'complete', receipt\nassert receipt.get('world_size')\
+    \ == 4, receipt\nassert 0 < int(receipt.get('round', -1)) <= 250, receipt\nassert\
+    \ int(receipt['round']) % 50 == 0, receipt\nassert receipt['sha256']['adapter_model']\
+    \ == digest(root + '/adapter/adapter_model.safetensors')\nassert receipt['sha256']['recurrent_state']\
+    \ == digest(root + '/recurrent_state.pt')\nconfig = payload['config']\nassert\
+    \ int(payload.get('round', -1)) == int(receipt['round']), payload\nassert config.get('causal_repeat_fraction')\
+    \ == 1.0, config\nassert float(config['causal_weight']) == float(sys.argv[3]),\
+    \ config\nassert config.get('causal_preference_reduction') == 'sum', config\n\
+    assert config.get('causal_objective_mode') == 'bootstrap_then_symmetric', config\n\
+    assert abs(float(config.get('causal_bootstrap_fraction')) - 0.041666666666666664)\
+    \ < 1e-12, config\nassert branch.startswith(('bootstrap_', 'donor_directional_')),\
+    \ branch\nPY\n    resume_args=(--resume-from-checkpoint \"$$latest_checkpoint/recurrent_state.pt\"\
+    )\n  fi\n  python -u scripts/train_recurrent_student_m4.py \\\n    --model \"\
+    $$LOCAL_MODEL\" \\\n    --init-adapter \"$$M3_RUN_DIR/final_adapter\" \\\n   \
+    \ --init-recurrent-state \"$$M3_RUN_DIR/recurrent_state.pt\" \\\n    --train-jsonl\
+    \ \"$$UNIFIED_DATA/train.jsonl\" \\\n    --valid-jsonl \"$$UNIFIED_DATA/valid.jsonl\"\
+    \ \\\n    --causal-train-jsonl \"$$CAUSAL_DATA/train.jsonl\" \\\n    --causal-valid-jsonl\
+    \ \"$$CAUSAL_DATA/valid.jsonl\" \\\n    --teacher-cache \"$$CACHE_DIR\" \\\n \
+    \   --output-dir \"$$RUN_DIR\" \\\n    --state-token-alias '<|vision_pad|>' \\\
+    \n    --max-length 1536 \\\n    --learning-rate 1e-5 \\\n    --generation-weight\
+    \ 1.0 \\\n    --behavior-kd-weight 0.5 \\\n    --behavior-kd-temperature 1.0 \\\
+    \n    --consistency-weight 0.25 \\\n    --direct-replay-weight 0.25 \\\n    --causal-weight\
+    \ \"$$CAUSAL_WEIGHT\" \\\n    --causal-margin 0.5 \\\n    --causal-preference-reduction\
+    \ sum \\\n    --causal-objective-mode bootstrap_then_symmetric \\\n    --causal-bootstrap-fraction\
+    \ 0.041666666666666664 \\\n    --causal-bootstrap-native-weight 0.0 \\\n    --causal-bootstrap-donor-weight\
+    \ 1.0 \\\n    --causal-repeat-fraction 1.0 \\\n    --gradient-accumulation-steps\
+    \ 1 \\\n    --trainable-projections \\\n    --state-projection-rank 64 \\\n  \
+    \  --eval-limit 300 \\\n    --causal-eval-limit 165 \\\n    --save-steps 50 \\\
+    \n    --distributed-mpi \\\n    --distributed-world-size 4 \\\n    --diagnostic-stop-after-round\
+    \ 250 \\\n    --seed 42 \\\n    \"$${resume_args[@]}\"\nfi\nif [[ \"$${OMPI_COMM_WORLD_RANK:-0}\"\
+    \ != 0 ]]; then\n  exit 0\nfi\ntest -f \"$$RUN_DIR/completion.json\"\ntest -f\
+    \ \"$$RUN_DIR/final_adapter/adapter_model.safetensors\"\ntest -f \"$$RUN_DIR/recurrent_state.pt\"\
+    \npython - \"$$RUN_DIR\" \"$$BRANCH\" \"$$CAUSAL_WEIGHT\" <<'PY'\nimport json,\
+    \ sys\nroot, branch = sys.argv[1], sys.argv[2]\ncompletion = json.load(open(root\
+    \ + '/completion.json', encoding='utf-8'))\nconfig = json.load(open(root + '/run_config.json',\
+    \ encoding='utf-8'))\nhistory = json.load(open(root + '/trainer_history.json',\
+    \ encoding='utf-8'))\nassert completion.get('status') == 'diagnostic_complete',\
+    \ completion\nassert completion.get('micro_steps') == 1000, completion\nassert\
+    \ completion.get('causal_pairs_seen') == 1000, completion\nassert completion.get('unique_causal_pairs_seen')\
+    \ == 1000, completion\nassert config.get('diagnostic_stop_after_round') == 250,\
+    \ config\nassert config.get('causal_repeat_fraction') == 1.0, config\nassert config.get('planned_causal_exposures')\
+    \ == 12000, config\nassert config.get('causal_objective_mode') == 'bootstrap_then_symmetric',\
+    \ config\nassert abs(float(config.get('causal_bootstrap_fraction')) - 0.041666666666666664)\
+    \ < 1e-12, config\nassert float(config.get('causal_weight')) == float(sys.argv[3]),\
+    \ config\ncausal = [row for row in history if row.get('causal_pair_id')]\npayload\
+    \ = {\n    'branch': branch,\n    'round_start': 0,\n    'round_end': 500,\n \
+    \   'causal_weight': float(config['causal_weight']),\n    'causal_exposure_multiplier':\
+    \ float(config['causal_exposure_multiplier']),\n    'effective_causal_weight':\
+    \ float(config['causal_weight']) * float(config['causal_exposure_multiplier']),\n\
+    \    'causal_rows_total': len(causal),\n    'objective_mode': config['causal_objective_mode'],\n\
+    \    'objective_phase_counts': {\n        phase: sum(x.get('causal_objective_phase')\
+    \ == phase for x in causal)\n        for phase in sorted({x.get('causal_objective_phase')\
+    \ for x in causal})\n    },\n    'native_advantage_first_500': sum(float(x['causal_native_advantage'])\
+    \ for x in causal[:500]) / 500,\n    'donor_advantage_first_500': sum(float(x['causal_donor_advantage'])\
+    \ for x in causal[:500]) / 500,\n    'preference_last_500': sum(float(x['causal_preference'])\
+    \ for x in causal[-500:]) / 500,\n    'state_relative_delta_first_500': sum(float(x['causal_state_relative_delta'])\
+    \ for x in causal[:500]) / 500,\n    'state_relative_delta_last_500': sum(float(x['causal_state_relative_delta'])\
+    \ for x in causal[-500:]) / 500,\n    'margin_loss_first_half': sum(float(x['causal_margin_loss'])\
+    \ for x in causal[:1000]) / 1000,\n    'margin_loss_second_half': sum(float(x['causal_margin_loss'])\
+    \ for x in causal[1000:]) / 1000,\n}\nopen(root + '/branch_training_summary.json',\
+    \ 'w', encoding='utf-8').write(json.dumps(payload, indent=2, sort_keys=True) +\
+    \ '\\n')\nprint(json.dumps(payload, indent=2, sort_keys=True))\nPY\nexport CUDA_VISIBLE_DEVICES=0\n\
+    python -u scripts/evaluate_recurrent_causal_gate.py \\\n  --model \"$$LOCAL_MODEL\"\
+    \ \\\n  --adapter \"$$RUN_DIR/final_adapter\" \\\n  --recurrent-state \"$$RUN_DIR/recurrent_state.pt\"\
+    \ \\\n  --jsonl \"$$BASE_DATA/test_same_template.jsonl\" \\\n  --pair-manifest\
+    \ manifests/c4_stage_a_gate_pairs_seed42_n150_v1.json \\\n  --output-json \"$$AMLT_OUTPUT_DIR/eval/c4/recurrent_causal_gate.json\"\
+    \ \\\n  --state-token-alias '<|vision_pad|>' \\\n  --max-length 1536 \\\n  --num-pairs\
+    \ 150 \\\n  --seed 42\ncp -r \"$$RUN_DIR/final_adapter/.\" \"$$AMLT_OUTPUT_DIR/model/\"\
+    \ncp \"$$RUN_DIR/recurrent_state.pt\" \"$$AMLT_OUTPUT_DIR/model/recurrent_state.pt\"\
+    \ncp \"$$RUN_DIR/completion.json\" \"$$AMLT_OUTPUT_DIR/metrics/completion.json\"\
+    \ncp \"$$RUN_DIR/validation_metrics.json\" \"$$AMLT_OUTPUT_DIR/metrics/validation_metrics.json\"\
+    \ncp \"$$RUN_DIR/causal_validation_metrics.json\" \"$$AMLT_OUTPUT_DIR/metrics/causal_validation_metrics.json\"\
+    \ncp \"$$RUN_DIR/training_metrics.json\" \"$$AMLT_OUTPUT_DIR/metrics/training_metrics.json\"\
+    \ncp \"$$RUN_DIR/run_config.json\" \"$$AMLT_OUTPUT_DIR/metrics/run_config.json\"\
+    \ncp \"$$RUN_DIR/gradient_audit.json\" \"$$AMLT_OUTPUT_DIR/metrics/gradient_audit.json\"\
+    \ncp \"$$RUN_DIR/branch_training_summary.json\" \"$$AMLT_OUTPUT_DIR/metrics/branch_training_summary.json\"\
+    \n"
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 43200
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      BRANCH: bootstrap_cf4_w1
+      CAUSAL_WEIGHT: '1.0'
+- name: m4-causal-cf4-donor-directional-w1-round0to250-seed42
+  sku: 80G4-A100
+  process_count_per_node: -1
+  mpi: true
+  sla_tier: Standard
+  command: "set -euo pipefail\nexport PATH=\"/tmp/studentmodeling-m4-causal-strength-venv/bin:$$PATH\"\
+    \nexport PYTHONPATH=\"$$AMLT_CODE_DIR/scripts$${PYTHONPATH:+:$$PYTHONPATH}\"\n\
+    export HF_HOME=/tmp/hf_cache\nexport HF_HUB_CACHE=/tmp/hf_cache/hub\nexport HF_HUB_DISABLE_XET=1\n\
+    export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True\nexport TRANSFORMERS_VERBOSITY=error\n\
+    export LOCAL_MODEL=/tmp/Qwen3-32B\nexport SOURCE_DATA=/mnt/amulet/studentmodeling/method_small_v1\n\
+    export BASE_DATA=/mnt/amulet/studentmodeling/c4_fullopen_20260724/malrule_c1_clean\n\
+    export UNIFIED_DATA=/tmp/unified_recurrent_method_small_fixedu4_v2_full\nexport\
+    \ CAUSAL_DATA=/tmp/recurrent_causal_pairs_cf4_balanced_v1\nexport M3_RUN_DIR=/mnt/amulet/studentmodeling/checkpoints/world_model_v1_m3_generation_kd_trainable_seed42_fixedu4_v2_20260730\n\
+    export CACHE_DIR=/mnt/amulet/studentmodeling/world_model_v1/m4/teacher_cache_train_n12000_top256_fixedu4_v2_20260730\n\
+    export RUN_DIR=\"/mnt/amulet/studentmodeling/diagnostics/world_model_v1_m4_causal_cf4_$${BRANCH}_seed42_round250_20260731\"\
+    \nmkdir -p \"$$HF_HUB_CACHE\" \"$$UNIFIED_DATA\" \"$$CAUSAL_DATA\" \"$$RUN_DIR\"\
+    \ \\\n  \"$$AMLT_OUTPUT_DIR/model\" \"$$AMLT_OUTPUT_DIR/metrics\" \"$$AMLT_OUTPUT_DIR/eval/c4\"\
+    \ntest \"$$(df --output=avail /tmp | tail -1)\" -ge 125829120\ntest -f \"$$SOURCE_DATA/train.jsonl\"\
+    \ntest -f \"$$SOURCE_DATA/valid.jsonl\"\ntest -f \"$$BASE_DATA/train.jsonl\"\n\
+    test -f \"$$BASE_DATA/val.jsonl\"\ntest -f \"$$BASE_DATA/test_same_template.jsonl\"\
+    \ntest -f \"$$M3_RUN_DIR/final_adapter/adapter_model.safetensors\"\ntest -f \"\
+    $$M3_RUN_DIR/recurrent_state.pt\"\ntest -f \"$$CACHE_DIR/integrity.json\"\ntest\
+    \ \"$$(sha256sum manifests/cf4_balanced_paired_state_swap_train_seed20260731_v1.json\
+    \ | cut -d' ' -f1)\" = 4e7907cf4d74eced4f4c5c2dddf7213a2649cddca081fd2b4a51f35934b35773\n\
+    test \"$$(sha256sum scripts/train_recurrent_student_m4.py | cut -d' ' -f1)\" =\
+    \ 865c12219deb23cf9db145c797244969721fce80323050dcd987b33d96cbfb1b\ntest \"$$(sha256sum\
+    \ scripts/recurrent_student_model.py | cut -d' ' -f1)\" = 9e0431dccb524f67b401f7ea911e11c96fc3061432ffdc73e0cac2bbc2acc5a0\n\
+    test \"$$(sha256sum scripts/build_unified_recurrent_manifest.py | cut -d' ' -f1)\"\
+    \ = 8bc822ec33165037dff8353707a037a0edc12679cd67b66885aa94a4288542f6\ntest \"\
+    $$(sha256sum scripts/audit_unified_recurrent_manifest.py | cut -d' ' -f1)\" =\
+    \ 6de4fcab57aa8dbd0b56f07972e341f64b60668474f03069cc47878a80e434a0\ntest \"$$(sha256sum\
+    \ scripts/build_recurrent_causal_pairs.py | cut -d' ' -f1)\" = 2daed709603a63a487705bce87539b58c7e01d239397758305d3b023f5eb26b7\n\
+    test \"$$(sha256sum scripts/evaluate_recurrent_causal_gate.py | cut -d' ' -f1)\"\
+    \ = 9dca3271d29153baf66b440239467e6889c0f2c64677c4e31fd4e2d8a5710c10\ntest \"\
+    $$(sha256sum manifests/c4_stage_a_gate_pairs_seed42_n150_v1.json | cut -d' ' -f1)\"\
+    \ = edcdb934a65252557f6c569eea9ef7a85e5445549deac9fb4829c3f579e1a9b8\npython -m\
+    \ unittest discover -s tests -p 'test_train_recurrent_student_m4.py' -v\npython\
+    \ -m unittest discover -s tests -p 'test_recurrent_student_model.py' -v\n\nexec\
+    \ 7>/tmp/m4-causal-branch-data.lock\nflock -x 7\nif [[ ! -f /tmp/m4-causal-branch-data.complete\
+    \ ]]; then\n  python scripts/build_unified_recurrent_manifest.py \\\n    --train-jsonl\
+    \ \"$$SOURCE_DATA/train.jsonl\" \\\n    --valid-jsonl \"$$SOURCE_DATA/valid.jsonl\"\
+    \ \\\n    --output-dir \"$$UNIFIED_DATA\" \\\n    --max-updates 4 \\\n    --seed\
+    \ 20260730\n  python scripts/audit_unified_recurrent_manifest.py \\\n    --train-jsonl\
+    \ \"$$UNIFIED_DATA/train.jsonl\" \\\n    --valid-jsonl \"$$UNIFIED_DATA/valid.jsonl\"\
+    \ \\\n    --output-json \"$$UNIFIED_DATA/audit.json\"\n  python scripts/build_recurrent_causal_pairs.py\
+    \ \\\n    --train-source \"$$BASE_DATA/train.jsonl\" \\\n    --valid-source \"\
+    $$BASE_DATA/val.jsonl\" \\\n    --train-pairs manifests/cf4_balanced_paired_state_swap_train_seed20260731_v1.json\
+    \ \\\n    --valid-pairs manifests/cf_paired_state_swap_valid_seed20260731_v1.json\
+    \ \\\n    --output-dir \"$$CAUSAL_DATA\" \\\n    --max-updates 4\n  touch /tmp/m4-causal-branch-data.complete\n\
+    fi\nflock -u 7\ntest \"$$(sha256sum \"$$UNIFIED_DATA/train.jsonl\" | cut -d' '\
+    \ -f1)\" = 18f2a05be56a93bb63f5ac552559502f29770158356faf906020911d5e9e2e6d\n\
+    test \"$$(sha256sum \"$$UNIFIED_DATA/valid.jsonl\" | cut -d' ' -f1)\" = 9079207606ebab4fe85a47926d8fb38332970af12d78cc647dcda965f4522069\n\
+    test \"$$(sha256sum \"$$CAUSAL_DATA/train.jsonl\" | cut -d' ' -f1)\" = 30f68f54120e5a9ada0a37b1dba2b6480de0f8eaeac98d0b7ed7c627429f9766\n\
+    test \"$$(sha256sum \"$$CAUSAL_DATA/valid.jsonl\" | cut -d' ' -f1)\" = 3e6b5fbcab3d232d5b3a65a005fbf9ba5719a8a4f8251d6ea85b861a7c1c3e22\n\
+    \nexec 6>/tmp/m4-causal-branch-model-copy.lock\nflock -x 6\nif [[ ! -f /tmp/Qwen3-32B.m4-causal-branch-copy-complete\
+    \ ]]; then\n  rm -rf \"$$LOCAL_MODEL\"\n  mkdir -p \"$$LOCAL_MODEL\"\n  python\
+    \ scripts/copy_model_parallel.py \\\n    --source /mnt/amulet/studentmodeling/models/Qwen3-32B\
+    \ \\\n    --destination \"$$LOCAL_MODEL\" \\\n    --workers 16\n  touch /tmp/Qwen3-32B.m4-causal-branch-copy-complete\n\
+    fi\nflock -u 6\ntest -f \"$$LOCAL_MODEL/model.safetensors.index.json\"\nnvidia-smi\
+    \ --query-gpu=index,name,memory.total --format=csv,noheader\n\nif [[ ! -f \"$$RUN_DIR/completion.json\"\
+    \ ]]; then\n  resume_args=()\n  latest_checkpoint=\"\"\n  mapfile -t branch_checkpoints\
+    \ < <(find \"$$RUN_DIR\" -mindepth 1 -maxdepth 1 \\\n    -type d -name 'checkpoint-round-*'\
+    \ | sort -V)\n  for ((i=$${#branch_checkpoints[@]}-1; i>=0; i--)); do\n    candidate=\"\
+    $${branch_checkpoints[$$i]}\"\n    if [[ -f \"$$candidate/checkpoint_completion.json\"\
+    \ \\\n          && -f \"$$candidate/adapter/adapter_model.safetensors\" \\\n \
+    \         && -f \"$$candidate/recurrent_state.pt\" ]]; then\n      latest_checkpoint=\"\
+    $$candidate\"\n      break\n    fi\n  done\n  if [[ -n \"$$latest_checkpoint\"\
+    \ ]]; then\n    python - \"$$latest_checkpoint\" \"$$BRANCH\" \"$$CAUSAL_WEIGHT\"\
+    \ <<'PY'\nimport hashlib, json, sys, torch\nroot, branch = sys.argv[1], sys.argv[2]\n\
+    receipt = json.load(open(root + '/checkpoint_completion.json', encoding='utf-8'))\n\
+    payload = torch.load(root + '/recurrent_state.pt', map_location='cpu', weights_only=False)\n\
+    digest = lambda path: hashlib.sha256(open(path, 'rb').read()).hexdigest()\nassert\
+    \ receipt.get('status') == 'complete', receipt\nassert receipt.get('world_size')\
+    \ == 4, receipt\nassert 0 < int(receipt.get('round', -1)) <= 250, receipt\nassert\
+    \ int(receipt['round']) % 50 == 0, receipt\nassert receipt['sha256']['adapter_model']\
+    \ == digest(root + '/adapter/adapter_model.safetensors')\nassert receipt['sha256']['recurrent_state']\
+    \ == digest(root + '/recurrent_state.pt')\nconfig = payload['config']\nassert\
+    \ int(payload.get('round', -1)) == int(receipt['round']), payload\nassert config.get('causal_repeat_fraction')\
+    \ == 1.0, config\nassert float(config['causal_weight']) == float(sys.argv[3]),\
+    \ config\nassert config.get('causal_preference_reduction') == 'sum', config\n\
+    assert config.get('causal_objective_mode') == 'donor_directional', config\nassert\
+    \ abs(float(config.get('causal_bootstrap_fraction')) - 0.041666666666666664) <\
+    \ 1e-12, config\nassert branch.startswith(('bootstrap_', 'donor_directional_')),\
+    \ branch\nPY\n    resume_args=(--resume-from-checkpoint \"$$latest_checkpoint/recurrent_state.pt\"\
+    )\n  fi\n  python -u scripts/train_recurrent_student_m4.py \\\n    --model \"\
+    $$LOCAL_MODEL\" \\\n    --init-adapter \"$$M3_RUN_DIR/final_adapter\" \\\n   \
+    \ --init-recurrent-state \"$$M3_RUN_DIR/recurrent_state.pt\" \\\n    --train-jsonl\
+    \ \"$$UNIFIED_DATA/train.jsonl\" \\\n    --valid-jsonl \"$$UNIFIED_DATA/valid.jsonl\"\
+    \ \\\n    --causal-train-jsonl \"$$CAUSAL_DATA/train.jsonl\" \\\n    --causal-valid-jsonl\
+    \ \"$$CAUSAL_DATA/valid.jsonl\" \\\n    --teacher-cache \"$$CACHE_DIR\" \\\n \
+    \   --output-dir \"$$RUN_DIR\" \\\n    --state-token-alias '<|vision_pad|>' \\\
+    \n    --max-length 1536 \\\n    --learning-rate 1e-5 \\\n    --generation-weight\
+    \ 1.0 \\\n    --behavior-kd-weight 0.5 \\\n    --behavior-kd-temperature 1.0 \\\
+    \n    --consistency-weight 0.25 \\\n    --direct-replay-weight 0.25 \\\n    --causal-weight\
+    \ \"$$CAUSAL_WEIGHT\" \\\n    --causal-margin 0.5 \\\n    --causal-preference-reduction\
+    \ sum \\\n    --causal-objective-mode donor_directional \\\n    --causal-bootstrap-fraction\
+    \ 0.041666666666666664 \\\n    --causal-bootstrap-native-weight 0.0 \\\n    --causal-bootstrap-donor-weight\
+    \ 1.0 \\\n    --causal-repeat-fraction 1.0 \\\n    --gradient-accumulation-steps\
+    \ 1 \\\n    --trainable-projections \\\n    --state-projection-rank 64 \\\n  \
+    \  --eval-limit 300 \\\n    --causal-eval-limit 165 \\\n    --save-steps 50 \\\
+    \n    --distributed-mpi \\\n    --distributed-world-size 4 \\\n    --diagnostic-stop-after-round\
+    \ 250 \\\n    --seed 42 \\\n    \"$${resume_args[@]}\"\nfi\nif [[ \"$${OMPI_COMM_WORLD_RANK:-0}\"\
+    \ != 0 ]]; then\n  exit 0\nfi\ntest -f \"$$RUN_DIR/completion.json\"\ntest -f\
+    \ \"$$RUN_DIR/final_adapter/adapter_model.safetensors\"\ntest -f \"$$RUN_DIR/recurrent_state.pt\"\
+    \npython - \"$$RUN_DIR\" \"$$BRANCH\" \"$$CAUSAL_WEIGHT\" <<'PY'\nimport json,\
+    \ sys\nroot, branch = sys.argv[1], sys.argv[2]\ncompletion = json.load(open(root\
+    \ + '/completion.json', encoding='utf-8'))\nconfig = json.load(open(root + '/run_config.json',\
+    \ encoding='utf-8'))\nhistory = json.load(open(root + '/trainer_history.json',\
+    \ encoding='utf-8'))\nassert completion.get('status') == 'diagnostic_complete',\
+    \ completion\nassert completion.get('micro_steps') == 1000, completion\nassert\
+    \ completion.get('causal_pairs_seen') == 1000, completion\nassert completion.get('unique_causal_pairs_seen')\
+    \ == 1000, completion\nassert config.get('diagnostic_stop_after_round') == 250,\
+    \ config\nassert config.get('causal_repeat_fraction') == 1.0, config\nassert config.get('planned_causal_exposures')\
+    \ == 12000, config\nassert config.get('causal_objective_mode') == 'donor_directional',\
+    \ config\nassert abs(float(config.get('causal_bootstrap_fraction')) - 0.041666666666666664)\
+    \ < 1e-12, config\nassert float(config.get('causal_weight')) == float(sys.argv[3]),\
+    \ config\ncausal = [row for row in history if row.get('causal_pair_id')]\npayload\
+    \ = {\n    'branch': branch,\n    'round_start': 0,\n    'round_end': 500,\n \
+    \   'causal_weight': float(config['causal_weight']),\n    'causal_exposure_multiplier':\
+    \ float(config['causal_exposure_multiplier']),\n    'effective_causal_weight':\
+    \ float(config['causal_weight']) * float(config['causal_exposure_multiplier']),\n\
+    \    'causal_rows_total': len(causal),\n    'objective_mode': config['causal_objective_mode'],\n\
+    \    'objective_phase_counts': {\n        phase: sum(x.get('causal_objective_phase')\
+    \ == phase for x in causal)\n        for phase in sorted({x.get('causal_objective_phase')\
+    \ for x in causal})\n    },\n    'native_advantage_first_500': sum(float(x['causal_native_advantage'])\
+    \ for x in causal[:500]) / 500,\n    'donor_advantage_first_500': sum(float(x['causal_donor_advantage'])\
+    \ for x in causal[:500]) / 500,\n    'preference_last_500': sum(float(x['causal_preference'])\
+    \ for x in causal[-500:]) / 500,\n    'state_relative_delta_first_500': sum(float(x['causal_state_relative_delta'])\
+    \ for x in causal[:500]) / 500,\n    'state_relative_delta_last_500': sum(float(x['causal_state_relative_delta'])\
+    \ for x in causal[-500:]) / 500,\n    'margin_loss_first_half': sum(float(x['causal_margin_loss'])\
+    \ for x in causal[:1000]) / 1000,\n    'margin_loss_second_half': sum(float(x['causal_margin_loss'])\
+    \ for x in causal[1000:]) / 1000,\n}\nopen(root + '/branch_training_summary.json',\
+    \ 'w', encoding='utf-8').write(json.dumps(payload, indent=2, sort_keys=True) +\
+    \ '\\n')\nprint(json.dumps(payload, indent=2, sort_keys=True))\nPY\nexport CUDA_VISIBLE_DEVICES=0\n\
+    python -u scripts/evaluate_recurrent_causal_gate.py \\\n  --model \"$$LOCAL_MODEL\"\
+    \ \\\n  --adapter \"$$RUN_DIR/final_adapter\" \\\n  --recurrent-state \"$$RUN_DIR/recurrent_state.pt\"\
+    \ \\\n  --jsonl \"$$BASE_DATA/test_same_template.jsonl\" \\\n  --pair-manifest\
+    \ manifests/c4_stage_a_gate_pairs_seed42_n150_v1.json \\\n  --output-json \"$$AMLT_OUTPUT_DIR/eval/c4/recurrent_causal_gate.json\"\
+    \ \\\n  --state-token-alias '<|vision_pad|>' \\\n  --max-length 1536 \\\n  --num-pairs\
+    \ 150 \\\n  --seed 42\ncp -r \"$$RUN_DIR/final_adapter/.\" \"$$AMLT_OUTPUT_DIR/model/\"\
+    \ncp \"$$RUN_DIR/recurrent_state.pt\" \"$$AMLT_OUTPUT_DIR/model/recurrent_state.pt\"\
+    \ncp \"$$RUN_DIR/completion.json\" \"$$AMLT_OUTPUT_DIR/metrics/completion.json\"\
+    \ncp \"$$RUN_DIR/validation_metrics.json\" \"$$AMLT_OUTPUT_DIR/metrics/validation_metrics.json\"\
+    \ncp \"$$RUN_DIR/causal_validation_metrics.json\" \"$$AMLT_OUTPUT_DIR/metrics/causal_validation_metrics.json\"\
+    \ncp \"$$RUN_DIR/training_metrics.json\" \"$$AMLT_OUTPUT_DIR/metrics/training_metrics.json\"\
+    \ncp \"$$RUN_DIR/run_config.json\" \"$$AMLT_OUTPUT_DIR/metrics/run_config.json\"\
+    \ncp \"$$RUN_DIR/gradient_audit.json\" \"$$AMLT_OUTPUT_DIR/metrics/gradient_audit.json\"\
+    \ncp \"$$RUN_DIR/branch_training_summary.json\" \"$$AMLT_OUTPUT_DIR/metrics/branch_training_summary.json\"\
+    \n"
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 43200
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      BRANCH: donor_directional_cf4_w1
+      CAUSAL_WEIGHT: '1.0'

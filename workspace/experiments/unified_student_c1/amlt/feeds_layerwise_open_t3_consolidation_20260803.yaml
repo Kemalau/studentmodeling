@@ -1,0 +1,87 @@
+# Generated from `amlt template -t Feeds -f ... -y`, then filled with two
+# matched phase-2 consolidation arms.  Both start from the same weight-identical
+# audited open-T3 formation checkpoint and use disjoint train-only rows.
+# yaml-language-server: $schema=file:///home/v-yuejiali/studentmodeling/workspace/experiments/unified_student_c1/.vscode/amlt-config.schema.json
+description: Open-T3 formation followed by low-LR causal/task consolidation
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-layerwise-open-t3-consolidation-venv
+    - /tmp/studentmodeling-layerwise-open-t3-consolidation-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-layerwise-open-t3-consolidation-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: layerwise-open-t3-consolidation-statekd-lr5e7-seed42
+    sku: 80G4-A100
+    process_count_per_node: -1
+    mpi: true
+    sla_tier: Standard
+    command: &command |
+      set -euo pipefail
+      bash scripts/run_layerwise_task_retention_rehearsal.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-layerwise-open-t3-consolidation-venv
+        BRANCH: equal_t3_t6_open_t3
+        LOSS_PROFILE: state_kd
+        TRAIN_ENTRYPOINT: scripts/train_recurrent_student_m4_open_t3_selective_kd.py
+        SEGMENT_ROWS: '1000'
+        LEARNING_RATE: '5e-7'
+        EXPECTED_CAUSAL_PAIRS: '50'
+        DIAGNOSTIC_START_GLOBAL_POSITION: '13000'
+        DIAGNOSTIC_STOP_AFTER_ROUND: '3500'
+        MANIFEST: manifests/layerwise_open_t3_consolidation_equal_t3_t6_seed42_v1.json
+        MANIFEST_SHA256: 3a6afeecb7949f72f464efcf608402b3a258e88609f4d8d45bf0bbd252a26b16
+        WARM_START_SOURCE_CHECKPOINT_DIR: /mnt/amulet/studentmodeling/diagnostics/layerwise_task_retention_service_recovery/equal_t3_t6_open_t3/state_kd/lr5e-6_start12000_stop3250_32adfcc7bd1d78f541ec8685ec8f96f9934b35471011bb896c402b1e77a7bf6f_b926ee1acc6bf8a098693cef8705f88c739be214629dcea723daed6a0827c440_2474b77459701fa36ec564c84b7f3b6b0d158c9ab128b5147111d252662b0931/checkpoint-round-3250
+        WARM_START_CHECKPOINT_DIR: /tmp/layerwise-open-t3-consolidation-statekd-warm-start
+        WARM_START_PRIOR_MANIFEST: manifests/layerwise_task_retention_equal_t3_t6_seed42_v1.json
+        WARM_START_EXPECTED_ROUND: '3250'
+        WARM_START_EXPECTED_WORLD_SIZE: '4'
+
+  - name: layerwise-open-t3-consolidation-statepath-lr5e7-seed42
+    sku: 80G4-A100
+    process_count_per_node: -1
+    mpi: true
+    sla_tier: Standard
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-layerwise-open-t3-consolidation-venv
+        BRANCH: equal_t3_t6_open_t3
+        LOSS_PROFILE: state_path
+        TRAIN_ENTRYPOINT: scripts/train_recurrent_student_m4_open_t3.py
+        SEGMENT_ROWS: '1000'
+        LEARNING_RATE: '5e-7'
+        EXPECTED_CAUSAL_PAIRS: '50'
+        DIAGNOSTIC_START_GLOBAL_POSITION: '13000'
+        DIAGNOSTIC_STOP_AFTER_ROUND: '3500'
+        MANIFEST: manifests/layerwise_open_t3_consolidation_equal_t3_t6_seed42_v1.json
+        MANIFEST_SHA256: 3a6afeecb7949f72f464efcf608402b3a258e88609f4d8d45bf0bbd252a26b16
+        WARM_START_SOURCE_CHECKPOINT_DIR: /mnt/amulet/studentmodeling/diagnostics/layerwise_task_retention_service_recovery/equal_t3_t6_open_t3/state_kd/lr5e-6_start12000_stop3250_32adfcc7bd1d78f541ec8685ec8f96f9934b35471011bb896c402b1e77a7bf6f_b926ee1acc6bf8a098693cef8705f88c739be214629dcea723daed6a0827c440_2474b77459701fa36ec564c84b7f3b6b0d158c9ab128b5147111d252662b0931/checkpoint-round-3250
+        WARM_START_CHECKPOINT_DIR: /tmp/layerwise-open-t3-consolidation-statepath-warm-start
+        WARM_START_PRIOR_MANIFEST: manifests/layerwise_task_retention_equal_t3_t6_seed42_v1.json
+        WARM_START_EXPECTED_ROUND: '3250'
+        WARM_START_EXPECTED_WORLD_SIZE: '4'

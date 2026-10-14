@@ -1,0 +1,67 @@
+# Generated from the approved full-support Eedi AMLT template.  The two jobs
+# differ only in the gold-semantic trajectory coefficient.
+description: Gold-semantic state-prototype repair diagnostic for closed layerwise Eedi T3
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-gold-semantic-teacher-venv
+    - /tmp/studentmodeling-gold-semantic-teacher-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-gold-semantic-teacher-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: gold-semantic-teacher-cw025-seed42
+    sku: 80G4-A100
+    process_count_per_node: -1
+    mpi: true
+    sla_tier: Standard
+    command: &command |
+      set -euo pipefail
+      bash scripts/run_layerwise_task_retention_rehearsal.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env: &common_env
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-gold-semantic-teacher-venv
+        BRANCH: eedi_full_open_t3
+        LOSS_PROFILE: state_path
+        TRAIN_ENTRYPOINT: scripts/train_recurrent_student_m4_gold_semantic_teacher.py
+        SEGMENT_ROWS: '5000'
+        LEARNING_RATE: '2e-6'
+        CONSISTENCY_WEIGHT: '0.25'
+        EXPECTED_CAUSAL_PAIRS: '250'
+        DIAGNOSTIC_STOP_AFTER_ROUND: '4250'
+        MANIFEST: /tmp/layerwise_extended_manifests/layerwise_task_retention_eedi_full_seed42_v1.json
+        MANIFEST_SHA256: 97bef6748b1fa8d75809e9e01c9b76d57b6534d336b7037217289932a31df393
+        STUDENTMODELING_EXTERNAL_STATE_TEACHER_ADAPTER: /mnt/amulet/studentmodeling/adapters/qwen3_32b_full_trainvalid_no_t4_strictt6_1ep/final_adapter
+        STUDENTMODELING_EXTERNAL_STATE_TEACHER_SHA256: 31db2cbe6163e2a32ffe71688803d75b707b7624f79af4a6a1f4a6892138835a
+
+  - name: gold-semantic-teacher-cw100-seed42
+    sku: 80G4-A100
+    process_count_per_node: -1
+    mpi: true
+    sla_tier: Standard
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env:
+        <<: *common_env
+        CONSISTENCY_WEIGHT: '1.0'

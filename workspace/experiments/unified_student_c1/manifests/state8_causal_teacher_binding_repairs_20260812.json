@@ -1,0 +1,49 @@
+{
+  "stage": "state8_curriculum_failed_checkpoint_repair_plan_v1",
+  "scientific_floors_unchanged": true,
+  "raw_history_visible_to_decoder": false,
+  "semantic_judge_authoritative": true,
+  "exact_match_authoritative": false,
+  "diagnosis": "Existing repairs perturb random states but fail to map real donor trajectories to donor diagnoses; bind native and donor recurrent trajectories to the frozen full-history teacher while retaining output-space C4 controls.",
+  "seed_base": 8201,
+  "branches": [
+    {
+      "name": "causal_teacher_low",
+      "source": {
+        "family": "curriculum",
+        "arm": "current_query",
+        "checkpoint_step": 3000
+      },
+      "training_arm": "full",
+      "overrides": {
+        "STATE8_EEDI_CAUSAL_TWINS": "200",
+        "STATE8_CAUSAL_REPEAT_FRACTION": "0.75",
+        "STATE8_CAUSAL_WEIGHT": "2.0",
+        "STATE8_CAUSAL_MARGIN": "0.5",
+        "STATE8_EEDI_GEOMETRY_WEIGHT": "0.10",
+        "STATE8_CAUSAL_TEACHER_TRAJECTORY_WEIGHT": "0.15",
+        "STATE8_CAUSAL_TEACHER_COSINE_WEIGHT": "1.0",
+        "STATE8_CAUSAL_TEACHER_RELATIVE_MSE_WEIGHT": "1.0"
+      }
+    },
+    {
+      "name": "causal_teacher_high",
+      "source": {
+        "family": "curriculum",
+        "arm": "current_query",
+        "checkpoint_step": 3000
+      },
+      "training_arm": "full",
+      "overrides": {
+        "STATE8_EEDI_CAUSAL_TWINS": "200",
+        "STATE8_CAUSAL_REPEAT_FRACTION": "0.75",
+        "STATE8_CAUSAL_WEIGHT": "2.0",
+        "STATE8_CAUSAL_MARGIN": "0.5",
+        "STATE8_EEDI_GEOMETRY_WEIGHT": "0.10",
+        "STATE8_CAUSAL_TEACHER_TRAJECTORY_WEIGHT": "0.50",
+        "STATE8_CAUSAL_TEACHER_COSINE_WEIGHT": "1.0",
+        "STATE8_CAUSAL_TEACHER_RELATIVE_MSE_WEIGHT": "1.0"
+      }
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "counts": {
+    "rows": 259845,
+    "source/dbe_kt22": 10941,
+    "source/eedi_mining": 3476,
+    "source/eedi_response": 33440,
+    "source/foundationalassist": 147191,
+    "source/malrule": 9900,
+    "source/xes3g5m": 54897,
+    "source_split/train": 244331,
+    "source_split/valid": 15514,
+    "task/diagnose_misconception": 6776,
+    "task/predict_correctness": 110525,
+    "task/predict_error_persistence": 8375,
+    "task/predict_prospective_error": 78600,
+    "task/predict_response": 55569
+  },
+  "inputs": {
+    "train": {
+      "path": "data/processed/unified_recurrent_full259845_u4_v1/train.jsonl",
+      "sha256": "2a2f650bb077196a79deaa7eac363d5224fd5936e9c51e60d3fd5f27775282c2"
+    },
+    "valid": {
+      "path": "data/processed/unified_recurrent_full259845_u4_v1/valid.jsonl",
+      "sha256": "78bfce75576dc3873cbb6459669a952adeedb8b77bda15f281af9519e2506d14"
+    }
+  },
+  "output": {
+    "path": "data/processed/unified_recurrent_full259845_u4_v1/final_fit_trainvalid.jsonl",
+    "sha256": "9961f746cb17e6c314e182d3453b6157022fb48b8de44d2e68bc8e87a1131ccd"
+  },
+  "purpose": "post_selection_final_fit_train_plus_validation",
+  "selection_data_note": "Loss/projection selection is completed before this merged corpus is used; the formal test remains untouched.",
+  "unique_examples": 259845,
+  "version": 1
+}

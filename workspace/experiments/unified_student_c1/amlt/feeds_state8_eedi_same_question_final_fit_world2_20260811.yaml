@@ -1,0 +1,45 @@
+# Generated from the approved diagnosis-first matched world2 lineage and
+# specialized for the jointly promoted same-question State8 candidate.
+description: Same-question State8 exact 259845-row unified final fit; world2; global batch 16; strict state-only
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-state8-eedi-same-question-finalfit-venv
+    - /tmp/studentmodeling-state8-eedi-same-question-finalfit-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-state8-eedi-same-question-finalfit-venv/bin/python -m pip install -r requirements-feeds.txt
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+jobs:
+  - name: state8-eedi-same-question-unified-finalfit-seed42
+    sku: 80G2-A100
+    process_count_per_node: -1
+    mpi: true
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      trap 'rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc" "$${BASH_COMMAND}" >&2; exit "$$rc"' ERR
+      test "$$(sha256sum scripts/render_state8_eedi_same_question_finalfit_world2.py | cut -d' ' -f1)" = 736d06fd7596707c9a669f9bff0a649d34134c40814fc5c88f77b268e61d1615
+      rendered=/tmp/run_state8_eedi_same_question_finalfit_world2.sh
+      observed="$$(python scripts/render_state8_eedi_same_question_finalfit_world2.py --source scripts/run_state8_unified_final_fit.sh --output "$$rendered")"
+      test "$$observed" = 8d025cb0301b894b85c1e2eac34bc3f318dc269fc76bd581b8aaa2bc887cc59f
+      test "$$(sha256sum "$$rendered" | cut -d' ' -f1)" = "$$observed"
+      bash -n "$$rendered"
+      exec bash "$$rendered"
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 345600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-eedi-same-question-finalfit-venv
+        FINALFIT_VARIANT: SELECTED_VARIANT

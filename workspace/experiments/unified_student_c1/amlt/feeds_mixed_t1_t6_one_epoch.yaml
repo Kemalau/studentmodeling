@@ -1,0 +1,81 @@
+description: Train Qwen3-32B mixed T1-T6 QLoRA for one complete epoch on four Feeds A100 80GB nodes
+
+target:
+  service: manifold  # run "amlt target list manifold" to see available targets
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-venv
+    - /tmp/studentmodeling-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore:
+    - .git/
+    - .vscode/
+    - amlt/
+    - data/
+    - results/
+    - __pycache__/
+    - '*.pyc'
+
+storage:
+  student_data:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: false
+
+jobs:
+  - name: qwen3-32b-mixed-t1-t6-one-epoch
+    sku: 80G4-A100
+    process_count_per_node: -1
+    mpi: true
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      export PATH="/tmp/studentmodeling-venv/bin:$$PATH"
+      export PYTHONPATH="$$AMLT_CODE_DIR$${PYTHONPATH:+:$$PYTHONPATH}"
+      export HF_HOME=/tmp/hf_cache
+      export HF_HUB_CACHE=/tmp/hf_cache/hub
+      export HF_HUB_DISABLE_XET=1
+      export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+      export LOCAL_MODEL=/tmp/Qwen3-32B
+      mkdir -p "$$HF_HUB_CACHE" "$$AMLT_OUTPUT_DIR/model"
+      available_kb=$$(df --output=avail /tmp | tail -1)
+      test "$$available_kb" -ge 125829120
+      (
+        flock -x 9
+        if [[ ! -f /tmp/Qwen3-32B.copy_complete ]]; then
+          rm -rf "$$LOCAL_MODEL"
+          mkdir -p "$$LOCAL_MODEL"
+          cp -r /mnt/amulet/studentmodeling/models/Qwen3-32B/. "$$LOCAL_MODEL/"
+          touch /tmp/Qwen3-32B.copy_complete
+        fi
+      ) 9>/tmp/qwen3-32b-copy.lock
+      python -c "import os, torch, transformers, peft, accelerate, bitsandbytes; print({'torch': torch.__version__, 'transformers': transformers.__version__, 'gpu': torch.cuda.get_device_name(0), 'world': os.environ.get('OMPI_COMM_WORLD_SIZE'), 'rank': os.environ.get('OMPI_COMM_WORLD_RANK')})"
+      python scripts/train_c1_lora.py \
+        --model "$$LOCAL_MODEL" \
+        --train-jsonl /mnt/amulet/studentmodeling/mixed_t1_t6_balanced/train.jsonl \
+        --output-dir "$$AMLT_OUTPUT_DIR/model" \
+        --max-length 1536 \
+        --max-train-samples 120000 \
+        --max-steps 30000 \
+        --per-device-train-batch-size 1 \
+        --gradient-accumulation-steps 1 \
+        --learning-rate 1e-4 \
+        --lora-rank 8 \
+        --lora-alpha 16 \
+        --load-4bit \
+        --state-token-alias '<|vision_pad|>' \
+        --supervise-eos \
+        --logging-steps 20 \
+        --save-steps 2500
+    submit_args:
+      max_run_duration_seconds: 86400
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml

@@ -1,0 +1,77 @@
+description: Exact State8 diagnosis-first checkpoint-3000 semantic T3 and causal C4
+  screen
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+  - python -m venv --system-site-packages /tmp/studentmodeling-state8-exact-midpoint-eval-venv
+  - /tmp/studentmodeling-state8-exact-midpoint-eval-venv/bin/python -m pip install
+    --upgrade pip
+  - /tmp/studentmodeling-state8-exact-midpoint-eval-venv/bin/python -m pip install
+    -r requirements-feeds.txt
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore:
+  - .git/
+  - .vscode/
+  - amlt/
+  - data/
+  - results/
+  - __pycache__/
+  - '*.pyc'
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+jobs:
+- name: state8-exact-diagnosis-midpoint-step3000-t3
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: 'set -euo pipefail
+
+    trap ''rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc"
+    "$${BASH_COMMAND}" >&2; exit "$$rc"'' ERR
+
+    bash scripts/run_state8_exact_diagnosis_midpoint_t3.sh
+
+    '
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 21600
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      VENV_ROOT: /tmp/studentmodeling-state8-exact-midpoint-eval-venv
+      STATE8_EXACT_CHECKPOINT_ROOT: /mnt/amulet/studentmodeling/checkpoints/state8_qualified_teacher_curriculum_seed42_exact5000_rounds1250_kd1_v2_20260805_taxonomy_semantic_v1_exact_diagnosis_first_seed64_single_ga4/checkpoint-3000
+      EXACT_DIAGNOSIS_FORMAL_SHA256: a8bc07a8fe6d2c9bfa9af6d976b53b84321cb4baa9c9fcace3188e370f7732c9
+      EXACT_DIAGNOSIS_C4_SHA256: 7eef90e079d698c94f1f8655a1df3fe6bd93cedbb175ba4e7082a49bb8069c8b
+      STATE8_EXACT_CHECKPOINT_STEP: '3000'
+- name: state8-exact-diagnosis-midpoint-step3000-c4
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: 'set -euo pipefail
+
+    trap ''rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc"
+    "$${BASH_COMMAND}" >&2; exit "$$rc"'' ERR
+
+    bash scripts/run_state8_exact_diagnosis_midpoint_c4.sh
+
+    '
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 21600
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      VENV_ROOT: /tmp/studentmodeling-state8-exact-midpoint-eval-venv
+      STATE8_EXACT_CHECKPOINT_ROOT: /mnt/amulet/studentmodeling/checkpoints/state8_qualified_teacher_curriculum_seed42_exact5000_rounds1250_kd1_v2_20260805_taxonomy_semantic_v1_exact_diagnosis_first_seed64_single_ga4/checkpoint-3000
+      EXACT_DIAGNOSIS_FORMAL_SHA256: a8bc07a8fe6d2c9bfa9af6d976b53b84321cb4baa9c9fcace3188e370f7732c9
+      EXACT_DIAGNOSIS_C4_SHA256: 7eef90e079d698c94f1f8655a1df3fe6bd93cedbb175ba4e7082a49bb8069c8b
+      STATE8_EXACT_CHECKPOINT_STEP: '3000'

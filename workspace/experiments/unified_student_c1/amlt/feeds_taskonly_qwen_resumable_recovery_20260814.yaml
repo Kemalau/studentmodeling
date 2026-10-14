@@ -1,0 +1,105 @@
+# yaml-language-server: $schema=file:///home/v-yuejiali/studentmodeling/workspace/experiments/unified_student_c1/.vscode/amlt-config.schema.json
+# ^ Update with: amlt schema add <file>  |  VS Code: Run Task > amlt
+# Amulet config file. Docs: https://amulet-docs.azurewebsites.net/config_file.html
+# Fill in all <placeholder> values before submitting.
+description: Guarded resumable recovery for unfinished one-epoch Qwen3-32B task-only controls
+
+target:
+  service: manifold  # run "amlt target list manifold" to see available targets
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+# Docker environment
+# Manifold jobs authenticate to Azure (storage, ACR) via a User-Assigned
+# Managed Identity, auto-detected from the workspace in most cases. Only set
+# _AZUREML_SINGULARITY_JOB_UAI in 'env' below if auto-detection is ambiguous
+# (multiple non-primary identities); run 'amlt run' to see the available list.
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-taskonly-qwen-venv
+    - /tmp/studentmodeling-taskonly-qwen-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-taskonly-qwen-venv/bin/python -m pip install -r requirements-feeds.txt
+
+# Code to run. Set local_dir to your code directory — it must
+# exist and be non-empty. $CONFIG_DIR = directory of this file; the default
+# $CONFIG_DIR/src means: put your code in a 'src' folder next to this file.
+code:
+  local_dir: /home/v-yuejiali/studentmodeling/workspace/experiments/unified_student_c1
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+# Jobs to run. SKU examples: C1 (1 CPU), G1 (1 GPU), G4 (4 GPUs), G8-V100 (8 V100s)
+# Commands run from the uploaded code directory (code.local_dir).
+# 'command' is a shell script block (|): one line per step, e.g. python train.py --lr 0.01
+# Write outputs to $AMLT_OUTPUT_DIR for retrieval with 'amlt results'.
+# Use $$VAR to pass env vars literally ($VAR is interpolated at submission time).
+jobs:
+  - name: qwen3-32b-taskonly-t1-resumable-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_taskonly_qwen_resumable.sh | cut -d' ' -f1)" = 82b02f6f3f3f881e296e910de55925f8f8437751c78ce9740a5cf2114939319c
+      test "$$(sha256sum scripts/train_c1_lora.py | cut -d' ' -f1)" = 115fded0ef080c4b7a58f5e616a971660791826f8cc53cb4275edcfd1005d9ed
+      test "$$(sha256sum scripts/validate_taskonly_qwen_checkpoint.py | cut -d' ' -f1)" = 93f469523b0fc0e757a0973d31dd2ee220aa0ca6475d0e57827bbcef92fe1e06
+      bash scripts/run_taskonly_qwen_resumable.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        TASKONLY_TASK: predict_correctness
+        TASKONLY_ROWS: '110525'
+        TASKONLY_DATA_SHA256: a98d0f24d47fa0ef1a06fed7946935f6f569ef7eced8a35e2f2289f02ec76046
+        TASKONLY_RUN_TAG: t1_correctness
+
+  - name: qwen3-32b-taskonly-t2-resumable-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_taskonly_qwen_resumable.sh | cut -d' ' -f1)" = 82b02f6f3f3f881e296e910de55925f8f8437751c78ce9740a5cf2114939319c
+      test "$$(sha256sum scripts/train_c1_lora.py | cut -d' ' -f1)" = 115fded0ef080c4b7a58f5e616a971660791826f8cc53cb4275edcfd1005d9ed
+      test "$$(sha256sum scripts/validate_taskonly_qwen_checkpoint.py | cut -d' ' -f1)" = 93f469523b0fc0e757a0973d31dd2ee220aa0ca6475d0e57827bbcef92fe1e06
+      bash scripts/run_taskonly_qwen_resumable.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        TASKONLY_TASK: predict_response
+        TASKONLY_ROWS: '55569'
+        TASKONLY_DATA_SHA256: e44efac7f183fdb7b5fa4dfe2075e5b10efaa5abf689dc33e0fd718256dfc62e
+        TASKONLY_RUN_TAG: t2_response
+
+  - name: qwen3-32b-taskonly-t4-resumable-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_taskonly_qwen_resumable.sh | cut -d' ' -f1)" = 82b02f6f3f3f881e296e910de55925f8f8437751c78ce9740a5cf2114939319c
+      test "$$(sha256sum scripts/train_c1_lora.py | cut -d' ' -f1)" = 115fded0ef080c4b7a58f5e616a971660791826f8cc53cb4275edcfd1005d9ed
+      test "$$(sha256sum scripts/validate_taskonly_qwen_checkpoint.py | cut -d' ' -f1)" = 93f469523b0fc0e757a0973d31dd2ee220aa0ca6475d0e57827bbcef92fe1e06
+      bash scripts/run_taskonly_qwen_resumable.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        TASKONLY_TASK: predict_prospective_error
+        TASKONLY_ROWS: '78600'
+        TASKONLY_DATA_SHA256: 240dc2f1a02bbb446e4d73b0301ee4da7f6716c088746f7ec17bf82934c2aa1e
+        TASKONLY_RUN_TAG: t4_prospective

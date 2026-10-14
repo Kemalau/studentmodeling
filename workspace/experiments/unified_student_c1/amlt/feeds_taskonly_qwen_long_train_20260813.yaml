@@ -1,0 +1,83 @@
+# Generated from the validated Feeds template used by the short task-only jobs.
+description: One-epoch same-backbone task-only Qwen3-32B controls for public T1, T2, and T4
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-taskonly-qwen-venv
+    - /tmp/studentmodeling-taskonly-qwen-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-taskonly-qwen-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: /home/v-yuejiali/studentmodeling/workspace/experiments/unified_student_c1
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: qwen3-32b-taskonly-t1-correctness-oneepoch-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_taskonly_qwen_oneepoch.sh | cut -d' ' -f1)" = 2925a3708b2ce62142693cfec4303e09f99bf7d1bf412ea5801816c4801e73dc
+      bash scripts/run_taskonly_qwen_oneepoch.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        TASKONLY_TASK: predict_correctness
+        TASKONLY_ROWS: '110525'
+        TASKONLY_DATA_SHA256: a98d0f24d47fa0ef1a06fed7946935f6f569ef7eced8a35e2f2289f02ec76046
+        TASKONLY_RUN_TAG: t1_correctness
+
+  - name: qwen3-32b-taskonly-t2-response-oneepoch-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_taskonly_qwen_oneepoch.sh | cut -d' ' -f1)" = 2925a3708b2ce62142693cfec4303e09f99bf7d1bf412ea5801816c4801e73dc
+      bash scripts/run_taskonly_qwen_oneepoch.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        TASKONLY_TASK: predict_response
+        TASKONLY_ROWS: '55569'
+        TASKONLY_DATA_SHA256: e44efac7f183fdb7b5fa4dfe2075e5b10efaa5abf689dc33e0fd718256dfc62e
+        TASKONLY_RUN_TAG: t2_response
+
+  - name: qwen3-32b-taskonly-t4-prospective-oneepoch-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_taskonly_qwen_oneepoch.sh | cut -d' ' -f1)" = 2925a3708b2ce62142693cfec4303e09f99bf7d1bf412ea5801816c4801e73dc
+      bash scripts/run_taskonly_qwen_oneepoch.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        TASKONLY_TASK: predict_prospective_error
+        TASKONLY_ROWS: '78600'
+        TASKONLY_DATA_SHA256: 240dc2f1a02bbb446e4d73b0301ee4da7f6716c088746f7ec17bf82934c2aa1e
+        TASKONLY_RUN_TAG: t4_prospective

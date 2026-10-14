@@ -1,0 +1,122 @@
+description: Complete formal base-versus-adapter T2/T3/T5 generation evaluation with balanced four-GPU task sharding
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-eval-venv
+    - /tmp/studentmodeling-eval-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-eval-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore:
+    - .git/
+    - .vscode/
+    - amlt/
+    - data/
+    - results/
+    - __pycache__/
+    - '*.pyc'
+
+storage:
+  student_data:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: false
+
+jobs:
+  - name: qwen3-32b-formal-generation-v1
+    sku: 80G4-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      export PATH="/tmp/studentmodeling-eval-venv/bin:$$PATH"
+      export PYTHONPATH="$$AMLT_CODE_DIR/scripts$${PYTHONPATH:+:$$PYTHONPATH}"
+      export HF_HOME=/tmp/hf_cache
+      export HF_HUB_CACHE=/tmp/hf_cache/hub
+      export HF_HUB_DISABLE_XET=1
+      export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+      export TRANSFORMERS_VERBOSITY=error
+      export LOCAL_MODEL=/tmp/Qwen3-32B
+      export ADAPTER=/mnt/amulet/studentmodeling/adapters/qwen3_32b_full_trainvalid_no_t4_strictt6_1ep/final_adapter
+      export EVAL_DATA=/mnt/amulet/studentmodeling/formal_evaluation_v1/test.jsonl
+      mkdir -p "$$HF_HUB_CACHE" "$$AMLT_OUTPUT_DIR/eval/logs"
+      python -c "import torch, transformers, peft, bitsandbytes; print({'torch': torch.__version__, 'transformers': transformers.__version__})"
+      available_kb=$$(df --output=avail /tmp | tail -1)
+      test "$$available_kb" -ge 125829120
+      (
+        flock -x 9
+        if [[ ! -f /tmp/Qwen3-32B.copy_complete ]]; then
+          rm -rf "$$LOCAL_MODEL"
+          mkdir -p "$$LOCAL_MODEL"
+          python scripts/copy_model_parallel.py \
+            --source /mnt/amulet/studentmodeling/models/Qwen3-32B \
+            --destination "$$LOCAL_MODEL" \
+            --workers 16
+          touch /tmp/Qwen3-32B.copy_complete
+        fi
+      ) 9>/tmp/qwen3-32b-copy.lock
+      test -f "$$ADAPTER/adapter_model.safetensors"
+      test -f "$$EVAL_DATA"
+      nvidia-smi --query-gpu=index,name,memory.total --format=csv,noheader
+
+      (
+        CUDA_VISIBLE_DEVICES=0 python -u scripts/evaluate_formal_protocols.py \
+          --model "$$LOCAL_MODEL" --adapter "$$ADAPTER" --eval-jsonl "$$EVAL_DATA" \
+          --output-dir "$$AMLT_OUTPUT_DIR/eval/adapter_predict_response" \
+          --tasks predict_response --max-length 1536 --max-new-tokens 128 --generation-batch-size 2 \
+          2>&1 | sed -u 's/^/[adapter-t2] /' | tee "$$AMLT_OUTPUT_DIR/eval/logs/adapter_predict_response.log"
+        CUDA_VISIBLE_DEVICES=0 python -u scripts/evaluate_formal_protocols.py \
+          --model "$$LOCAL_MODEL" --adapter "$$ADAPTER" --eval-jsonl "$$EVAL_DATA" \
+          --output-dir "$$AMLT_OUTPUT_DIR/eval/adapter_diagnose_misconception" \
+          --tasks diagnose_misconception --max-length 1536 --max-new-tokens 128 --generation-batch-size 2 \
+          2>&1 | sed -u 's/^/[adapter-t3] /' | tee "$$AMLT_OUTPUT_DIR/eval/logs/adapter_diagnose_misconception.log"
+      ) &
+      pid_adapter_t2_t3=$$!
+
+      (
+        CUDA_VISIBLE_DEVICES=1 python -u scripts/evaluate_formal_protocols.py \
+          --model "$$LOCAL_MODEL" --eval-jsonl "$$EVAL_DATA" \
+          --output-dir "$$AMLT_OUTPUT_DIR/eval/base_predict_response" \
+          --tasks predict_response --max-length 1536 --max-new-tokens 128 --generation-batch-size 2 \
+          2>&1 | sed -u 's/^/[base-t2] /' | tee "$$AMLT_OUTPUT_DIR/eval/logs/base_predict_response.log"
+        CUDA_VISIBLE_DEVICES=1 python -u scripts/evaluate_formal_protocols.py \
+          --model "$$LOCAL_MODEL" --eval-jsonl "$$EVAL_DATA" \
+          --output-dir "$$AMLT_OUTPUT_DIR/eval/base_diagnose_misconception" \
+          --tasks diagnose_misconception --max-length 1536 --max-new-tokens 128 --generation-batch-size 2 \
+          2>&1 | sed -u 's/^/[base-t3] /' | tee "$$AMLT_OUTPUT_DIR/eval/logs/base_diagnose_misconception.log"
+      ) &
+      pid_base_t2_t3=$$!
+
+      CUDA_VISIBLE_DEVICES=2 python -u scripts/evaluate_formal_protocols.py \
+        --model "$$LOCAL_MODEL" --adapter "$$ADAPTER" --eval-jsonl "$$EVAL_DATA" \
+        --output-dir "$$AMLT_OUTPUT_DIR/eval/adapter_predict_prospective_error" \
+        --tasks predict_prospective_error --max-length 1536 --max-new-tokens 128 --generation-batch-size 2 \
+        2>&1 | sed -u 's/^/[adapter-t5] /' | tee "$$AMLT_OUTPUT_DIR/eval/logs/adapter_predict_prospective_error.log" &
+      pid_adapter_t5=$$!
+
+      CUDA_VISIBLE_DEVICES=3 python -u scripts/evaluate_formal_protocols.py \
+        --model "$$LOCAL_MODEL" --eval-jsonl "$$EVAL_DATA" \
+        --output-dir "$$AMLT_OUTPUT_DIR/eval/base_predict_prospective_error" \
+        --tasks predict_prospective_error --max-length 1536 --max-new-tokens 128 --generation-batch-size 2 \
+        2>&1 | sed -u 's/^/[base-t5] /' | tee "$$AMLT_OUTPUT_DIR/eval/logs/base_predict_prospective_error.log" &
+      pid_base_t5=$$!
+
+      status=0
+      wait "$$pid_adapter_t2_t3" || status=1
+      wait "$$pid_base_t2_t3" || status=1
+      wait "$$pid_adapter_t5" || status=1
+      wait "$$pid_base_t5" || status=1
+      exit "$$status"
+    submit_args:
+      max_run_duration_seconds: 172800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml

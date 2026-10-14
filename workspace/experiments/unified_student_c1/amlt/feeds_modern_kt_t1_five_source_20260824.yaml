@@ -1,0 +1,199 @@
+# Generated from `amlt template -t Feeds -f /tmp/modern_kt_generated.yaml -y`.
+description: Modern KT baselines on frozen five-source T1 with three seeds
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/modern-kt-venv
+    - /tmp/modern-kt-venv/bin/python -m pip install -r requirements-modern-kt.txt
+
+code:
+  local_dir: /home/v-yuejiali/studentmodeling/workspace/experiments/unified_student_c1
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: modern-kt-t1-simplekt-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: &command |
+      set -euo pipefail
+      export PATH="/tmp/modern-kt-venv/bin:$$PATH"
+      test "$$(sha256sum scripts/train_modern_kt_t1.py | cut -d' ' -f1)" = 0c891bd132f7b3c681c421fe423620ff1feb135d8253a34b70485dabcad33b68
+      test "$$(sha256sum scripts/run_modern_kt_t1_job.sh | cut -d' ' -f1)" = 562fa8ac3907e69588373ea64251afe7ad88233370c2f0dcfca276c0e93a25b0
+      test "$$(sha256sum third_party/pykt_toolkit/PINNED_COMMIT | cut -d' ' -f1)" = 1b1ec16bd8687ef161098af50ee27e04a0e13b1a501a21b26df7da204dde1999
+      bash scripts/run_modern_kt_t1_job.sh
+    submit_args: &submit_args
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env: &base_env
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        KT_DATA_DIR: /mnt/amulet/studentmodeling/modern_kt_t1_five_source_v1
+        KT_DATA_MANIFEST_SHA256: 112fc9008ab65bb7382682d17de2269b32511aebcaa6588ce89520b39856a962
+        KT_MODEL: simplekt
+        KT_SEED: '42'
+        KT_OUTPUT_DIR: /mnt/amulet/studentmodeling/modern_kt_t1_five_source_results/simplekt_seed42
+
+  - name: modern-kt-t1-dtransformer-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *command
+    submit_args:
+      <<: *submit_args
+      env:
+        <<: *base_env
+        KT_MODEL: dtransformer
+        KT_OUTPUT_DIR: /mnt/amulet/studentmodeling/modern_kt_t1_five_source_results/dtransformer_seed42
+
+  - name: modern-kt-t1-rekt-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *command
+    submit_args:
+      <<: *submit_args
+      env:
+        <<: *base_env
+        KT_MODEL: rekt
+        KT_OUTPUT_DIR: /mnt/amulet/studentmodeling/modern_kt_t1_five_source_results/rekt_seed42
+
+  - name: modern-kt-t1-ukt-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *command
+    submit_args:
+      <<: *submit_args
+      env:
+        <<: *base_env
+        KT_MODEL: ukt
+        KT_OUTPUT_DIR: /mnt/amulet/studentmodeling/modern_kt_t1_five_source_results/ukt_seed42
+
+  - name: modern-kt-t1-simplekt-seed97
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *command
+    submit_args:
+      <<: *submit_args
+      env:
+        <<: *base_env
+        KT_MODEL: simplekt
+        KT_SEED: '97'
+        KT_OUTPUT_DIR: /mnt/amulet/studentmodeling/modern_kt_t1_five_source_results/simplekt_seed97
+
+  - name: modern-kt-t1-dtransformer-seed97
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *command
+    submit_args:
+      <<: *submit_args
+      env:
+        <<: *base_env
+        KT_MODEL: dtransformer
+        KT_SEED: '97'
+        KT_OUTPUT_DIR: /mnt/amulet/studentmodeling/modern_kt_t1_five_source_results/dtransformer_seed97
+
+  - name: modern-kt-t1-rekt-seed97
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *command
+    submit_args:
+      <<: *submit_args
+      env:
+        <<: *base_env
+        KT_MODEL: rekt
+        KT_SEED: '97'
+        KT_OUTPUT_DIR: /mnt/amulet/studentmodeling/modern_kt_t1_five_source_results/rekt_seed97
+
+  - name: modern-kt-t1-ukt-seed97
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *command
+    submit_args:
+      <<: *submit_args
+      env:
+        <<: *base_env
+        KT_MODEL: ukt
+        KT_SEED: '97'
+        KT_OUTPUT_DIR: /mnt/amulet/studentmodeling/modern_kt_t1_five_source_results/ukt_seed97
+
+  - name: modern-kt-t1-simplekt-seed123
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *command
+    submit_args:
+      <<: *submit_args
+      env:
+        <<: *base_env
+        KT_MODEL: simplekt
+        KT_SEED: '123'
+        KT_OUTPUT_DIR: /mnt/amulet/studentmodeling/modern_kt_t1_five_source_results/simplekt_seed123
+
+  - name: modern-kt-t1-dtransformer-seed123
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *command
+    submit_args:
+      <<: *submit_args
+      env:
+        <<: *base_env
+        KT_MODEL: dtransformer
+        KT_SEED: '123'
+        KT_OUTPUT_DIR: /mnt/amulet/studentmodeling/modern_kt_t1_five_source_results/dtransformer_seed123
+
+  - name: modern-kt-t1-rekt-seed123
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *command
+    submit_args:
+      <<: *submit_args
+      env:
+        <<: *base_env
+        KT_MODEL: rekt
+        KT_SEED: '123'
+        KT_OUTPUT_DIR: /mnt/amulet/studentmodeling/modern_kt_t1_five_source_results/rekt_seed123
+
+  - name: modern-kt-t1-ukt-seed123
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *command
+    submit_args:
+      <<: *submit_args
+      env:
+        <<: *base_env
+        KT_MODEL: ukt
+        KT_SEED: '123'
+        KT_OUTPUT_DIR: /mnt/amulet/studentmodeling/modern_kt_t1_five_source_results/ukt_seed123

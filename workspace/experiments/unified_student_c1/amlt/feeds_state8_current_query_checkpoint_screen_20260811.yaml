@@ -1,0 +1,51 @@
+# Generated from `amlt template -t Feeds -y`, then specialized and hash-bound.
+description: Query-aligned State8 checkpoint semantic and diagnosis-C4 screen
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-state8-current-query-screen-venv
+    - /tmp/studentmodeling-state8-current-query-screen-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-state8-current-query-screen-venv/bin/python -m pip install -r requirements-feeds.txt
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+jobs:
+  - &base
+    name: state8-current-query-cp20-screen
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: &command |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_state8_current_query_checkpoint_screen.sh | cut -d' ' -f1)" = e405811b0b5413383393935e1bc28256f17a4c79469a7608eb47115aebc6708e
+      bash scripts/run_state8_current_query_checkpoint_screen.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env: &env
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-current-query-screen-venv
+        CHECKPOINT_STEP: '20'
+        CHECKPOINT_ADAPTER_SHA256: HASH_PENDING
+        CHECKPOINT_STATE_SHA256: HASH_PENDING
+        CHECKPOINT_RECEIPT_SHA256: HASH_PENDING
+  - <<: *base
+    name: state8-current-query-cp100-screen
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env:
+        <<: *env
+        CHECKPOINT_STEP: '100'

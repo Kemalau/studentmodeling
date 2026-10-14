@@ -1,0 +1,99 @@
+# yaml-language-server: $schema=file:///home/v-yuejiali/studentmodeling/workspace/experiments/unified_student_c1/.vscode/amlt-config.schema.json
+# ^ Update with: amlt schema add <file>  |  VS Code: Run Task > amlt
+# Amulet config file. Docs: https://amulet-docs.azurewebsites.net/config_file.html
+description: Read-only State8 canonical-label transport diagnostic on frozen identical-query Eedi C4 twins
+
+target:
+  service: manifold  # run "amlt target list manifold" to see available targets
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+# REQUIRED: Docker environment
+# Manifold jobs authenticate to Azure (storage, ACR) via a User-Assigned
+# Managed Identity, auto-detected from the workspace in most cases. Only set
+# _AZUREML_SINGULARITY_JOB_UAI in 'env' below if auto-detection is ambiguous
+# (multiple non-primary identities); run 'amlt run' to see the available list.
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-state8-label-readout-venv
+    - /tmp/studentmodeling-state8-label-readout-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-state8-label-readout-venv/bin/python -m pip install -r requirements-feeds.txt
+
+# REQUIRED: code to run. Set local_dir to your code directory — it must
+# exist and be non-empty. $CONFIG_DIR = directory of this file; the default
+# $CONFIG_DIR/src means: put your code in a 'src' folder next to this file.
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+# REQUIRED: Jobs to run. SKU examples: C1 (1 CPU), G1 (1 GPU), G4 (4 GPUs), G8-V100 (8 V100s)
+# Commands run from the uploaded code directory (code.local_dir).
+# 'command' is a shell script block (|): one line per step, e.g. python train.py --lr 0.01
+# Write outputs to $AMLT_OUTPUT_DIR for retrieval with 'amlt results'.
+# Use $$VAR to pass env vars literally ($VAR is interpolated at submission time).
+jobs:
+  - name: state8-label-readout-early-label-low-cp20
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_state8_eedi_label_readout.sh | cut -d' ' -f1)" = c521c26a2d8f35ce30124f4725d69b7b711e44d47c058d05b922a731239800fd
+      bash scripts/run_state8_eedi_label_readout.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 10800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-label-readout-venv
+        READOUT_TAG: early-label-low-cp20
+        CHECKPOINT_ROOT: /mnt/amulet/studentmodeling/checkpoint_snapshots/state8_curriculum_repairs_20260812/seed8301_early_label_low/checkpoint-20
+        CHECKPOINT_ADAPTER_SHA256: fd375a90c733df7ec7ef15506e4be7d5258951de0fa9b2abd2c10dfa5c670840
+        CHECKPOINT_STATE_SHA256: b90949097afc16b21b09f2136e2a3b038cd2f9d6b9fcbaccc5f7072596d318c1
+  - name: state8-label-readout-early-label-high-cp20
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_state8_eedi_label_readout.sh | cut -d' ' -f1)" = c521c26a2d8f35ce30124f4725d69b7b711e44d47c058d05b922a731239800fd
+      bash scripts/run_state8_eedi_label_readout.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 10800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-label-readout-venv
+        READOUT_TAG: early-label-high-cp20
+        CHECKPOINT_ROOT: /mnt/amulet/studentmodeling/checkpoint_snapshots/state8_curriculum_repairs_20260812/seed8302_early_label_high/checkpoint-20
+        CHECKPOINT_ADAPTER_SHA256: e14471dad4c51973d3b8658822f5d918dc96d21e43493bd2016613351fe3d146
+        CHECKPOINT_STATE_SHA256: 7fca70d7934a6f661a17850ee84d28a89dd2fb72bc925bb4a557a6888baa5152
+  - name: state8-label-readout-causal-teacher-low-cp100-control
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_state8_eedi_label_readout.sh | cut -d' ' -f1)" = c521c26a2d8f35ce30124f4725d69b7b711e44d47c058d05b922a731239800fd
+      bash scripts/run_state8_eedi_label_readout.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 10800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-label-readout-venv
+        READOUT_TAG: causal-teacher-low-cp100-control
+        CHECKPOINT_ROOT: /mnt/amulet/studentmodeling/checkpoint_snapshots/state8_curriculum_repairs_20260812/seed8201_causal_teacher_low/checkpoint-100
+        CHECKPOINT_ADAPTER_SHA256: eee283aa6652d341cfedba56b67e77ea29790076b5ea231a2b515c6794d5e6e2
+        CHECKPOINT_STATE_SHA256: dba0454940c399a65b2588ae6ae4b54fa5a76480b508b29595444b361cccfb05

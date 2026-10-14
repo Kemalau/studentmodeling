@@ -1,0 +1,200 @@
+{
+  "checkpoint": {
+    "adapter_sha256": "d748b3d14c7a616a10fafcc0d2ca12ed77c0c2c0533e17e1c0e1a367a0e5905e",
+    "recurrent_state_sha256": "3a80bbea9e73d47fab7321ccfbdd6f09af54abb6bf75ed982e4699a7ef37ecbd"
+  },
+  "feature_artifacts": {
+    "test": {
+      "metadata_sha256": "ba8f6ce6038da50df2da86958512458ddbacf9ec5470a02da7d14f6f78b59035",
+      "npz_sha256": "0aa3c8963b247e51c42974305d290d9d8ecbe5b097068475679bf5710f0728f9"
+    },
+    "train": {
+      "metadata_sha256": "935b3dbf1ce36bc831663c50e96156fc0d155a18bfbf8c3c2bca6e547d9fadc8",
+      "npz_sha256": "9967a974926ae1452a5e81a1e1c2ca3d50ceaa78bd66c7f07bea37e33693b47c"
+    },
+    "valid": {
+      "metadata_sha256": "6b3c3870b212a6e60e644a760fd2847707bbcc5ac88466e69eedb6e00fbb90e9",
+      "npz_sha256": "c44a20d2e2f8bfa49922468ba9ab503e02cb755be7c4bd2be25180cd4f58955d"
+    }
+  },
+  "information_route": "frozen State8 features only for State8 readout",
+  "raw_history_visible_to_state8_readout": false,
+  "same_window_control_uses_exact_updater_visible_history": true,
+  "selection": {
+    "history_alpha": 100.0,
+    "history_validation_rmse": 0.13654676718712822,
+    "state_alpha": 1000.0,
+    "state_validation_rmse": 0.14661666744976454
+  },
+  "stage": "state8_profile_seen_unseen_feature_audit_v1",
+  "status": "complete",
+  "strata": {
+    "all_future_supported": {
+      "same_window_kc_outcomes": {
+        "cells": 634,
+        "mae": 0.0969895008397458,
+        "rmse": 0.1220736739741332,
+        "students_with_cells": 88
+      },
+      "state8": {
+        "cells": 634,
+        "mae": 0.10462269992172417,
+        "rmse": 0.13539142979295113,
+        "students_with_cells": 88
+      },
+      "state8_ownership_permutation": {
+        "delta_permuted_mean_minus_observed": -0.0024483040240093623,
+        "observed_rmse": 0.13539142979295113,
+        "p_one_sided": 0.7946026986506747,
+        "permuted_rmse_ci95": [
+          0.1271893819268367,
+          0.1385511306237557
+        ],
+        "permuted_rmse_mean": 0.13294312576894177,
+        "replicates": 2000
+      },
+      "state8_vs_population": {
+        "bootstrap_probability_model_better": 0.0,
+        "ci95": [
+          0.010511709732542174,
+          0.02357580908700365
+        ],
+        "metric": "mean_student_RMSE_delta_model_minus_reference",
+        "replicates": 5000,
+        "students": 88,
+        "value": 0.016747471413049893
+      },
+      "state8_vs_same_window": {
+        "bootstrap_probability_model_better": 0.0,
+        "ci95": [
+          0.005786396069924087,
+          0.01788653098042039
+        ],
+        "metric": "mean_student_RMSE_delta_model_minus_reference",
+        "replicates": 5000,
+        "students": 88,
+        "value": 0.011647469517889442
+      },
+      "train_valid_population": {
+        "cells": 634,
+        "mae": 0.0926257793603073,
+        "rmse": 0.11786435072392837,
+        "students_with_cells": 88
+      }
+    },
+    "seen_in_updater_history": {
+      "same_window_kc_outcomes": {
+        "cells": 114,
+        "mae": 0.10751778071058869,
+        "rmse": 0.13667108925954247,
+        "students_with_cells": 68
+      },
+      "state8": {
+        "cells": 114,
+        "mae": 0.11106168414912757,
+        "rmse": 0.14407287069605573,
+        "students_with_cells": 68
+      },
+      "state8_ownership_permutation": {
+        "delta_permuted_mean_minus_observed": -0.00478574518633193,
+        "observed_rmse": 0.14407287069605573,
+        "p_one_sided": 0.8185907046476761,
+        "permuted_rmse_ci95": [
+          0.12847491187700616,
+          0.14960476556958813
+        ],
+        "permuted_rmse_mean": 0.1392871255097238,
+        "replicates": 2000
+      },
+      "state8_vs_population": {
+        "bootstrap_probability_model_better": 0.0072,
+        "ci95": [
+          0.0019152535756560803,
+          0.01903658307226901
+        ],
+        "metric": "mean_student_RMSE_delta_model_minus_reference",
+        "replicates": 5000,
+        "students": 68,
+        "value": 0.010362333686152476
+      },
+      "state8_vs_same_window": {
+        "bootstrap_probability_model_better": 0.2234,
+        "ci95": [
+          -0.005443370219885773,
+          0.012256073463601679
+        ],
+        "metric": "mean_student_RMSE_delta_model_minus_reference",
+        "replicates": 5000,
+        "students": 68,
+        "value": 0.0033847133053474723
+      },
+      "train_valid_population": {
+        "cells": 114,
+        "mae": 0.09721461998953759,
+        "rmse": 0.1257832568632849,
+        "students_with_cells": 68
+      }
+    },
+    "unseen_in_updater_history": {
+      "same_window_kc_outcomes": {
+        "cells": 520,
+        "mae": 0.09468137794498412,
+        "rmse": 0.11863366393319814,
+        "students_with_cells": 84
+      },
+      "state8": {
+        "cells": 520,
+        "mae": 0.10321107645648575,
+        "rmse": 0.13341271271787525,
+        "students_with_cells": 84
+      },
+      "state8_ownership_permutation": {
+        "delta_permuted_mean_minus_observed": -0.0021433737798234875,
+        "observed_rmse": 0.13341271271787525,
+        "p_one_sided": 0.7586206896551724,
+        "permuted_rmse_ci95": [
+          0.12524343114881564,
+          0.13710973742565966
+        ],
+        "permuted_rmse_mean": 0.13126933893805176,
+        "replicates": 2000
+      },
+      "state8_vs_population": {
+        "bootstrap_probability_model_better": 0.0,
+        "ci95": [
+          0.007754731212668775,
+          0.023264272974155925
+        ],
+        "metric": "mean_student_RMSE_delta_model_minus_reference",
+        "replicates": 5000,
+        "students": 84,
+        "value": 0.015268018513077953
+      },
+      "state8_vs_same_window": {
+        "bootstrap_probability_model_better": 0.0,
+        "ci95": [
+          0.006952095413316606,
+          0.020994455536317624
+        ],
+        "metric": "mean_student_RMSE_delta_model_minus_reference",
+        "replicates": 5000,
+        "students": 84,
+        "value": 0.013890454228338607
+      },
+      "train_valid_population": {
+        "cells": 520,
+        "mae": 0.09161976429928372,
+        "rmse": 0.1160560915459881,
+        "students_with_cells": 84
+      }
+    }
+  },
+  "stratification_uses_input_kc_names_not_future_outcomes": true,
+  "student_id_visible_to_readout": false,
+  "students": {
+    "test": 88,
+    "train": 663,
+    "valid": 84
+  },
+  "test_labels_used_for_selection": false
+}

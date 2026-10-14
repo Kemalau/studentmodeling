@@ -1,0 +1,160 @@
+# Generated from `amlt template -t Feeds`; four deterministic teacher-eval shards.
+description: Four-way clean-prompt semantic generation for the qualified state8 teacher
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-state8-teacher-eval-sharded-venv
+    - /tmp/studentmodeling-state8-teacher-eval-sharded-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-state8-teacher-eval-sharded-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: state8-full-history-teacher-eval-shard0
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: &teacher_eval_command |
+      set -euo pipefail
+      trap 'rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc" "$${BASH_COMMAND}" >&2; exit "$$rc"' ERR
+      export PATH="/tmp/studentmodeling-state8-teacher-eval-sharded-venv/bin:$$PATH"
+      export PYTHONPATH="$$AMLT_CODE_DIR/scripts$${PYTHONPATH:+:$$PYTHONPATH}"
+      export HF_HOME=/tmp/hf_cache
+      export HF_HUB_CACHE=/tmp/hf_cache/hub
+      export HF_HUB_DISABLE_XET=1
+      export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+      export TRANSFORMERS_VERBOSITY=error
+      export LOCAL_MODEL=/tmp/Qwen3-32B
+      export TEACHER=/mnt/amulet/studentmodeling/diagnostics/state8_full_history_natural_teacher_v1
+      export CLEAN_EVAL=/tmp/state8_teacher_eval_clean_v2.jsonl
+      export EXACT_EVAL=/tmp/state8_teacher_eval_clean_v2_exact_path.jsonl
+      : "$${SHARD_INDEX:?SHARD_INDEX is required}"
+      mkdir -p "$$HF_HUB_CACHE" "$$AMLT_OUTPUT_DIR/eval/t3"
+      test -f "$$TEACHER/model/adapter_model.safetensors"
+      test -f "$$TEACHER/model/adapter_config.json"
+      test -f "$$TEACHER/metrics/teacher_eval.jsonl"
+      test -f "$$TEACHER/metrics/publish_receipt.json"
+      test "$$(df --output=avail /tmp | tail -1)" -ge 83886080
+      python - "$$TEACHER" <<'PY'
+      import hashlib,json,pathlib,sys
+      root=pathlib.Path(sys.argv[1]); receipt=json.load(open(root/'metrics/publish_receipt.json'))
+      def digest(path):
+          h=hashlib.sha256()
+          with open(path,'rb') as f:
+              for chunk in iter(lambda:f.read(1024*1024),b''): h.update(chunk)
+          return h.hexdigest()
+      assert receipt['status']=='complete' and receipt['stage']=='state8_full_history_teacher_publish_v1',receipt
+      assert receipt['adapter_sha256']=='ceaf5248707fb793a1090df4a05ce2cbb35cf4e3088db93d6d11bd017bdd842a',receipt
+      assert receipt['adapter_sha256']==digest(root/'model/adapter_model.safetensors'),receipt
+      assert receipt['eval_sha256']=='659c7137f4b5aa8dd5d325c58d76d48abf9d2415f583fed46958f04ec6c0f7d2',receipt
+      assert receipt['eval_sha256']==digest(root/'metrics/teacher_eval.jsonl'),receipt
+      assert receipt['teacher_history_visible'] is True,receipt
+      PY
+      test "$$(sha256sum scripts/evaluate_formal_protocols.py | cut -d' ' -f1)" = d8070d317f4facfe7d915b44f5e23d21210bfae450f3a50483432db2c59b6f69
+      test "$$(sha256sum scripts/state8_natural_curriculum_view.py | cut -d' ' -f1)" = 98c961180d2428b2c68ef9399996ed991d5bd34120a3046b4f56fb9ba4e09682
+      test "$$(sha256sum scripts/rewrite_state8_teacher_prompts.py | cut -d' ' -f1)" = ee7087d5624cb4e502d650747f2cc13b497d7385c7b72032c776563561a17fc3
+      test "$$(sha256sum scripts/add_state8_teacher_markers.py | cut -d' ' -f1)" = 15b418c5a34058658c25ec1083da04801cc906cd577541cfb59f01e2bc343f51
+      test "$$(sha256sum scripts/copy_model_parallel.py | cut -d' ' -f1)" = 62b37ab70bc2ffc81c8314ca69215da7facdf18dba3f023d83096d1c3526ea4c
+      python -m pytest -q tests/test_evaluate_formal_protocols.py tests/test_rewrite_state8_teacher_prompts.py tests/test_t3_judge_utils.py
+      rm -rf "$$LOCAL_MODEL"; mkdir -p "$$LOCAL_MODEL"
+      python scripts/copy_model_parallel.py \
+        --source /mnt/amulet/studentmodeling/models/Qwen3-32B \
+        --destination "$$LOCAL_MODEL" --workers 16
+      python scripts/rewrite_state8_teacher_prompts.py \
+        --input-jsonl "$$TEACHER/metrics/teacher_eval.jsonl" \
+        --output-jsonl "$$CLEAN_EVAL"
+      test "$$(sha256sum "$$CLEAN_EVAL" | cut -d' ' -f1)" = c35fd46e0cfbccd9141eccb524992bd5452416d32720686f74ad9373f57de314
+      python - "$$CLEAN_EVAL.receipt.json" <<'PY'
+      import json,sys
+      x=json.load(open(sys.argv[1]))
+      assert x['stage']=='state8_teacher_clean_prompt_v2' and x['rows']==1494,x
+      assert x['changed_rows']==600 and x['legacy_answer_adjacent_contracts']==0,x
+      assert x['source_counts']=={'eedi_mining':894,'malrule':600},x
+      assert x['output_sha256']=='c35fd46e0cfbccd9141eccb524992bd5452416d32720686f74ad9373f57de314',x
+      PY
+      python scripts/add_state8_teacher_markers.py \
+        --input-jsonl "$$CLEAN_EVAL" \
+        --output-jsonl "$$EXACT_EVAL"
+      test "$$(sha256sum "$$EXACT_EVAL" | cut -d' ' -f1)" = 78850c5434f24c3072b7ab89370400347955686e9aac5b99aadb69ae19c7cfa5
+      python -u scripts/evaluate_formal_protocols.py \
+        --model "$$LOCAL_MODEL" --adapter "$$TEACHER/model" \
+        --eval-jsonl "$$EXACT_EVAL" --output-dir "$$AMLT_OUTPUT_DIR/eval/t3" \
+        --max-length 1536 --max-new-tokens 256 --generation-batch-size 1 \
+        --tasks diagnose_misconception --sources eedi_mining malrule \
+        --shard-index "$$SHARD_INDEX" --num-shards 4 --seed 42 \
+        --save-unredacted-predictions
+      python - "$$AMLT_OUTPUT_DIR/eval/t3/metrics.json" "$$SHARD_INDEX" <<'PY'
+      import json,sys
+      x=json.load(open(sys.argv[1])); index=int(sys.argv[2])
+      assert x['artifact_sha256']=={
+          'adapter_model':'ceaf5248707fb793a1090df4a05ce2cbb35cf4e3088db93d6d11bd017bdd842a',
+          'evaluation_input':'78850c5434f24c3072b7ab89370400347955686e9aac5b99aadb69ae19c7cfa5'},x
+      assert x['unsharded_filtered_rows']==1494,x
+      assert x['evaluation_shard']=={'index':index,'count':4},x
+      assert x['sampled_rows'] in {373,374} and x['generation_rows']==x['sampled_rows'],x
+      assert x['classification_rows']==0 and x['max_samples_per_group'] is None,x
+      assert x['max_length']==1536 and x['max_new_tokens']==256,x
+      PY
+      cp "$$EXACT_EVAL.receipt.json" "$$AMLT_OUTPUT_DIR/eval/t3/exact_path_receipt.json"
+      cp "$$CLEAN_EVAL.receipt.json" "$$AMLT_OUTPUT_DIR/eval/t3/clean_prompt_receipt.json"
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 43200
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        SHARD_INDEX: '0'
+
+  - name: state8-full-history-teacher-eval-shard1
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *teacher_eval_command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 43200
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        SHARD_INDEX: '1'
+
+  - name: state8-full-history-teacher-eval-shard2
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *teacher_eval_command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 43200
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        SHARD_INDEX: '2'
+
+  - name: state8-full-history-teacher-eval-shard3
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *teacher_eval_command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 43200
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        SHARD_INDEX: '3'

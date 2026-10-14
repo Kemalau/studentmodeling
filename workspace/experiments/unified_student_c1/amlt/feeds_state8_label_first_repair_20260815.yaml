@@ -1,0 +1,48 @@
+# Generated from `amlt template -t Feeds -f amlt/feeds_state8_label_first_repair_20260815.yaml -y`
+description: State8 label-first query-free identity binding continuation
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-state8-label-first-venv
+    - /tmp/studentmodeling-state8-label-first-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-state8-label-first-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: /home/v-yuejiali/studentmodeling/workspace/experiments/unified_student_c1
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: state8-label-first-repair-seed8501
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_state8_label_first_repair.sh | cut -d' ' -f1)" = 17202a0e3eeea92f7bf3e6d70a522e7f4345054007a0369c6eb60c61fb0f1529
+      bash scripts/run_state8_label_first_repair.sh
+    submit_args:
+      max_attempts: 3
+      max_run_duration_seconds: 172800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-label-first-venv
+        SOURCE_ROOT: /mnt/amulet/studentmodeling/diagnostics/state8_stateonly_repair_seed8401_taskanchor_source_anchor_full_mse1_eedi_same_question_v1_early_label_high_seed8401
+        EXPECTED_STUDENT_ADAPTER_SHA256: 3bcf7bdc1d6e4de432efbd2bf78551c3d92349e44d7e2b217166ca1305cffe24
+        EXPECTED_STUDENT_STATE_SHA256: 6985e40ec82e100211a552847b2f4a8601fbdb5785d58fdcb0f0620df10d5762
+        REPAIR_REMOTE_ROOT: /mnt/amulet/studentmodeling/diagnostics/state8_label_first_repair_seed8501_v1
+        STATE8_REPAIR_MANIFEST: manifests/state8_label_first_repair_seed8501_v1.json
+        STATE8_REPAIR_MANIFEST_SHA256: 4a5e31add8732a16ccc109ad9ff3d1956e9c0dcfa4608a0dea3800d7ee295f9c

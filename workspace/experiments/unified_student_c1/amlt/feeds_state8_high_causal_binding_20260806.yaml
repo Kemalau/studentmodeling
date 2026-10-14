@@ -1,0 +1,79 @@
+# Specialized from the AMLT 11.14.2 Feeds/Manifold template generated for this run.
+# Two matched arms test whether high-exposure diagnosis C4 binds open generation
+# to recurrent state, with or without freezing the answer decoder.
+description: State8 diagnosis-only high-exposure causal binding screen
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-state8-high-causal-venv
+    - /tmp/studentmodeling-state8-high-causal-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-state8-high-causal-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - &base
+    name: state8-highcausal-joint-seed47
+    sku: 80G4-A100
+    process_count_per_node: -1
+    mpi: true
+    sla_tier: Standard
+    command: &command |
+      set -euo pipefail
+      trap 'rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc" "$${BASH_COMMAND}" >&2; exit "$$rc"' ERR
+      bash scripts/run_state8_stateonly_repair_ab.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env: &env
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-high-causal-venv
+        REPAIR_ARM: trajectory01
+        TRAIN_ENTRYPOINT: scripts/train_state8_semantic_causal_repair.py
+        STUDENT_ROOT: /mnt/amulet/studentmodeling/checkpoints/state8_stateonly_repair_seed45_trajectory01_semantic_causal_strongbase_v1
+        STUDENT_MODEL_DIR: /mnt/amulet/studentmodeling/checkpoints/state8_stateonly_repair_seed45_trajectory01_semantic_causal_strongbase_v1/final_adapter
+        STUDENT_STATE_PATH: /mnt/amulet/studentmodeling/checkpoints/state8_stateonly_repair_seed45_trajectory01_semantic_causal_strongbase_v1/recurrent_state.pt
+        STUDENT_RECEIPT: /mnt/amulet/studentmodeling/checkpoints/state8_stateonly_repair_seed45_trajectory01_semantic_causal_strongbase_v1/completion.json
+        EXPECTED_STUDENT_ADAPTER_SHA256: 449162955d459e0d60ce3613ca9318ca417eef4986844f37803ac68200a04e69
+        EXPECTED_STUDENT_STATE_SHA256: 43c16db184b69bf01bd7d63d8b2b9b05ffda215c932376d600a4dc2e35e5e6ad
+        RUN_TAG: highcausal_joint_v1
+        TRAIN_SEED: '47'
+        STATE8_CAUSAL_LABEL_WEIGHT: '8.0'
+        STATE8_REPAIR_LABEL_WEIGHT: '4.0'
+        STATE8_RANDOM_NEUTRAL: '1'
+        STATE8_GEOMETRY_WEIGHT: '1.0'
+        STATE8_DIFFERENT_MAX_COSINE: '0.75'
+        STATE8_CAUSAL_DIAGNOSIS_ONLY: '1'
+        STATE8_CAUSAL_REPEAT_FRACTION: '1.0'
+        STATE8_CAUSAL_WEIGHT: '8.0'
+        STATE8_CAUSAL_MARGIN: '1.0'
+        STATE8_LAYERWISE_TRANSITION_ONLY: '0'
+        STATE8_UPDATER_ONLY: '0'
+
+  - <<: *base
+    name: state8-highcausal-updater-seed48
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env:
+        <<: *env
+        RUN_TAG: highcausal_updater_only_v1
+        TRAIN_SEED: '48'
+        STATE8_LAYERWISE_TRANSITION_ONLY: '1'
+        STATE8_UPDATER_ONLY: '1'

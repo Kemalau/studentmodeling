@@ -1,0 +1,20 @@
+{
+  "arms": {
+    "malrule_correctness": {
+      "path": "manifests/c3_exposure_matched_20260804/c3_exposure_matched_malrule_correctness_seed20260804_v1.json",
+      "sha256": "ce358ed02a74fe0d5b9bdf75073e9202eff0fe689a5620fb10f8b02e0e632d25"
+    },
+    "malrule_misconception": {
+      "path": "manifests/c3_exposure_matched_20260804/c3_exposure_matched_malrule_misconception_seed20260804_v1.json",
+      "sha256": "ba74efc1eb675cab148af062fde1c6bad0c9b57fbbc1c579b68756ef340da818"
+    },
+    "malrule_response": {
+      "path": "manifests/c3_exposure_matched_20260804/c3_exposure_matched_malrule_response_seed20260804_v1.json",
+      "sha256": "e6202050ea4dbc7b00298546abb7d6e964565a807fbfda8c0165f9ca4c8dd6ea"
+    }
+  },
+  "eedi_example_ids_sha256": "d8a2d71f58d78962cb5841578507d0f58b1532fafb02828aa29dfdf2b0df00f0",
+  "paired_malrule_raw_ids_sha256": "a60ad63063ef331a6eea49924b74f45b9cc1581d890b8149e28aa229edde03ea",
+  "role_order_sha256": "b961142a8907cea8160db446faff5245acedbff53292dd465bd8e60ceb480907",
+  "stage": "C3_exposure_matched_manifest_bundle_v1"
+}

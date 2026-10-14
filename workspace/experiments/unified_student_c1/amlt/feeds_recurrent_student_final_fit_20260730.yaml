@@ -1,0 +1,527 @@
+# yaml-language-server: $schema=file:///home/v-yuejiali/studentmodeling/workspace/experiments/unified_student_c1/.vscode/amlt-config.schema.json
+description: Post-selection full 259845-row recurrent unified final fit with distributed exact exposure and causal replay
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-finalfit-venv
+    - /tmp/studentmodeling-finalfit-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-finalfit-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore:
+    - .git/
+    - .vscode/
+    - amlt/
+    - data/
+    - results/
+    - __pycache__/
+    - '*.pyc'
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: finalfit-cache-rank0-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: &cache_command |
+      set -euo pipefail
+      export PATH="/tmp/studentmodeling-finalfit-venv/bin:$$PATH"
+      export PYTHONPATH="$$AMLT_CODE_DIR/scripts$${PYTHONPATH:+:$$PYTHONPATH}"
+      export HF_HOME=/tmp/hf_cache
+      export HF_HUB_CACHE=/tmp/hf_cache/hub
+      export HF_HUB_DISABLE_XET=1
+      export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+      export TRANSFORMERS_VERBOSITY=error
+      export LOCAL_MODEL=/tmp/Qwen3-32B
+      export RAW_FULL=/mnt/amulet/studentmodeling/full_trainplusvalid_no_t4_strict_t6/train.jsonl
+      export RAW_SPLIT=/tmp/full_trainvalid_promptcomplete_v1
+      export RECURRENT_SPLIT=/tmp/unified_recurrent_full259845_u4_v1
+      export FINAL_JSONL="$$RECURRENT_SPLIT/final_fit_trainvalid.jsonl"
+      export TEACHER_ADAPTER=/mnt/amulet/studentmodeling/adapters/qwen3_32b_full_trainvalid_no_t4_strictt6_1ep/final_adapter
+      export CACHE_ROOT=/mnt/amulet/studentmodeling/world_model_v1/final_fit/cache_full259845_top256_seed42_v1
+      export PART_DIR="$$CACHE_ROOT/rank-$${PARTITION_INDEX}"
+      mkdir -p "$$HF_HUB_CACHE" "$$PART_DIR" "$$AMLT_OUTPUT_DIR/cache"
+      test "$$(df --output=avail /tmp | tail -1)" -ge 125829120
+      test -f "$$RAW_FULL"
+      test -f "$$TEACHER_ADAPTER/adapter_model.safetensors"
+      test "$$(sha256sum "$$RAW_FULL" | cut -d' ' -f1)" = aeabd3b4dfef3c4d92ac68583879c91448ef90f58304cedf32e470b586ca4542
+      test "$$(sha256sum scripts/split_full_mix_by_original_split.py | cut -d' ' -f1)" = 6dd0bab1e1e669a6012fbd6dc5947335294ec456a04b4c92dc68240e81974801
+      test "$$(sha256sum scripts/build_unified_recurrent_manifest.py | cut -d' ' -f1)" = 8bc822ec33165037dff8353707a037a0edc12679cd67b66885aa94a4288542f6
+      test "$$(sha256sum scripts/audit_unified_recurrent_manifest.py | cut -d' ' -f1)" = 6de4fcab57aa8dbd0b56f07972e341f64b60668474f03069cc47878a80e434a0
+      test "$$(sha256sum scripts/merge_recurrent_full_corpus.py | cut -d' ' -f1)" = 1bfdf4408867b03d171ef52f7c9c8b8dc328becf759dc304adaf5e37612c4e34
+      test "$$(sha256sum scripts/build_teacher_cache.py | cut -d' ' -f1)" = d52b5f17ffbbd033ce2ba27877dbedf9abdaffa4aaaffe8194cbe7bd5a5b7f08
+      test "$$(sha256sum scripts/finalize_teacher_cache.py | cut -d' ' -f1)" = d70a169b26f9e632c2104d90a2f4e07913350f4931424de3429c0a1ff922135e
+      python -m unittest discover -s tests -p 'test_teacher_cache.py' -v
+
+      python scripts/split_full_mix_by_original_split.py --input-jsonl "$$RAW_FULL" --output-dir "$$RAW_SPLIT"
+      test "$$(sha256sum "$$RAW_SPLIT/train.jsonl" | cut -d' ' -f1)" = 70637b5b7e5f828195513b9c1679acb94c09df3c7fd86393fc0b34f555eafaf2
+      test "$$(sha256sum "$$RAW_SPLIT/valid.jsonl" | cut -d' ' -f1)" = a3aab16770a09595e5e69e8097678f5374033b359733323bdaff0b1d9b0a2e9d
+      python scripts/build_unified_recurrent_manifest.py --train-jsonl "$$RAW_SPLIT/train.jsonl" --valid-jsonl "$$RAW_SPLIT/valid.jsonl" --output-dir "$$RECURRENT_SPLIT" --max-updates 4 --seed 20260730
+      test "$$(sha256sum "$$RECURRENT_SPLIT/train.jsonl" | cut -d' ' -f1)" = 2a2f650bb077196a79deaa7eac363d5224fd5936e9c51e60d3fd5f27775282c2
+      test "$$(sha256sum "$$RECURRENT_SPLIT/valid.jsonl" | cut -d' ' -f1)" = 78bfce75576dc3873cbb6459669a952adeedb8b77bda15f281af9519e2506d14
+      python scripts/audit_unified_recurrent_manifest.py --train-jsonl "$$RECURRENT_SPLIT/train.jsonl" --valid-jsonl "$$RECURRENT_SPLIT/valid.jsonl" --output-json "$$RECURRENT_SPLIT/audit.json"
+      python scripts/merge_recurrent_full_corpus.py --train-jsonl "$$RECURRENT_SPLIT/train.jsonl" --valid-jsonl "$$RECURRENT_SPLIT/valid.jsonl" --output-jsonl "$$FINAL_JSONL" --manifest "$$RECURRENT_SPLIT/final_fit_manifest.json"
+      test "$$(sha256sum "$$FINAL_JSONL" | cut -d' ' -f1)" = 9961f746cb17e6c314e182d3453b6157022fb48b8de44d2e68bc8e87a1131ccd
+
+      rm -rf "$$LOCAL_MODEL"
+      mkdir -p "$$LOCAL_MODEL"
+      python scripts/copy_model_parallel.py --source /mnt/amulet/studentmodeling/models/Qwen3-32B --destination "$$LOCAL_MODEL" --workers 16
+      test -f "$$LOCAL_MODEL/model.safetensors.index.json"
+      nvidia-smi --query-gpu=index,name,memory.total --format=csv,noheader
+      if [[ ! -f "$$PART_DIR/integrity.json" ]]; then
+        rm -f "$$PART_DIR"/*.partial
+        python -u scripts/build_teacher_cache.py \
+          --model "$$LOCAL_MODEL" \
+          --teacher-adapter "$$TEACHER_ADAPTER" \
+          --jsonl "$$FINAL_JSONL" \
+          --output-dir "$$PART_DIR" \
+          --state-token-alias '<|vision_pad|>' \
+          --max-length 1536 \
+          --top-k 256 \
+          --shard-size 512 \
+          --order-seed 42 \
+          --partition-index "$$PARTITION_INDEX" \
+          --partition-count 4
+        python scripts/finalize_teacher_cache.py --cache-dir "$$PART_DIR"
+      fi
+      python - "$$PART_DIR" "$$PARTITION_INDEX" <<'PY'
+      import json, sys
+      root, rank = sys.argv[1], int(sys.argv[2])
+      manifest = json.load(open(root + '/manifest.json', encoding='utf-8'))
+      integrity = json.load(open(root + '/integrity.json', encoding='utf-8'))
+      assert manifest['source_sha256'] == '9961f746cb17e6c314e182d3453b6157022fb48b8de44d2e68bc8e87a1131ccd'
+      assert manifest['source_rows'] == 259845 and manifest['order_seed'] == 42
+      assert manifest['partition_index'] == rank and manifest['partition_count'] == 4
+      assert manifest['rows'] in {64961, 64962}
+      assert integrity['status'] == 'verified' and integrity['rows'] == manifest['rows']
+      PY
+      cp "$$PART_DIR/manifest.json" "$$AMLT_OUTPUT_DIR/cache/manifest.json"
+      cp "$$PART_DIR/integrity.json" "$$AMLT_OUTPUT_DIR/cache/integrity.json"
+    submit_args: &cache_submit
+      max_attempts: 2
+      max_run_duration_seconds: 345600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        PARTITION_INDEX: "0"
+
+  - name: finalfit-cache-rank1-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *cache_command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 345600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        PARTITION_INDEX: "1"
+
+  - name: finalfit-cache-rank2-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *cache_command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 345600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        PARTITION_INDEX: "2"
+
+  - name: finalfit-cache-rank3-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *cache_command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 345600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        PARTITION_INDEX: "3"
+
+  - name: finalfit-generation-only-identity-seed42
+    sku: 80G8-A100-IB-NvLink
+    process_count_per_node: -1
+    mpi: true
+    sla_tier: Standard
+    command: &train_command |
+      set -euo pipefail
+      export PATH="/tmp/studentmodeling-finalfit-venv/bin:$$PATH"
+      export PYTHONPATH="$$AMLT_CODE_DIR/scripts$${PYTHONPATH:+:$$PYTHONPATH}"
+      export HF_HOME=/tmp/hf_cache
+      export HF_HUB_CACHE=/tmp/hf_cache/hub
+      export HF_HUB_DISABLE_XET=1
+      export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+      export TRANSFORMERS_VERBOSITY=error
+      : "$${DISTRIBUTED_WORLD_SIZE:?DISTRIBUTED_WORLD_SIZE is required}"
+      : "$${GRADIENT_ACCUMULATION_STEPS:?GRADIENT_ACCUMULATION_STEPS is required}"
+      export LOCAL_MODEL=/tmp/Qwen3-32B
+      export RAW_FULL=/mnt/amulet/studentmodeling/full_trainplusvalid_no_t4_strict_t6/train.jsonl
+      export RAW_SPLIT=/tmp/full_trainvalid_promptcomplete_v1
+      export RECURRENT_SPLIT=/tmp/unified_recurrent_full259845_u4_v1
+      export FINAL_JSONL="$$RECURRENT_SPLIT/final_fit_trainvalid.jsonl"
+      export CACHE_ROOT=/mnt/amulet/studentmodeling/world_model_v1/final_fit/cache_full259845_top256_seed42_v1
+      export CACHE_V2_ROOT=/mnt/amulet/studentmodeling/world_model_v1/final_fit/cache_full259845_top256_seed42_v2_16way
+      if [[ -f "$$CACHE_V2_ROOT/integrity.json" ]]; then
+        export CACHE_ROOT="$$CACHE_V2_ROOT"
+      fi
+      export PILOT_RECEIPT=/mnt/amulet/studentmodeling/world_model_v1/m4/selected_seed42.json
+      export BASE_DATA=/mnt/amulet/studentmodeling/c4_fullopen_20260724/malrule_c1_clean
+      export CAUSAL_DATA=/tmp/recurrent_causal_pairs_v1
+      export RUN_DIR="/mnt/amulet/studentmodeling/checkpoints/world_model_v1_m4_finalfit_$${ARM}_$${PROJECTION_MODE}_seed42_full259845_v1_20260730"
+      mkdir -p "$$HF_HUB_CACHE" "$$RECURRENT_SPLIT" "$$CAUSAL_DATA" "$$RUN_DIR" "$$AMLT_OUTPUT_DIR/model" "$$AMLT_OUTPUT_DIR/metrics"
+      test "$$(df --output=avail /tmp | tail -1)" -ge 125829120
+      test -f "$$RAW_FULL"
+      test -f "$$PILOT_RECEIPT"
+      test -f "$$BASE_DATA/train.jsonl"
+      test -f "$$BASE_DATA/val.jsonl"
+      test "$$(sha256sum "$$RAW_FULL" | cut -d' ' -f1)" = aeabd3b4dfef3c4d92ac68583879c91448ef90f58304cedf32e470b586ca4542
+      test "$$(sha256sum scripts/train_recurrent_student_m4.py | cut -d' ' -f1)" = 865c12219deb23cf9db145c797244969721fce80323050dcd987b33d96cbfb1b
+      test "$$(sha256sum scripts/distributed_epoch.py | cut -d' ' -f1)" = 4b825fa7e7f03de5ceb60e3a812eafab79ba47b07bc9ca8c11274c45f24cd178
+      test "$$(sha256sum scripts/recurrent_student_model.py | cut -d' ' -f1)" = 9e0431dccb524f67b401f7ea911e11c96fc3061432ffdc73e0cac2bbc2acc5a0
+      test "$$(sha256sum scripts/teacher_cache.py | cut -d' ' -f1)" = 04f057df2ccdc174e3094bab1c79d9bdbee4c9c67657615f1e49c3e68903cc4b
+      test "$$(sha256sum scripts/merge_teacher_cache_partitions.py | cut -d' ' -f1)" = 8bd00421608fe2c31df67ce624d2452183461877f9aa07a1e85d8552bd72c468
+      test "$$(sha256sum scripts/build_recurrent_causal_pairs.py | cut -d' ' -f1)" = 2daed709603a63a487705bce87539b58c7e01d239397758305d3b023f5eb26b7
+      python -m unittest discover -s tests -p 'test_recurrent_student_model.py' -v
+      python -m unittest discover -s tests -p 'test_train_recurrent_student_m4.py' -v
+      python -m unittest discover -s tests -p 'test_distributed_epoch.py' -v
+      python -m unittest discover -s tests -p 'test_teacher_cache.py' -v
+
+      readarray -t selected < <(python - "$$PILOT_RECEIPT" "$$ARM" "$$PROJECTION_MODE" <<'PY'
+      import json, sys
+      value = json.load(open(sys.argv[1], encoding='utf-8'))
+      assert value.get('status') == 'candidate_complete', value
+      assert value.get('mask_protocol') == 'answer_anchor_visible_v2', value
+      assert value.get('arm') == sys.argv[2] and value.get('projection_mode') == sys.argv[3], value
+      branch = value.get('causal_rescue_branch')
+      policies = {
+          None: (1.0, False, 0.0),
+          'raw4': (4.0, False, 0.0),
+          'mean_normalized': (1.0, True, 0.0),
+          'raw8': (8.0, False, 0.0),
+          'mean2_normalized': (2.0, True, 0.0),
+          'repeat100_w1': (1.0, False, 1.0),
+          'repeat100_w4': (4.0, False, 1.0),
+          'repeat100_sum_w1': (1.0, False, 1.0),
+          'repeat100_sum_w4': (4.0, False, 1.0),
+          'bootstrap_sum_w1': (1.0, False, 1.0),
+          'bootstrap_sum_w4': (4.0, False, 1.0),
+          'bootstrap_native25_sum_w1': (1.0, False, 1.0),
+          'bootstrap_native25_sum_w4': (4.0, False, 1.0),
+          'bootstrap_balanced_sum_w1': (1.0, False, 1.0),
+          'bootstrap_balanced_sum_w4': (4.0, False, 1.0),
+          'bootstrap_native25_balanced_sum_w1': (1.0, False, 1.0),
+          'bootstrap_native25_balanced_sum_w4': (4.0, False, 1.0),
+          'donor_directional_sum_w1': (1.0, False, 1.0),
+          'donor_directional_sum_w4': (4.0, False, 1.0),
+          'cf4_bootstrap_symmetric_w1': (1.0, False, 1.0),
+          'cf4_donor_directional_w1': (1.0, False, 1.0),
+      }
+      assert branch in policies, value
+      expected_weight, expected_normalize, expected_repeat = policies[branch]
+      weight = float(value.get('causal_weight', expected_weight))
+      normalize = bool(value.get('normalize_causal_exposure', expected_normalize))
+      repeat = float(value.get('causal_repeat_fraction', expected_repeat))
+      assert (weight, normalize, repeat) == (
+          expected_weight, expected_normalize, expected_repeat
+      ), value
+      if branch is not None:
+          assert float(value.get('C4_D_specific', -1.0)) >= 0.15, value
+      final_weight = float(value.get('final_fit_causal_weight', weight))
+      final_normalize = bool(value.get('final_fit_normalize_causal_exposure', normalize))
+      final_repeat = float(value.get('final_fit_causal_repeat_fraction', 0.05))
+      final_preference_reduction = value.get(
+          'final_fit_causal_preference_reduction',
+          value.get('causal_preference_reduction', 'mean'),
+      )
+      final_objective_mode = value.get(
+          'final_fit_causal_objective_mode',
+          value.get('causal_objective_mode', 'symmetric'),
+      )
+      assert 0 < final_repeat <= 1.0, value
+      assert final_preference_reduction in {'mean', 'sum'}, value
+      assert final_objective_mode in {'symmetric', 'directional', 'donor_directional'}, value
+      print(value['run_dir'])
+      print(final_weight)
+      print(1 if final_normalize else 0)
+      print(final_repeat)
+      print(final_preference_reduction)
+      print(final_objective_mode)
+      print(value.get('causal_data_mode', 'cf1_single_query'))
+      PY
+      )
+      export PILOT_DIR="$${selected[0]}"
+      export PILOT_CAUSAL_WEIGHT="$${selected[1]}"
+      export PILOT_NORMALIZE_CAUSAL="$${selected[2]}"
+      export PILOT_CAUSAL_REPEAT="$${selected[3]}"
+      export PILOT_CAUSAL_PREFERENCE_REDUCTION="$${selected[4]}"
+      export PILOT_CAUSAL_OBJECTIVE_MODE="$${selected[5]}"
+      export PILOT_CAUSAL_DATA_MODE="$${selected[6]}"
+      test -f "$$PILOT_DIR/final_adapter/adapter_model.safetensors"
+      test -f "$$PILOT_DIR/recurrent_state.pt"
+      test -f "$$PILOT_DIR/completion.json"
+
+      exec 7>/tmp/finalfit-data-preparation.lock
+      flock -x 7
+      if [[ ! -f /tmp/finalfit-data-preparation.complete ]]; then
+        python scripts/split_full_mix_by_original_split.py --input-jsonl "$$RAW_FULL" --output-dir "$$RAW_SPLIT"
+        test "$$(sha256sum "$$RAW_SPLIT/train.jsonl" | cut -d' ' -f1)" = 70637b5b7e5f828195513b9c1679acb94c09df3c7fd86393fc0b34f555eafaf2
+        test "$$(sha256sum "$$RAW_SPLIT/valid.jsonl" | cut -d' ' -f1)" = a3aab16770a09595e5e69e8097678f5374033b359733323bdaff0b1d9b0a2e9d
+        python scripts/build_unified_recurrent_manifest.py --train-jsonl "$$RAW_SPLIT/train.jsonl" --valid-jsonl "$$RAW_SPLIT/valid.jsonl" --output-dir "$$RECURRENT_SPLIT" --max-updates 4 --seed 20260730
+        test "$$(sha256sum "$$RECURRENT_SPLIT/train.jsonl" | cut -d' ' -f1)" = 2a2f650bb077196a79deaa7eac363d5224fd5936e9c51e60d3fd5f27775282c2
+        test "$$(sha256sum "$$RECURRENT_SPLIT/valid.jsonl" | cut -d' ' -f1)" = 78bfce75576dc3873cbb6459669a952adeedb8b77bda15f281af9519e2506d14
+        python scripts/audit_unified_recurrent_manifest.py --train-jsonl "$$RECURRENT_SPLIT/train.jsonl" --valid-jsonl "$$RECURRENT_SPLIT/valid.jsonl" --output-json "$$RECURRENT_SPLIT/audit.json"
+        python scripts/merge_recurrent_full_corpus.py --train-jsonl "$$RECURRENT_SPLIT/train.jsonl" --valid-jsonl "$$RECURRENT_SPLIT/valid.jsonl" --output-jsonl "$$FINAL_JSONL" --manifest "$$RECURRENT_SPLIT/final_fit_manifest.json"
+        test "$$(sha256sum "$$FINAL_JSONL" | cut -d' ' -f1)" = 9961f746cb17e6c314e182d3453b6157022fb48b8de44d2e68bc8e87a1131ccd
+        causal_train_pairs=manifests/cf_paired_state_swap_train_seed20260730_v1.json
+        if [[ "$$PILOT_CAUSAL_DATA_MODE" == cf4_balanced ]]; then
+          causal_train_pairs=manifests/cf4_balanced_paired_state_swap_train_seed20260731_v1.json
+        elif [[ "$$PILOT_CAUSAL_DATA_MODE" != cf1_single_query ]]; then
+          echo "Unknown causal data mode: $$PILOT_CAUSAL_DATA_MODE" >&2
+          exit 2
+        fi
+        python scripts/build_recurrent_causal_pairs.py --train-source "$$BASE_DATA/train.jsonl" --valid-source "$$BASE_DATA/val.jsonl" --train-pairs "$$causal_train_pairs" --valid-pairs manifests/cf_paired_state_swap_valid_seed20260731_v1.json --output-dir "$$CAUSAL_DATA" --max-updates 4
+        touch /tmp/finalfit-data-preparation.complete
+      fi
+      flock -u 7
+      test "$$(sha256sum "$$RAW_SPLIT/train.jsonl" | cut -d' ' -f1)" = 70637b5b7e5f828195513b9c1679acb94c09df3c7fd86393fc0b34f555eafaf2
+      test "$$(sha256sum "$$RAW_SPLIT/valid.jsonl" | cut -d' ' -f1)" = a3aab16770a09595e5e69e8097678f5374033b359733323bdaff0b1d9b0a2e9d
+      test "$$(sha256sum "$$RECURRENT_SPLIT/train.jsonl" | cut -d' ' -f1)" = 2a2f650bb077196a79deaa7eac363d5224fd5936e9c51e60d3fd5f27775282c2
+      test "$$(sha256sum "$$RECURRENT_SPLIT/valid.jsonl" | cut -d' ' -f1)" = 78bfce75576dc3873cbb6459669a952adeedb8b77bda15f281af9519e2506d14
+      test "$$(sha256sum "$$FINAL_JSONL" | cut -d' ' -f1)" = 9961f746cb17e6c314e182d3453b6157022fb48b8de44d2e68bc8e87a1131ccd
+      if [[ "$$PILOT_CAUSAL_DATA_MODE" == cf4_balanced ]]; then
+        test "$$(sha256sum "$$CAUSAL_DATA/train.jsonl" | cut -d' ' -f1)" = 30f68f54120e5a9ada0a37b1dba2b6480de0f8eaeac98d0b7ed7c627429f9766
+      else
+        test "$$(sha256sum "$$CAUSAL_DATA/train.jsonl" | cut -d' ' -f1)" = edb1bda6cc6aceb4507ac599377284c533014cef34b80e1063e062a74752267e
+      fi
+      test "$$(sha256sum "$$CAUSAL_DATA/valid.jsonl" | cut -d' ' -f1)" = 3e6b5fbcab3d232d5b3a65a005fbf9ba5719a8a4f8251d6ea85b861a7c1c3e22
+
+      kd_args=()
+      if [[ "$$ARM" == generation_kd ]]; then
+        exec 6>/tmp/finalfit-cache-merge.lock
+        flock -x 6
+        if [[ ! -f "$$CACHE_ROOT/integrity.json" ]]; then
+          python scripts/merge_teacher_cache_partitions.py --parts-root "$$CACHE_ROOT" --output-dir "$$CACHE_ROOT" --expected-rows 259845
+        fi
+        flock -u 6
+        kd_args=(--teacher-cache "$$CACHE_ROOT" --behavior-kd-weight 0.5 --behavior-kd-temperature 1.0)
+      elif [[ "$$ARM" != generation_only ]]; then
+        echo "Unknown ARM=$$ARM" >&2
+        exit 2
+      fi
+      projection_args=()
+      if [[ "$$PROJECTION_MODE" == trainable ]]; then
+        projection_args=(--trainable-projections --state-projection-rank 64)
+      elif [[ "$$PROJECTION_MODE" != identity ]]; then
+        echo "Unknown PROJECTION_MODE=$$PROJECTION_MODE" >&2
+        exit 2
+      fi
+      causal_args=(--causal-weight "$$PILOT_CAUSAL_WEIGHT")
+      if [[ "$$PILOT_NORMALIZE_CAUSAL" == 1 ]]; then
+        causal_args+=(--normalize-causal-exposure)
+      elif [[ "$$PILOT_NORMALIZE_CAUSAL" != 0 ]]; then
+        echo "Unknown PILOT_NORMALIZE_CAUSAL=$$PILOT_NORMALIZE_CAUSAL" >&2
+        exit 2
+      fi
+
+      (
+        flock -x 9
+        if [[ ! -f /tmp/Qwen3-32B.copy_complete ]]; then
+          rm -rf "$$LOCAL_MODEL"
+          mkdir -p "$$LOCAL_MODEL"
+          python scripts/copy_model_parallel.py --source /mnt/amulet/studentmodeling/models/Qwen3-32B --destination "$$LOCAL_MODEL" --workers 16
+          touch /tmp/Qwen3-32B.copy_complete
+        fi
+      ) 9>/tmp/qwen3-32b-copy.lock
+      test -f "$$LOCAL_MODEL/model.safetensors.index.json"
+      nvidia-smi --query-gpu=index,name,memory.total --format=csv,noheader
+      resume_args=()
+      if [[ ! -f "$$RUN_DIR/completion.json" ]]; then
+        latest=""
+        mapfile -t checkpoints < <(find "$$RUN_DIR" -mindepth 1 -maxdepth 1 -type d -name 'checkpoint-round-*' | sort -V)
+        for ((i=$${#checkpoints[@]}-1; i>=0; i--)); do
+          candidate="$${checkpoints[$$i]}"
+          if [[ -f "$$candidate/adapter/adapter_model.safetensors" && -f "$$candidate/recurrent_state.pt" && -f "$$candidate/checkpoint_completion.json" ]]; then
+            latest="$$candidate/recurrent_state.pt"
+            break
+          fi
+        done
+        [[ -z "$$latest" ]] || resume_args=(--resume-from-checkpoint "$$latest")
+        python -u scripts/train_recurrent_student_m4.py \
+          --model "$$LOCAL_MODEL" \
+          --init-adapter "$$PILOT_DIR/final_adapter" \
+          --init-recurrent-state "$$PILOT_DIR/recurrent_state.pt" \
+          --init-run-dir "$$PILOT_DIR" \
+          --train-jsonl "$$FINAL_JSONL" \
+          --valid-jsonl "$$RECURRENT_SPLIT/valid.jsonl" \
+          --causal-train-jsonl "$$CAUSAL_DATA/train.jsonl" \
+          --causal-valid-jsonl "$$CAUSAL_DATA/valid.jsonl" \
+          --output-dir "$$RUN_DIR" \
+          --state-token-alias '<|vision_pad|>' \
+          --max-length 1536 \
+          --learning-rate 5e-6 \
+          --lr-scheduler cosine \
+          --warmup-ratio 0.03 \
+          --generation-weight 1.0 \
+          --consistency-weight 0.25 \
+          --direct-replay-weight 0.25 \
+          "$${causal_args[@]}" \
+          --causal-margin 0.5 \
+          --causal-preference-reduction "$$PILOT_CAUSAL_PREFERENCE_REDUCTION" \
+          --causal-objective-mode "$$PILOT_CAUSAL_OBJECTIVE_MODE" \
+          --causal-repeat-fraction "$$PILOT_CAUSAL_REPEAT" \
+          --gradient-accumulation-steps "$$GRADIENT_ACCUMULATION_STEPS" \
+          --eval-limit 300 \
+          --causal-eval-limit 165 \
+          --save-steps 2000 \
+          --distributed-mpi \
+          --distributed-world-size "$$DISTRIBUTED_WORLD_SIZE" \
+          --seed 42 \
+          "$${projection_args[@]}" \
+          "$${kd_args[@]}" \
+          "$${resume_args[@]}"
+      fi
+      if [[ "$${OMPI_COMM_WORLD_RANK:-0}" != "0" ]]; then
+        exit 0
+      fi
+      test -f "$$RUN_DIR/completion.json"
+      test -f "$$RUN_DIR/final_adapter/adapter_model.safetensors"
+      test -f "$$RUN_DIR/recurrent_state.pt"
+      python - "$$RUN_DIR/completion.json" "$$ARM" "$$PROJECTION_MODE" "$$RUN_DIR" <<'PY'
+      import hashlib, json, os, sys
+      completion = json.load(open(sys.argv[1], encoding='utf-8'))
+      config = json.load(open(os.path.join(sys.argv[4], 'run_config.json'), encoding='utf-8'))
+      assert completion.get('status') == 'complete', completion
+      assert completion.get('micro_steps') == 259845, completion
+      assert completion.get('real_examples_seen_once') is True, completion
+      assert completion.get('causal_exposure_count_matches_plan') is True, completion
+      assert completion.get('all_causal_pairs_covered') is True, completion
+      assert completion.get('causal_pairs_seen') == config.get('planned_causal_exposures'), (completion, config)
+      receipt = {
+          'version': 1,
+          'status': 'final_fit_complete',
+          'arm': sys.argv[2],
+          'projection_mode': sys.argv[3],
+          'run_dir': sys.argv[4],
+          'completion_sha256': hashlib.sha256(open(sys.argv[1], 'rb').read()).hexdigest(),
+          'mask_protocol': 'answer_anchor_visible_v2',
+          'real_examples': 259845,
+          'causal_replay_fraction': float(config['causal_repeat_fraction']),
+          'causal_weight': float(config['causal_weight']),
+          'normalize_causal_exposure': bool(config['normalize_causal_exposure']),
+          'causal_preference_reduction': config['causal_preference_reduction'],
+          'causal_objective_mode': config['causal_objective_mode'],
+          'causal_data_mode': os.environ['PILOT_CAUSAL_DATA_MODE'],
+          'causal_train_sha256': config['causal_train_sha256'],
+          'causal_valid_sha256': config['causal_valid_sha256'],
+      }
+      target = '/mnt/amulet/studentmodeling/world_model_v1/final_fit/selected_seed42.json'
+      os.makedirs(os.path.dirname(target), exist_ok=True)
+      temporary = target + '.partial'
+      with open(temporary, 'w', encoding='utf-8') as handle:
+          json.dump(receipt, handle, indent=2, sort_keys=True)
+          handle.write('\n')
+      os.replace(temporary, target)
+      PY
+      cp -r "$$RUN_DIR/final_adapter/." "$$AMLT_OUTPUT_DIR/model/"
+      cp "$$RUN_DIR/recurrent_state.pt" "$$AMLT_OUTPUT_DIR/model/recurrent_state.pt"
+      cp "$$RUN_DIR/completion.json" "$$AMLT_OUTPUT_DIR/metrics/completion.json"
+      cp "$$RUN_DIR/validation_metrics.json" "$$AMLT_OUTPUT_DIR/metrics/validation_metrics.json"
+      cp "$$RUN_DIR/causal_validation_metrics.json" "$$AMLT_OUTPUT_DIR/metrics/causal_validation_metrics.json"
+      cp "$$RUN_DIR/training_metrics.json" "$$AMLT_OUTPUT_DIR/metrics/training_metrics.json"
+      cp "$$RUN_DIR/run_config.json" "$$AMLT_OUTPUT_DIR/metrics/run_config.json"
+      cp "$$RUN_DIR/gradient_audit.json" "$$AMLT_OUTPUT_DIR/metrics/gradient_audit.json"
+      cp "$$RECURRENT_SPLIT/audit.json" "$$AMLT_OUTPUT_DIR/metrics/data_audit.json"
+      cp "$$RECURRENT_SPLIT/final_fit_manifest.json" "$$AMLT_OUTPUT_DIR/metrics/final_fit_manifest.json"
+      cp "$$PILOT_RECEIPT" "$$AMLT_OUTPUT_DIR/metrics/pilot_receipt.json"
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 604800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        ARM: generation_only
+        PROJECTION_MODE: identity
+        DISTRIBUTED_WORLD_SIZE: "8"
+        GRADIENT_ACCUMULATION_STEPS: "2"
+
+  - name: finalfit-generation-kd-identity-seed42
+    sku: 80G8-A100-IB-NvLink
+    process_count_per_node: -1
+    mpi: true
+    sla_tier: Standard
+    command: *train_command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 604800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        ARM: generation_kd
+        PROJECTION_MODE: identity
+        DISTRIBUTED_WORLD_SIZE: "8"
+        GRADIENT_ACCUMULATION_STEPS: "2"
+
+  - name: finalfit-generation-only-trainable-seed42
+    sku: 80G8-A100-IB-NvLink
+    process_count_per_node: -1
+    mpi: true
+    sla_tier: Standard
+    command: *train_command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 604800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        ARM: generation_only
+        PROJECTION_MODE: trainable
+        DISTRIBUTED_WORLD_SIZE: "8"
+        GRADIENT_ACCUMULATION_STEPS: "2"
+
+  - name: finalfit-generation-kd-trainable-seed42
+    sku: 80G8-A100-IB-NvLink
+    process_count_per_node: -1
+    mpi: true
+    sla_tier: Standard
+    command: *train_command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 604800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        ARM: generation_kd
+        PROJECTION_MODE: trainable
+        DISTRIBUTED_WORLD_SIZE: "8"
+        GRADIENT_ACCUMULATION_STEPS: "2"
+
+  - name: finalfit-generation-kd-trainable-seed42-16rank
+    sku: 2x80G8-A100-IB-NvLink
+    process_count_per_node: -1
+    mpi: true
+    sla_tier: Standard
+    command: *train_command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 604800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        ARM: generation_kd
+        PROJECTION_MODE: trainable
+        DISTRIBUTED_WORLD_SIZE: "16"
+        GRADIENT_ACCUMULATION_STEPS: "1"

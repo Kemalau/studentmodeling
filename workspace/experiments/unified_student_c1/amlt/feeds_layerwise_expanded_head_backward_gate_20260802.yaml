@@ -1,0 +1,74 @@
+# Generated from `amlt template -t Feeds -f amlt/feeds_layerwise_expanded_head_backward_gate_20260802.yaml -n 2 -y`.
+# yaml-language-server: $schema=file:///home/v-yuejiali/studentmodeling/workspace/experiments/unified_student_c1/.vscode/amlt-config.schema.json
+description: Three exact-row Qwen3-32B backward gates for head-expanded aligned SDPA bias preservation
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-layerwise-expanded-head-venv
+    - /tmp/studentmodeling-layerwise-expanded-head-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-layerwise-expanded-head-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: layerwise-expanded-head-backward-549-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: &gate_command |
+      set -euo pipefail
+      bash scripts/run_layerwise_expanded_head_backward_gate.sh
+    submit_args:
+      max_attempts: 1
+      max_run_duration_seconds: 21600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        ROW_INDEX: 177752
+        EXPECTED_TOKENS: 549
+        EXPECTED_SUFFIX: ':233:1'
+
+  - name: layerwise-expanded-head-backward-653-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *gate_command
+    submit_args:
+      max_attempts: 1
+      max_run_duration_seconds: 21600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        ROW_INDEX: 110499
+        EXPECTED_TOKENS: 653
+        EXPECTED_SUFFIX: ':0002079:malrule_identity'
+
+  - name: layerwise-expanded-head-backward-721-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *gate_command
+    submit_args:
+      max_attempts: 1
+      max_run_duration_seconds: 21600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        ROW_INDEX: 68865
+        EXPECTED_TOKENS: 721
+        EXPECTED_SUFFIX: ':0002130:malrule_identity'

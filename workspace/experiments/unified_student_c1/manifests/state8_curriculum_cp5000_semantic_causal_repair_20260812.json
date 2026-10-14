@@ -1,0 +1,27 @@
+{
+  "branches": [
+    {
+      "name": "semantic_binding",
+      "overrides": {
+        "STATE8_CAUSAL_MARGIN": "0.75",
+        "STATE8_CAUSAL_REPEAT_FRACTION": "1.0",
+        "STATE8_CAUSAL_WEIGHT": "2.0",
+        "STATE8_CONTROL_RANDOM_SAMPLES": "4",
+        "STATE8_CONTROL_RANDOM_WEIGHT": "0.25",
+        "STATE8_CONTROL_SAME_RULE_WEIGHT": "0.50",
+        "STATE8_EEDI_CAUSAL_TWINS": "200",
+        "STATE8_EEDI_GEOMETRY_WEIGHT": "0.10"
+      },
+      "source": {
+        "arm": "current_query",
+        "checkpoint_step": 5000,
+        "family": "curriculum"
+      },
+      "training_arm": "full"
+    }
+  ],
+  "raw_history_visible_to_decoder": false,
+  "scientific_floors_unchanged": true,
+  "seed_base": 7201,
+  "stage": "state8_curriculum_failed_checkpoint_repair_plan_v1"
+}

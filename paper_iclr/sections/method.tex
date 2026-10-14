@@ -1,0 +1,212 @@
+\section{Causally Grounded Generative Student Modeling}
+\label{sec:method}
+
+\subsection{Problem formulation}
+
+Let $x_t=(q_t,r_t,y_t,k_t,m_t)$ denote an observed interaction at time $t$:
+problem content $q_t$, student response $r_t$, correctness $y_t$, available
+knowledge-component metadata $k_t$, and optional interaction metadata $m_t$.
+Fields unavailable in a source are omitted rather than imputed.  The history
+before a target is $H_t=(x_1,\ldots,x_{t-1})$.  Given a task instruction
+$\tau$ and a target query $\tilde q_t$, we predict a structured textual output
+$o_t$.
+
+Standard generative prompting estimates
+\begin{equation}
+    p_\theta(o_t\mid \tau,H_t,\tilde q_t),
+    \label{eq:full-context}
+\end{equation}
+which permits the decoder to retrieve arbitrary history tokens and does not
+identify a student state.  We instead factor prediction through a fixed-size
+continuous state:
+\begin{align}
+    z_t &= U_\theta(z_{t-1},x_{t-1}),
+    \label{eq:update}\\
+    p_\theta(o_t\mid \tau,z_t,\tilde q_t)
+        &= G_\theta(\tau,z_t,\tilde q_t).
+    \label{eq:decode}
+\end{align}
+The updater $U_\theta$ and decoder $G_\theta$ share the same language-model
+backbone and parameter-efficient adapters.  The state
+$z_t\in\mathbb{R}^{L\times S\times d}$ retains a layerwise trajectory with
+$S=8$ slots, all addressed by one repeated \studentstate{} token type.  It is a
+per-student, time-indexed activation, not a learned student-ID embedding.
+
+The tasks differ only in when the state is read and which output fields are
+requested.  T1 and T2 read the state before the target interaction; T3 first
+updates the state with the observed wrong response and then requests a
+misconception; T4 reads the current state but queries a problem $\Delta$
+interactions in the future; and strict T5 updates with the current wrong
+response before predicting its recurrence on a later exposure.  T6 predicts a
+future-KC-performance band and is reported only as an appendix proxy, never as
+a direct latent-mastery label.
+
+\subsection{A recurrent state carried by eight slots}
+
+We implement the updater with two banks of eight occurrences of the same
+special token type.  For
+an update, the model receives
+\begin{equation}
+ [\studentstate{}_{\mathrm{in}}^{1:S};\;\operatorname{serialize}(x_t);\;
+  \studentstate{}_{\mathrm{out}}^{1:S}].
+\end{equation}
+All positions use the same tokenizer ID.  At the input positions, we replace
+the ordinary token embeddings by projected and normalized copies of the
+previous state,
+\begin{equation}
+    e_{\mathrm{in}}^{1:S}=P_{\mathrm{in}}\operatorname{LN}(z_t).
+\end{equation}
+The causal hidden activations at the output positions can attend to the
+previous state and the new interaction; their layerwise trajectory becomes
+\begin{equation}
+    z_{t+1}=P_{\mathrm{out}}h(\studentstate{}_{\mathrm{out}}^{1:S}).
+\end{equation}
+For the first observed interaction, $z_0$ is initialized by a learned base
+state associated with \studentstate{}.  The small projections $P_{\mathrm{in}}$ and
+$P_{\mathrm{out}}$, layer-normalization parameters, and language-model adapters
+are trained jointly.
+
+At prediction time, the decoder receives
+\begin{equation}
+ [\operatorname{instruction}(\tau);\;\studentstate{}^{1:S};\;
+  \operatorname{serialize}(\tilde q_t);\;o_t].
+\end{equation}
+The embeddings at \studentstate{} are replaced by
+$P_{\mathrm{in}}\operatorname{LN}(z_t)$.  The raw history is not included, so
+every history-dependent prediction must pass through the state.
+This removes the history bypass that weakens one-shot bottleneck masks.  It also
+makes inference incremental: a serving system stores one vector per student,
+updates it after each interaction, and reuses it for any task query.
+
+We unroll updates over chronological blocks and truncate gradients every $B$
+interactions.  The state value is preserved across block boundaries while its
+gradient is detached.  This bounds memory independently of the full student
+history and permits training the 32B backbone with low-rank adapters.
+
+\subsection{Multi-task structured generation}
+
+All targets use a small structured output language.  Binary outcomes use
+fields such as \texttt{<correctness>}; response tasks use
+\texttt{<predicted\_response>}; misconception diagnosis uses
+\texttt{<misconception>}; and prospective tasks combine multiple fields.  The
+generative objective is the target-token negative log likelihood
+\begin{equation}
+    \mathcal L_{\mathrm{gen}}
+    =-\sum_{j=1}^{|o_t|}\log
+      p_\theta(o_{t,j}\mid o_{t,<j},\tau,z_t,\tilde q_t).
+    \label{eq:gen-loss}
+\end{equation}
+Instruction, state, and query tokens are masked from the loss.  Task and source
+samplers are separated so that a large correctness dataset does not dominate
+open-response or misconception supervision.
+
+This schema unifies the interface, not the construct or metric.  Closed-choice
+responses remain distinct from open mathematical responses; Eedi diagnosis is
+evaluated against its full taxonomy or by open generation; and strict
+wrong-response recurrence is not merged with repeat-incorrectness proxies.
+
+\subsection{Predictive state distillation}
+
+A strict bottleneck can lose information before the updater learns useful
+compression.  We therefore initialize a full-context teacher $T$ from the
+strong unrestricted multi-task model.  For the same target, the teacher sees
+$H_t$ as in Equation~\ref{eq:full-context}, while the student decoder sees only
+$z_t$.  We minimize a temperature-scaled token-level divergence
+\begin{equation}
+    \mathcal L_{\mathrm{KD}}
+    =\mathcal T^2\sum_j
+      \operatorname{KL}\!\left(
+      p_T^{(\mathcal T)}(\cdot\mid H_t,\tau,\tilde q_t,o_{t,<j})
+      \;\|\;
+      p_\theta^{(\mathcal T)}(\cdot\mid z_t,\tau,\tilde q_t,o_{t,<j})
+      \right).
+    \label{eq:kd-loss}
+\end{equation}
+The teacher is frozen.  Ground-truth generation remains the primary objective,
+so the student is not forced to reproduce teacher errors.  The gap between the
+teacher and state-only student is also reported as an empirical measure of
+state sufficiency.
+
+\subsection{Recurrent--direct state consistency}
+
+Errors can accumulate when the state is updated over a long trajectory.  We
+construct a second state from the complete visible history using a direct
+history encoder $E_\theta$ with the existing late-fusion mask.  Its state token
+can attend to all of $H_t$, but the answer cannot.  For selected checkpoints in
+an unrolled trajectory, we align the recurrent state $z_t^{\mathrm{rec}}$ with
+the stop-gradient direct state $z_t^{\mathrm{dir}}=E_\theta(H_t)$:
+\begin{equation}
+    \mathcal L_{\mathrm{dyn}}
+      =1-\cos\!\left(
+        \operatorname{LN}(z_t^{\mathrm{rec}}),
+        \operatorname{sg}[\operatorname{LN}(z_t^{\mathrm{dir}})]
+      \right).
+    \label{eq:dyn-loss}
+\end{equation}
+We reverse the stop-gradient direction on half of the minibatches.  This
+symmetric schedule prevents one branch from remaining an untrained target
+while avoiding immediate representational collapse.  Both states must also
+predict the same observed target through Equation~\ref{eq:gen-loss}; cosine
+agreement alone is never optimized without behavioral supervision.
+
+\subsection{Counterfactual grounding with executable misconceptions}
+
+Decodability does not ensure that changing a state changes behavior.  We use
+MalruleLib to construct supervised interventions.  Let histories $H^A$ and
+$H^B$ instantiate different misconception rules $a$ and $b$, and let $q$ be a
+held-out problem for which both rules are executable.  The library provides
+counterfactual responses $r_a(q)$ and $r_b(q)$.  We decode the same query after
+swapping the two states and optimize
+\begin{align}
+    \mathcal L_{\mathrm{cf}} ={}&
+    -\log p_\theta(r_a(q)\mid z^A,\tau_{\mathrm{response}},q) \\
+    &-\log p_\theta(r_b(q)\mid z^B,\tau_{\mathrm{response}},q).
+    \label{eq:cf-loss}
+\end{align}
+The pairing procedure deliberately changes the problem template, so the model
+cannot satisfy the loss by copying a previous answer.  We do not attach a
+malrule classifier to $z$: the supervision specifies what the state should
+\emph{do}, not which label a probe should recover.  Evaluation uses unseen
+history--query pairs, held-out templates, and, where coverage permits, held-out
+malrules.
+
+\subsection{Future-profile ownership grounding}
+
+To make student identity testable without exposing a student ID, we add an
+auxiliary readout over a fixed projection $\phi(z_t)$ of the layerwise State8
+trajectory.  For student $i$, let $y_i\in[0,1]^K$ be smoothed correctness rates
+computed only from post-cutoff interactions and let $m_i$ mark KCs with
+sufficient support.  A linear head predicts
+\begin{equation}
+    \hat y_i=\sigma(W\phi(z_i)+b).
+\end{equation}
+For a hard mismatched student $j$, selected inside the training split, we
+optimize supported future-rate error together with an ownership margin:
+\begin{align}
+    \mathcal L_{\mathrm{prof}} &=
+      \operatorname{MSE}_{m_i}(\hat y_i,y_i),\\
+    \mathcal L_{\mathrm{own}} &=
+      \max\{0,\gamma+
+      \operatorname{MSE}_{m_i\cap m_j}(\hat y_i,y_i)-
+      \operatorname{MSE}_{m_i\cap m_j}(\hat y_i,y_j)\}.
+\end{align}
+Post-cutoff targets supervise training but are never visible to the updater or
+decoder at inference.  KCs below a threshold fixed from training support are
+excluded from this auxiliary loss.
+
+The complete objective is
+\begin{equation}
+    \mathcal L
+      =\mathcal L_{\mathrm{gen}}
+      +\lambda_{\mathrm{KD}}\mathcal L_{\mathrm{KD}}
+      +\lambda_{\mathrm{dyn}}\mathcal L_{\mathrm{dyn}}
+      +\lambda_{\mathrm{cf}}\mathcal L_{\mathrm{cf}}
+      +\lambda_{\mathrm{prof}}\mathcal L_{\mathrm{prof}}
+      +\lambda_{\mathrm{own}}\mathcal L_{\mathrm{own}}.
+    \label{eq:total-loss}
+\end{equation}
+We first warm-start on unrestricted multi-task generation, then train recurrent
+and direct state paths with distillation and consistency, and finally mix
+counterfactual and profile batches with real-data replay.  This curriculum separates
+language/output-format learning from state compression and reduces catastrophic
+forgetting during causal grounding.

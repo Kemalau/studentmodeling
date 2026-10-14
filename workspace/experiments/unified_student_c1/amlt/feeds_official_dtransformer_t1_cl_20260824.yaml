@@ -1,0 +1,74 @@
+# Generated from `amlt template -t Feeds -f /tmp/official_dtransformer_t1_generated.yaml -y`.
+description: Authors-official DTransformer with contrastive loss on frozen five-source T1, three seeds
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/official-dtransformer-venv
+    - /tmp/official-dtransformer-venv/bin/python -m pip install -r requirements-modern-kt.txt
+
+code:
+  local_dir: /home/v-yuejiali/studentmodeling/workspace/experiments/unified_student_c1
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: official-dtransformer-cl-t1-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: &command |
+      set -euo pipefail
+      export PATH="/tmp/official-dtransformer-venv/bin:$$PATH"
+      test "$$(sha256sum scripts/train_dtransformer_t1_baseline.py | cut -d' ' -f1)" = 177c16cb055d1020177a0449ab647e209f483f10d195dbd90b53f14b72aae28b
+      test "$$(sha256sum scripts/run_official_dtransformer_t1_job.sh | cut -d' ' -f1)" = fd73c229395be0c4de3db97afd45653680436a02dd1f9d7f73803d4fa9f1483b
+      test "$$(sha256sum third_party/DTransformer/DTransformer/model.py | cut -d' ' -f1)" = b928f033659ad4cb1e113e3726a09efe7ed08298367ba63d57846f0b407aefd0
+      test "$$(sha256sum third_party/DTransformer/PINNED_COMMIT | cut -d' ' -f1)" = 8581530e0936433061edafe990e123577e04270d4ee2f40d8c56e5710534769c
+      bash scripts/run_official_dtransformer_t1_job.sh
+    submit_args: &submit_args
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env: &base_env
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        KT_DATA_DIR: /mnt/amulet/studentmodeling/modern_kt_t1_five_source_v1
+        KT_DATA_MANIFEST_SHA256: 112fc9008ab65bb7382682d17de2269b32511aebcaa6588ce89520b39856a962
+        KT_SEED: '42'
+        KT_OUTPUT_DIR: /mnt/amulet/studentmodeling/modern_kt_t1_five_source_results/official_dtransformer_cl_seed42
+
+  - name: official-dtransformer-cl-t1-seed97
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *command
+    submit_args:
+      <<: *submit_args
+      env:
+        <<: *base_env
+        KT_SEED: '97'
+        KT_OUTPUT_DIR: /mnt/amulet/studentmodeling/modern_kt_t1_five_source_results/official_dtransformer_cl_seed97
+
+  - name: official-dtransformer-cl-t1-seed123
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *command
+    submit_args:
+      <<: *submit_args
+      env:
+        <<: *base_env
+        KT_SEED: '123'
+        KT_OUTPUT_DIR: /mnt/amulet/studentmodeling/modern_kt_t1_five_source_results/official_dtransformer_cl_seed123

@@ -1,0 +1,84 @@
+{
+  "ignored_non_student_sentinels": {
+    "eedi_mining": [
+      "eedi_mining::NO_STUDENT_HISTORY"
+    ]
+  },
+  "required_tasks": [
+    "diagnose_misconception",
+    "predict_correctness",
+    "predict_error_persistence",
+    "predict_prospective_error",
+    "predict_response"
+  ],
+  "status": "passed",
+  "train": {
+    "carrier_errors": 0,
+    "cold_start_rows": 2,
+    "decoder_history_leaks": 0,
+    "path": "data/processed/unified_recurrent_method_small_u4_v3_train_n1200/train.jsonl",
+    "rows": 1200,
+    "sequence_semantics": {
+      "chronological_trajectory": 958,
+      "cold_start_no_observation": 2,
+      "non_temporal_profile_deterministic_serialization": 140,
+      "single_observed_wrong_response": 100
+    },
+    "sha256": "ef1bd988e061761c07bb33b72ace898ae9d27615eec2c665c14d145a9b5d3672",
+    "sources": {
+      "dbe_kt22": 161,
+      "eedi_mining": 100,
+      "eedi_response": 140,
+      "foundationalassist": 469,
+      "malrule": 210,
+      "xes3g5m": 120
+    },
+    "tasks": {
+      "diagnose_misconception": 170,
+      "predict_correctness": 410,
+      "predict_error_persistence": 100,
+      "predict_prospective_error": 230,
+      "predict_response": 290
+    },
+    "unique_examples": 1200
+  },
+  "train_valid_example_overlap": 0,
+  "train_valid_real_student_overlap": {
+    "dbe_kt22": 0,
+    "eedi_mining": 0,
+    "eedi_response": 0,
+    "foundationalassist": 0,
+    "malrule": 0,
+    "xes3g5m": 0
+  },
+  "valid": {
+    "carrier_errors": 0,
+    "cold_start_rows": 0,
+    "decoder_history_leaks": 0,
+    "path": "data/processed/unified_recurrent_method_small_u4_v3_train_n1200/valid.jsonl",
+    "rows": 300,
+    "sequence_semantics": {
+      "chronological_trajectory": 237,
+      "non_temporal_profile_deterministic_serialization": 42,
+      "single_observed_wrong_response": 21
+    },
+    "sha256": "9ed980d30286f7bb4afe139636247feb8814df29e7ac741fde28f8f80a3e9f57",
+    "sources": {
+      "dbe_kt22": 38,
+      "eedi_mining": 21,
+      "eedi_response": 42,
+      "foundationalassist": 137,
+      "malrule": 31,
+      "xes3g5m": 31
+    },
+    "tasks": {
+      "diagnose_misconception": 31,
+      "predict_correctness": 105,
+      "predict_error_persistence": 25,
+      "predict_prospective_error": 64,
+      "predict_response": 75
+    },
+    "unique_examples": 300
+  },
+  "version": 1
+}

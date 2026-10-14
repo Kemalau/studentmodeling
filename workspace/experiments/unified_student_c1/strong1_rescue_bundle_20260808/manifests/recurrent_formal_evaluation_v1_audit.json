@@ -1,0 +1,61 @@
+{
+  "audit": {
+    "carrier_errors": 0,
+    "cold_start_rows": 8,
+    "decoder_history_leaks": 0,
+    "path": "data/processed/recurrent_formal_evaluation_v1/test.jsonl",
+    "rows": 21676,
+    "sequence_semantics": {
+      "chronological_trajectory": 18806,
+      "cold_start_no_observation": 8,
+      "non_temporal_profile_deterministic_serialization": 1968,
+      "single_observed_wrong_response": 894
+    },
+    "sha256": "1966914f7d8a7e568f58d9f4685a7ae4d74e06dffbb1485ac85c08b33b0f3b18",
+    "sources": {
+      "dbe_kt22": 660,
+      "eedi_mining": 894,
+      "eedi_response": 1968,
+      "foundationalassist": 9132,
+      "malrule": 1800,
+      "xes3g5m": 7222
+    },
+    "tasks": {
+      "diagnose_misconception": 1494,
+      "predict_correctness": 10913,
+      "predict_error_persistence": 976,
+      "predict_prospective_error": 4600,
+      "predict_response": 3693
+    },
+    "unique_examples": 21676
+  },
+  "construction": {
+    "counts": {
+      "diagnose_misconception/eedi_mining/single_observed_wrong_response": 894,
+      "diagnose_misconception/malrule/chronological_trajectory": 600,
+      "predict_correctness/dbe_kt22/chronological_trajectory": 225,
+      "predict_correctness/eedi_response/non_temporal_profile_deterministic_serialization": 984,
+      "predict_correctness/foundationalassist/chronological_trajectory": 1882,
+      "predict_correctness/malrule/chronological_trajectory": 600,
+      "predict_correctness/xes3g5m/chronological_trajectory": 7222,
+      "predict_error_persistence/dbe_kt22/chronological_trajectory": 12,
+      "predict_error_persistence/foundationalassist/chronological_trajectory": 956,
+      "predict_error_persistence/foundationalassist/cold_start_no_observation": 8,
+      "predict_prospective_error/dbe_kt22/chronological_trajectory": 200,
+      "predict_prospective_error/foundationalassist/chronological_trajectory": 4400,
+      "predict_response/dbe_kt22/chronological_trajectory": 223,
+      "predict_response/eedi_response/non_temporal_profile_deterministic_serialization": 984,
+      "predict_response/foundationalassist/chronological_trajectory": 1886,
+      "predict_response/malrule/chronological_trajectory": 600
+    },
+    "input": "data/processed/formal_evaluation_v1/test.jsonl",
+    "input_sha256": "bff7726953ae048bedf6dacdbb7500a54cb8de305e406f2497ef1f11c04167f8",
+    "max_updates": 4,
+    "selected": 21676,
+    "skipped": {}
+  },
+  "input_jsonl": "data/processed/formal_evaluation_v1/test.jsonl",
+  "input_sha256": "bff7726953ae048bedf6dacdbb7500a54cb8de305e406f2497ef1f11c04167f8",
+  "status": "passed",
+  "version": 1
+}

@@ -1,0 +1,79 @@
+{
+  "ignored_non_student_sentinels": {},
+  "required_tasks": [
+    "diagnose_misconception",
+    "predict_correctness",
+    "predict_error_persistence",
+    "predict_prospective_error",
+    "predict_response"
+  ],
+  "status": "passed",
+  "train": {
+    "carrier_errors": 0,
+    "cold_start_rows": 52,
+    "decoder_history_leaks": 0,
+    "path": "data/processed/unified_recurrent_full259845_u4_v1/train.jsonl",
+    "rows": 244331,
+    "sequence_semantics": {
+      "chronological_trajectory": 209331,
+      "cold_start_no_observation": 52,
+      "non_temporal_profile_deterministic_serialization": 31472,
+      "single_observed_wrong_response": 3476
+    },
+    "sha256": "2a2f650bb077196a79deaa7eac363d5224fd5936e9c51e60d3fd5f27775282c2",
+    "sources": {
+      "dbe_kt22": 10287,
+      "eedi_mining": 3476,
+      "eedi_response": 31472,
+      "foundationalassist": 138087,
+      "malrule": 9000,
+      "xes3g5m": 52009
+    },
+    "tasks": {
+      "diagnose_misconception": 6476,
+      "predict_correctness": 104269,
+      "predict_error_persistence": 7386,
+      "predict_prospective_error": 73997,
+      "predict_response": 52203
+    },
+    "unique_examples": 244331
+  },
+  "train_valid_example_overlap": 0,
+  "train_valid_real_student_overlap": {
+    "dbe_kt22": 0,
+    "eedi_mining": 0,
+    "eedi_response": 0,
+    "foundationalassist": 0,
+    "malrule": 0,
+    "xes3g5m": 0
+  },
+  "valid": {
+    "carrier_errors": 0,
+    "cold_start_rows": 5,
+    "decoder_history_leaks": 0,
+    "path": "data/processed/unified_recurrent_full259845_u4_v1/valid.jsonl",
+    "rows": 15514,
+    "sequence_semantics": {
+      "chronological_trajectory": 13541,
+      "cold_start_no_observation": 5,
+      "non_temporal_profile_deterministic_serialization": 1968
+    },
+    "sha256": "78bfce75576dc3873cbb6459669a952adeedb8b77bda15f281af9519e2506d14",
+    "sources": {
+      "dbe_kt22": 654,
+      "eedi_response": 1968,
+      "foundationalassist": 9104,
+      "malrule": 900,
+      "xes3g5m": 2888
+    },
+    "tasks": {
+      "diagnose_misconception": 300,
+      "predict_correctness": 6256,
+      "predict_error_persistence": 989,
+      "predict_prospective_error": 4603,
+      "predict_response": 3366
+    },
+    "unique_examples": 15514
+  },
+  "version": 1
+}

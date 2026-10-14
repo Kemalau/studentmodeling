@@ -1,0 +1,43 @@
+# Recovery derived from the approved Feeds Singularity profile-readout config.
+description: Resume completed State8 profile training at checkpoint-1000 and run fixed-query validation/evaluation
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-state8-profile-readout-venv
+    - /tmp/studentmodeling-state8-profile-readout-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-state8-profile-readout-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: state8-student-profile-readout-seed8601-recovery3
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_state8_student_profile_readout.sh | cut -d' ' -f1)" = 933a666a35c79d9498d1d99f492c7be52f8138bc2b1c8e77ceb77147a2dca4d2
+      export PROFILE_READOUT_RESUME_FROM=/mnt/amulet/studentmodeling/checkpoints/state8_student_profile_readout_seed8601_v1/checkpoint-1000/recurrent_state.pt
+      bash scripts/run_state8_student_profile_readout.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-profile-readout-venv

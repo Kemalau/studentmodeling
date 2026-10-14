@@ -1,0 +1,126 @@
+# Generated from `amlt template -t Feeds -y` with project-verified fields.
+description: Teacher-cache throughput benchmark for exact per-target top-k KD logits
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-cache-bench-venv
+    - /tmp/studentmodeling-cache-bench-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-cache-bench-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore:
+    - .git/
+    - .vscode/
+    - amlt/
+    - data/
+    - results/
+    - __pycache__/
+    - '*.pyc'
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: cache-bench-b1-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: &bench_command |
+      set -euo pipefail
+      export PATH="/tmp/studentmodeling-cache-bench-venv/bin:$$PATH"
+      export PYTHONPATH="$$AMLT_CODE_DIR/scripts$${PYTHONPATH:+:$$PYTHONPATH}"
+      export HF_HOME=/tmp/hf_cache
+      export HF_HUB_CACHE=/tmp/hf_cache/hub
+      export HF_HUB_DISABLE_XET=1
+      export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+      export TRANSFORMERS_VERBOSITY=error
+      export LOCAL_MODEL=/tmp/Qwen3-32B
+      export RAW_FULL=/mnt/amulet/studentmodeling/full_trainplusvalid_no_t4_strict_t6/train.jsonl
+      export RAW_SPLIT=/tmp/cache_bench_raw_split
+      export RECURRENT_SPLIT=/tmp/cache_bench_recurrent_split
+      export SOURCE="$$RECURRENT_SPLIT/final_fit_trainvalid.jsonl"
+      export TEACHER_ADAPTER=/mnt/amulet/studentmodeling/adapters/qwen3_32b_full_trainvalid_no_t4_strictt6_1ep/final_adapter
+      export OUT=/tmp/cache_bench_b$${BATCH_SIZE}
+      mkdir -p "$$HF_HUB_CACHE" "$$OUT" "$$AMLT_OUTPUT_DIR/bench"
+      test -f "$$RAW_FULL"
+      test -f "$$TEACHER_ADAPTER/adapter_model.safetensors"
+      test "$$(sha256sum scripts/build_teacher_cache.py | cut -d' ' -f1)" = d52b5f17ffbbd033ce2ba27877dbedf9abdaffa4aaaffe8194cbe7bd5a5b7f08
+      test "$$(sha256sum scripts/split_full_mix_by_original_split.py | cut -d' ' -f1)" = 6dd0bab1e1e669a6012fbd6dc5947335294ec456a04b4c92dc68240e81974801
+      test "$$(sha256sum scripts/build_unified_recurrent_manifest.py | cut -d' ' -f1)" = 8bc822ec33165037dff8353707a037a0edc12679cd67b66885aa94a4288542f6
+      test "$$(sha256sum scripts/merge_recurrent_full_corpus.py | cut -d' ' -f1)" = 1bfdf4408867b03d171ef52f7c9c8b8dc328becf759dc304adaf5e37612c4e34
+      python -m unittest discover -s tests -p 'test_teacher_cache.py' -v
+      python scripts/split_full_mix_by_original_split.py --input-jsonl "$$RAW_FULL" --output-dir "$$RAW_SPLIT"
+      python scripts/build_unified_recurrent_manifest.py --train-jsonl "$$RAW_SPLIT/train.jsonl" --valid-jsonl "$$RAW_SPLIT/valid.jsonl" --output-dir "$$RECURRENT_SPLIT" --max-updates 4 --seed 20260730
+      python scripts/merge_recurrent_full_corpus.py --train-jsonl "$$RECURRENT_SPLIT/train.jsonl" --valid-jsonl "$$RECURRENT_SPLIT/valid.jsonl" --output-jsonl "$$SOURCE" --manifest "$$RECURRENT_SPLIT/final_fit_manifest.json"
+      test "$$(sha256sum "$$SOURCE" | cut -d' ' -f1)" = 9961f746cb17e6c314e182d3453b6157022fb48b8de44d2e68bc8e87a1131ccd
+      rm -rf "$$LOCAL_MODEL"
+      mkdir -p "$$LOCAL_MODEL"
+      python scripts/copy_model_parallel.py --source /mnt/amulet/studentmodeling/models/Qwen3-32B --destination "$$LOCAL_MODEL" --workers 16
+      test -f "$$LOCAL_MODEL/model.safetensors.index.json"
+      nvidia-smi --query-gpu=index,name,memory.total --format=csv,noheader
+      start_ns=$$(date +%s%N)
+      python -u scripts/build_teacher_cache.py \
+          --model "$$LOCAL_MODEL" \
+          --teacher-adapter "$$TEACHER_ADAPTER" \
+          --jsonl "$$SOURCE" \
+          --output-dir "$$OUT" \
+          --state-token-alias '<|vision_pad|>' \
+          --max-length 1536 \
+          --top-k 256 \
+          --shard-size 128 \
+          --order-seed 42 \
+          --partition-index 0 \
+          --partition-count 1 \
+          --limit 128 \
+          --batch-size "$$BATCH_SIZE" \
+          --attn-implementation sdpa
+      end_ns=$$(date +%s%N)
+      python - "$$start_ns" "$$end_ns" "$$BATCH_SIZE" "$$AMLT_OUTPUT_DIR/bench/timing.json" <<'PY'
+      import json, sys
+      start_ns, end_ns, batch_size, output = sys.argv[1:]
+      elapsed = (int(end_ns) - int(start_ns)) / 1_000_000_000
+      with open(output, 'w', encoding='utf-8') as handle:
+          json.dump({
+              'batch_size': int(batch_size),
+              'rows': 128,
+              'elapsed_seconds': elapsed,
+              'rows_per_second': 128 / elapsed,
+          }, handle, indent=2, sort_keys=True)
+          handle.write('\n')
+      PY
+      python scripts/finalize_teacher_cache.py --cache-dir "$$OUT"
+      cp "$$OUT/manifest.json" "$$AMLT_OUTPUT_DIR/bench/manifest.json"
+      cp "$$OUT/integrity.json" "$$AMLT_OUTPUT_DIR/bench/integrity.json"
+      cp "$$OUT/index.json" "$$AMLT_OUTPUT_DIR/bench/index.json"
+      cp "$$OUT"/shard-*.pt "$$AMLT_OUTPUT_DIR/bench/"
+    submit_args:
+      max_attempts: 1
+      max_run_duration_seconds: 7200
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        BATCH_SIZE: "1"
+
+  - name: cache-bench-b4-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *bench_command
+    submit_args:
+      max_attempts: 1
+      max_run_duration_seconds: 7200
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        BATCH_SIZE: "4"

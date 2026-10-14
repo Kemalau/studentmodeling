@@ -1,0 +1,140 @@
+# yaml-language-server: $schema=file:///home/v-yuejiali/studentmodeling/workspace/experiments/unified_student_c1/.vscode/amlt-config.schema.json
+description: Probe and causally test the student-state alias in the one-epoch method-small fully-open Qwen3-32B adapter
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-c4-venv
+    - /tmp/studentmodeling-c4-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-c4-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore:
+    - .git/
+    - .vscode/
+    - amlt/
+    - data/
+    - results/
+    - __pycache__/
+    - '*.pyc'
+
+storage:
+  student_data:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: false
+
+jobs:
+  - name: qwen3-32b-method-small-fullopen-c4-probe
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      export PATH="/tmp/studentmodeling-c4-venv/bin:$$PATH"
+      export PYTHONPATH="$$AMLT_CODE_DIR/scripts$${PYTHONPATH:+:$$PYTHONPATH}"
+      export HF_HOME=/tmp/hf_cache
+      export HF_HUB_CACHE=/tmp/hf_cache/hub
+      export HF_HUB_DISABLE_XET=1
+      export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+      export TRANSFORMERS_VERBOSITY=error
+      export LOCAL_MODEL=/tmp/Qwen3-32B
+      export ADAPTER=/mnt/amulet/projects/v-yuejiali/amlt-results/7215295067.10143-255b28af-1e91/model/final_adapter
+      export C4_DATA=/mnt/amulet/studentmodeling/c4_fullopen_20260724/malrule_c1_clean
+      mkdir -p "$$HF_HUB_CACHE" "$$AMLT_OUTPUT_DIR/c4"
+      available_kb=$$(df --output=avail /tmp | tail -1)
+      test "$$available_kb" -ge 125829120
+      rm -rf "$$LOCAL_MODEL"
+      mkdir -p "$$LOCAL_MODEL"
+      python scripts/copy_model_parallel.py \
+        --source /mnt/amulet/studentmodeling/models/Qwen3-32B \
+        --destination "$$LOCAL_MODEL" \
+        --workers 16
+      test -f "$$LOCAL_MODEL/model.safetensors.index.json"
+      test -f "$$ADAPTER/adapter_model.safetensors"
+      test -f "$$C4_DATA/train.jsonl"
+      test -f "$$C4_DATA/test_same_template.jsonl"
+      test -f "$$C4_DATA/test_cross_template.jsonl"
+      sha256sum "$$C4_DATA/train.jsonl" "$$C4_DATA/test_same_template.jsonl" "$$C4_DATA/test_cross_template.jsonl" \
+        | tee "$$AMLT_OUTPUT_DIR/c4/input_sha256.txt"
+      nvidia-smi --query-gpu=index,name,memory.total --format=csv,noheader
+      python -u scripts/probe_student_state_smoke.py \
+        --model "$$LOCAL_MODEL" \
+        --adapter "$$ADAPTER" \
+        --train-jsonl "$$C4_DATA/train.jsonl" \
+        --same-jsonl "$$C4_DATA/test_same_template.jsonl" \
+        --cross-jsonl "$$C4_DATA/test_cross_template.jsonl" \
+        --output-json "$$AMLT_OUTPUT_DIR/c4/probe.json" \
+        --task malrule_next_response \
+        --layers 0,8,16,24,32,40,48,56,63 \
+        --train-per-label 50 \
+        --eval-per-label 15 \
+        --max-length 1536 \
+        --batch-size 2 \
+        --epochs 250 \
+        --lr 0.1 \
+        --weight-decay 1e-4 \
+        --seed 42 \
+        --state-token-alias '<|vision_pad|>'
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+
+  - name: qwen3-32b-method-small-fullopen-c4-swap
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      export PATH="/tmp/studentmodeling-c4-venv/bin:$$PATH"
+      export PYTHONPATH="$$AMLT_CODE_DIR/scripts$${PYTHONPATH:+:$$PYTHONPATH}"
+      export HF_HOME=/tmp/hf_cache
+      export HF_HUB_CACHE=/tmp/hf_cache/hub
+      export HF_HUB_DISABLE_XET=1
+      export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+      export TRANSFORMERS_VERBOSITY=error
+      export LOCAL_MODEL=/tmp/Qwen3-32B
+      export ADAPTER=/mnt/amulet/projects/v-yuejiali/amlt-results/7215295067.10143-255b28af-1e91/model/final_adapter
+      export C4_DATA=/mnt/amulet/studentmodeling/c4_fullopen_20260724/malrule_c1_clean
+      mkdir -p "$$HF_HUB_CACHE" "$$AMLT_OUTPUT_DIR/c4"
+      available_kb=$$(df --output=avail /tmp | tail -1)
+      test "$$available_kb" -ge 125829120
+      rm -rf "$$LOCAL_MODEL"
+      mkdir -p "$$LOCAL_MODEL"
+      python scripts/copy_model_parallel.py \
+        --source /mnt/amulet/studentmodeling/models/Qwen3-32B \
+        --destination "$$LOCAL_MODEL" \
+        --workers 16
+      test -f "$$LOCAL_MODEL/model.safetensors.index.json"
+      test -f "$$ADAPTER/adapter_model.safetensors"
+      test -f "$$C4_DATA/test_same_template.jsonl"
+      sha256sum "$$C4_DATA/test_same_template.jsonl" | tee "$$AMLT_OUTPUT_DIR/c4/input_sha256.txt"
+      nvidia-smi --query-gpu=index,name,memory.total --format=csv,noheader
+      python -u scripts/state_swap_misconception_smoke.py \
+        --model "$$LOCAL_MODEL" \
+        --adapter "$$ADAPTER" \
+        --jsonl "$$C4_DATA/test_same_template.jsonl" \
+        --output-json "$$AMLT_OUTPUT_DIR/c4/swap.json" \
+        --task malrule_next_response \
+        --swap-target response \
+        --layers all \
+        --num-pairs 150 \
+        --max-length 1536 \
+        --seed 42 \
+        --state-token-alias '<|vision_pad|>'
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml

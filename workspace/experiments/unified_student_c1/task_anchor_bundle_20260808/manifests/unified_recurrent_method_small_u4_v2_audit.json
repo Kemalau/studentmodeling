@@ -1,0 +1,85 @@
+{
+  "ignored_non_student_sentinels": {
+    "eedi_mining": [
+      "eedi_mining::NO_STUDENT_HISTORY"
+    ]
+  },
+  "required_tasks": [
+    "diagnose_misconception",
+    "predict_correctness",
+    "predict_error_persistence",
+    "predict_prospective_error",
+    "predict_response"
+  ],
+  "status": "passed",
+  "train": {
+    "carrier_errors": 0,
+    "cold_start_rows": 11,
+    "decoder_history_leaks": 0,
+    "path": "data/processed/unified_recurrent_method_small_u4_v2/train.jsonl",
+    "rows": 12000,
+    "sequence_semantics": {
+      "chronological_trajectory": 9589,
+      "cold_start_no_observation": 11,
+      "non_temporal_profile_deterministic_serialization": 1400,
+      "single_observed_wrong_response": 1000
+    },
+    "sha256": "a1cd24e8845c33ee1fa5f3691383098875193c6c05c5ac9f68004fe072e1bc95",
+    "sources": {
+      "dbe_kt22": 1614,
+      "eedi_mining": 1000,
+      "eedi_response": 1400,
+      "foundationalassist": 4686,
+      "malrule": 2100,
+      "xes3g5m": 1200
+    },
+    "tasks": {
+      "diagnose_misconception": 1700,
+      "predict_correctness": 4100,
+      "predict_error_persistence": 1000,
+      "predict_prospective_error": 2300,
+      "predict_response": 2900
+    },
+    "unique_examples": 12000
+  },
+  "train_valid_example_overlap": 0,
+  "train_valid_real_student_overlap": {
+    "dbe_kt22": 0,
+    "eedi_mining": 0,
+    "eedi_response": 0,
+    "foundationalassist": 0,
+    "malrule": 0,
+    "xes3g5m": 0
+  },
+  "valid": {
+    "carrier_errors": 0,
+    "cold_start_rows": 2,
+    "decoder_history_leaks": 0,
+    "path": "data/processed/unified_recurrent_method_small_u4_v2/valid.jsonl",
+    "rows": 2900,
+    "sequence_semantics": {
+      "chronological_trajectory": 2298,
+      "cold_start_no_observation": 2,
+      "non_temporal_profile_deterministic_serialization": 400,
+      "single_observed_wrong_response": 200
+    },
+    "sha256": "99f9dd4adb2befb328b97265ed1ad3859a7145d47dbc9e7fe17cca80d9d045fd",
+    "sources": {
+      "dbe_kt22": 375,
+      "eedi_mining": 200,
+      "eedi_response": 400,
+      "foundationalassist": 1325,
+      "malrule": 300,
+      "xes3g5m": 300
+    },
+    "tasks": {
+      "diagnose_misconception": 300,
+      "predict_correctness": 1020,
+      "predict_error_persistence": 240,
+      "predict_prospective_error": 620,
+      "predict_response": 720
+    },
+    "unique_examples": 2900
+  },
+  "version": 1
+}

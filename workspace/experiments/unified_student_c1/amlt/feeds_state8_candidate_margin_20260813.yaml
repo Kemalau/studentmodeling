@@ -1,0 +1,62 @@
+description: Read-only teacher/full-history versus recurrent-State8 Eedi candidate-margin audit
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-state8-candidate-margin-venv
+    - /tmp/studentmodeling-state8-candidate-margin-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-state8-candidate-margin-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: state8-candidate-margin-student-cp3000
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: &command |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_state8_candidate_margin.sh | cut -d' ' -f1)" = f6b8c6d29871fab422ab9805c926aa98a69180ee5122c0476b9f1d1ead45e168
+      bash scripts/run_state8_candidate_margin.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 10800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-candidate-margin-venv
+        AUDIT_MODE: student
+        ADAPTER_ROOT: /mnt/amulet/studentmodeling/checkpoint_snapshots/state8_diagnosis_first_eedi_current_query_curriculum_20260812/checkpoint-3000/adapter
+        ADAPTER_SHA256: 566bd6a488523bd59610767e019c53c5f1609b760a1ab1d1fcf6cbaabc95cabd
+        RECURRENT_STATE: /mnt/amulet/studentmodeling/checkpoint_snapshots/state8_diagnosis_first_eedi_current_query_curriculum_20260812/checkpoint-3000/recurrent_state.pt
+        RECURRENT_STATE_SHA256: 5e0b0d40ee5dee2429f641270cdbb83e66b96172cd53e3336e84ac9b6564ac73
+
+  - name: state8-candidate-margin-teacher
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 10800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-candidate-margin-venv
+        AUDIT_MODE: teacher
+        ADAPTER_ROOT: /mnt/amulet/studentmodeling/diagnostics/state8_diagnosis_first_full_history_teacher_v1/model
+        ADAPTER_RECEIPT: /mnt/amulet/studentmodeling/diagnostics/state8_diagnosis_first_full_history_teacher_v1/metrics/publish_receipt.json

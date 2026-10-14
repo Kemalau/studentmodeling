@@ -1,0 +1,488 @@
+description: 'Same-question State8 exact-epoch final evaluation: 16 formal shards,
+  three MalRule answer/diagnosis C4 seeds, and one frozen 150-pair Eedi C4'
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+  - python -m venv --system-site-packages /tmp/studentmodeling-state8-final-eval-venv
+  - /tmp/studentmodeling-state8-final-eval-venv/bin/python -m pip install --upgrade
+    pip
+  - /tmp/studentmodeling-state8-final-eval-venv/bin/python -m pip install -r requirements-feeds.txt
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore:
+  - .git/
+  - .vscode/
+  - amlt/
+  - data/
+  - results/
+  - __pycache__/
+  - '*.pyc'
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+jobs:
+- name: state8-final-formal-shard00
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: 'set -euo pipefail
+
+    trap ''rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc"
+    "$${BASH_COMMAND}" >&2; exit "$$rc"'' ERR
+
+    bash scripts/run_state8_eedi_same_question_final_formal_shard.sh
+
+    '
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 259200
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      VENV_ROOT: /tmp/studentmodeling-state8-final-eval-venv
+      NUM_SHARDS: '16'
+      SHARD_INDEX: '0'
+      STATE8_FINAL_EVAL_RUN_DIR: /mnt/amulet/studentmodeling/checkpoints/state8_eedi_same_question_unified_canonical_v1_20260811
+      STATE8_FINAL_EVAL_PROGRESS_NAMESPACE: state8_eedi_same_question_final_full259845
+- name: state8-final-formal-shard01
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: 'set -euo pipefail
+
+    trap ''rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc"
+    "$${BASH_COMMAND}" >&2; exit "$$rc"'' ERR
+
+    bash scripts/run_state8_eedi_same_question_final_formal_shard.sh
+
+    '
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 259200
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      VENV_ROOT: /tmp/studentmodeling-state8-final-eval-venv
+      NUM_SHARDS: '16'
+      SHARD_INDEX: '1'
+      STATE8_FINAL_EVAL_RUN_DIR: /mnt/amulet/studentmodeling/checkpoints/state8_eedi_same_question_unified_canonical_v1_20260811
+      STATE8_FINAL_EVAL_PROGRESS_NAMESPACE: state8_eedi_same_question_final_full259845
+- name: state8-final-formal-shard02
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: 'set -euo pipefail
+
+    trap ''rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc"
+    "$${BASH_COMMAND}" >&2; exit "$$rc"'' ERR
+
+    bash scripts/run_state8_eedi_same_question_final_formal_shard.sh
+
+    '
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 259200
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      VENV_ROOT: /tmp/studentmodeling-state8-final-eval-venv
+      NUM_SHARDS: '16'
+      SHARD_INDEX: '2'
+      STATE8_FINAL_EVAL_RUN_DIR: /mnt/amulet/studentmodeling/checkpoints/state8_eedi_same_question_unified_canonical_v1_20260811
+      STATE8_FINAL_EVAL_PROGRESS_NAMESPACE: state8_eedi_same_question_final_full259845
+- name: state8-final-formal-shard03
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: 'set -euo pipefail
+
+    trap ''rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc"
+    "$${BASH_COMMAND}" >&2; exit "$$rc"'' ERR
+
+    bash scripts/run_state8_eedi_same_question_final_formal_shard.sh
+
+    '
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 259200
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      VENV_ROOT: /tmp/studentmodeling-state8-final-eval-venv
+      NUM_SHARDS: '16'
+      SHARD_INDEX: '3'
+      STATE8_FINAL_EVAL_RUN_DIR: /mnt/amulet/studentmodeling/checkpoints/state8_eedi_same_question_unified_canonical_v1_20260811
+      STATE8_FINAL_EVAL_PROGRESS_NAMESPACE: state8_eedi_same_question_final_full259845
+- name: state8-final-formal-shard04
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: 'set -euo pipefail
+
+    trap ''rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc"
+    "$${BASH_COMMAND}" >&2; exit "$$rc"'' ERR
+
+    bash scripts/run_state8_eedi_same_question_final_formal_shard.sh
+
+    '
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 259200
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      VENV_ROOT: /tmp/studentmodeling-state8-final-eval-venv
+      NUM_SHARDS: '16'
+      SHARD_INDEX: '4'
+      STATE8_FINAL_EVAL_RUN_DIR: /mnt/amulet/studentmodeling/checkpoints/state8_eedi_same_question_unified_canonical_v1_20260811
+      STATE8_FINAL_EVAL_PROGRESS_NAMESPACE: state8_eedi_same_question_final_full259845
+- name: state8-final-formal-shard05
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: 'set -euo pipefail
+
+    trap ''rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc"
+    "$${BASH_COMMAND}" >&2; exit "$$rc"'' ERR
+
+    bash scripts/run_state8_eedi_same_question_final_formal_shard.sh
+
+    '
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 259200
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      VENV_ROOT: /tmp/studentmodeling-state8-final-eval-venv
+      NUM_SHARDS: '16'
+      SHARD_INDEX: '5'
+      STATE8_FINAL_EVAL_RUN_DIR: /mnt/amulet/studentmodeling/checkpoints/state8_eedi_same_question_unified_canonical_v1_20260811
+      STATE8_FINAL_EVAL_PROGRESS_NAMESPACE: state8_eedi_same_question_final_full259845
+- name: state8-final-formal-shard06
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: 'set -euo pipefail
+
+    trap ''rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc"
+    "$${BASH_COMMAND}" >&2; exit "$$rc"'' ERR
+
+    bash scripts/run_state8_eedi_same_question_final_formal_shard.sh
+
+    '
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 259200
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      VENV_ROOT: /tmp/studentmodeling-state8-final-eval-venv
+      NUM_SHARDS: '16'
+      SHARD_INDEX: '6'
+      STATE8_FINAL_EVAL_RUN_DIR: /mnt/amulet/studentmodeling/checkpoints/state8_eedi_same_question_unified_canonical_v1_20260811
+      STATE8_FINAL_EVAL_PROGRESS_NAMESPACE: state8_eedi_same_question_final_full259845
+- name: state8-final-formal-shard07
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: 'set -euo pipefail
+
+    trap ''rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc"
+    "$${BASH_COMMAND}" >&2; exit "$$rc"'' ERR
+
+    bash scripts/run_state8_eedi_same_question_final_formal_shard.sh
+
+    '
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 259200
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      VENV_ROOT: /tmp/studentmodeling-state8-final-eval-venv
+      NUM_SHARDS: '16'
+      SHARD_INDEX: '7'
+      STATE8_FINAL_EVAL_RUN_DIR: /mnt/amulet/studentmodeling/checkpoints/state8_eedi_same_question_unified_canonical_v1_20260811
+      STATE8_FINAL_EVAL_PROGRESS_NAMESPACE: state8_eedi_same_question_final_full259845
+- name: state8-final-formal-shard08
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: 'set -euo pipefail
+
+    trap ''rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc"
+    "$${BASH_COMMAND}" >&2; exit "$$rc"'' ERR
+
+    bash scripts/run_state8_eedi_same_question_final_formal_shard.sh
+
+    '
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 259200
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      VENV_ROOT: /tmp/studentmodeling-state8-final-eval-venv
+      NUM_SHARDS: '16'
+      SHARD_INDEX: '8'
+      STATE8_FINAL_EVAL_RUN_DIR: /mnt/amulet/studentmodeling/checkpoints/state8_eedi_same_question_unified_canonical_v1_20260811
+      STATE8_FINAL_EVAL_PROGRESS_NAMESPACE: state8_eedi_same_question_final_full259845
+- name: state8-final-formal-shard09
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: 'set -euo pipefail
+
+    trap ''rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc"
+    "$${BASH_COMMAND}" >&2; exit "$$rc"'' ERR
+
+    bash scripts/run_state8_eedi_same_question_final_formal_shard.sh
+
+    '
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 259200
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      VENV_ROOT: /tmp/studentmodeling-state8-final-eval-venv
+      NUM_SHARDS: '16'
+      SHARD_INDEX: '9'
+      STATE8_FINAL_EVAL_RUN_DIR: /mnt/amulet/studentmodeling/checkpoints/state8_eedi_same_question_unified_canonical_v1_20260811
+      STATE8_FINAL_EVAL_PROGRESS_NAMESPACE: state8_eedi_same_question_final_full259845
+- name: state8-final-formal-shard10
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: 'set -euo pipefail
+
+    trap ''rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc"
+    "$${BASH_COMMAND}" >&2; exit "$$rc"'' ERR
+
+    bash scripts/run_state8_eedi_same_question_final_formal_shard.sh
+
+    '
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 259200
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      VENV_ROOT: /tmp/studentmodeling-state8-final-eval-venv
+      NUM_SHARDS: '16'
+      SHARD_INDEX: '10'
+      STATE8_FINAL_EVAL_RUN_DIR: /mnt/amulet/studentmodeling/checkpoints/state8_eedi_same_question_unified_canonical_v1_20260811
+      STATE8_FINAL_EVAL_PROGRESS_NAMESPACE: state8_eedi_same_question_final_full259845
+- name: state8-final-formal-shard11
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: 'set -euo pipefail
+
+    trap ''rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc"
+    "$${BASH_COMMAND}" >&2; exit "$$rc"'' ERR
+
+    bash scripts/run_state8_eedi_same_question_final_formal_shard.sh
+
+    '
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 259200
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      VENV_ROOT: /tmp/studentmodeling-state8-final-eval-venv
+      NUM_SHARDS: '16'
+      SHARD_INDEX: '11'
+      STATE8_FINAL_EVAL_RUN_DIR: /mnt/amulet/studentmodeling/checkpoints/state8_eedi_same_question_unified_canonical_v1_20260811
+      STATE8_FINAL_EVAL_PROGRESS_NAMESPACE: state8_eedi_same_question_final_full259845
+- name: state8-final-formal-shard12
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: 'set -euo pipefail
+
+    trap ''rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc"
+    "$${BASH_COMMAND}" >&2; exit "$$rc"'' ERR
+
+    bash scripts/run_state8_eedi_same_question_final_formal_shard.sh
+
+    '
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 259200
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      VENV_ROOT: /tmp/studentmodeling-state8-final-eval-venv
+      NUM_SHARDS: '16'
+      SHARD_INDEX: '12'
+      STATE8_FINAL_EVAL_RUN_DIR: /mnt/amulet/studentmodeling/checkpoints/state8_eedi_same_question_unified_canonical_v1_20260811
+      STATE8_FINAL_EVAL_PROGRESS_NAMESPACE: state8_eedi_same_question_final_full259845
+- name: state8-final-formal-shard13
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: 'set -euo pipefail
+
+    trap ''rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc"
+    "$${BASH_COMMAND}" >&2; exit "$$rc"'' ERR
+
+    bash scripts/run_state8_eedi_same_question_final_formal_shard.sh
+
+    '
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 259200
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      VENV_ROOT: /tmp/studentmodeling-state8-final-eval-venv
+      NUM_SHARDS: '16'
+      SHARD_INDEX: '13'
+      STATE8_FINAL_EVAL_RUN_DIR: /mnt/amulet/studentmodeling/checkpoints/state8_eedi_same_question_unified_canonical_v1_20260811
+      STATE8_FINAL_EVAL_PROGRESS_NAMESPACE: state8_eedi_same_question_final_full259845
+- name: state8-final-formal-shard14
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: 'set -euo pipefail
+
+    trap ''rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc"
+    "$${BASH_COMMAND}" >&2; exit "$$rc"'' ERR
+
+    bash scripts/run_state8_eedi_same_question_final_formal_shard.sh
+
+    '
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 259200
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      VENV_ROOT: /tmp/studentmodeling-state8-final-eval-venv
+      NUM_SHARDS: '16'
+      SHARD_INDEX: '14'
+      STATE8_FINAL_EVAL_RUN_DIR: /mnt/amulet/studentmodeling/checkpoints/state8_eedi_same_question_unified_canonical_v1_20260811
+      STATE8_FINAL_EVAL_PROGRESS_NAMESPACE: state8_eedi_same_question_final_full259845
+- name: state8-final-formal-shard15
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: 'set -euo pipefail
+
+    trap ''rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc"
+    "$${BASH_COMMAND}" >&2; exit "$$rc"'' ERR
+
+    bash scripts/run_state8_eedi_same_question_final_formal_shard.sh
+
+    '
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 259200
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      VENV_ROOT: /tmp/studentmodeling-state8-final-eval-venv
+      NUM_SHARDS: '16'
+      SHARD_INDEX: '15'
+      STATE8_FINAL_EVAL_RUN_DIR: /mnt/amulet/studentmodeling/checkpoints/state8_eedi_same_question_unified_canonical_v1_20260811
+      STATE8_FINAL_EVAL_PROGRESS_NAMESPACE: state8_eedi_same_question_final_full259845
+- name: state8-final-c4-seed13
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: 'set -euo pipefail
+
+    trap ''rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc"
+    "$${BASH_COMMAND}" >&2; exit "$$rc"'' ERR
+
+    bash scripts/run_state8_eedi_same_question_final_malrule_c4.sh
+
+    '
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 259200
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      VENV_ROOT: /tmp/studentmodeling-state8-final-eval-venv
+      PAIR_SEED: '13'
+      PAIR_MANIFEST_SHA256: 9856e643848d11a834761e3d28fb078f6eb70fa6c42fc468c3eb1b3a1aafd693
+      STATE8_FINAL_EVAL_RUN_DIR: /mnt/amulet/studentmodeling/checkpoints/state8_eedi_same_question_unified_canonical_v1_20260811
+      STATE8_FINAL_EVAL_PROGRESS_NAMESPACE: state8_eedi_same_question_final_full259845
+- name: state8-final-c4-seed42
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: 'set -euo pipefail
+
+    trap ''rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc"
+    "$${BASH_COMMAND}" >&2; exit "$$rc"'' ERR
+
+    bash scripts/run_state8_eedi_same_question_final_malrule_c4.sh
+
+    '
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 259200
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      VENV_ROOT: /tmp/studentmodeling-state8-final-eval-venv
+      PAIR_SEED: '42'
+      PAIR_MANIFEST_SHA256: edcdb934a65252557f6c569eea9ef7a85e5445549deac9fb4829c3f579e1a9b8
+      STATE8_FINAL_EVAL_RUN_DIR: /mnt/amulet/studentmodeling/checkpoints/state8_eedi_same_question_unified_canonical_v1_20260811
+      STATE8_FINAL_EVAL_PROGRESS_NAMESPACE: state8_eedi_same_question_final_full259845
+- name: state8-final-c4-seed97
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: 'set -euo pipefail
+
+    trap ''rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc"
+    "$${BASH_COMMAND}" >&2; exit "$$rc"'' ERR
+
+    bash scripts/run_state8_eedi_same_question_final_malrule_c4.sh
+
+    '
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 259200
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      VENV_ROOT: /tmp/studentmodeling-state8-final-eval-venv
+      PAIR_SEED: '97'
+      PAIR_MANIFEST_SHA256: 15ed710992abd71c37bdfa2246a5a38b5eb422e70ecbfb6da933be013d6d9118
+      STATE8_FINAL_EVAL_RUN_DIR: /mnt/amulet/studentmodeling/checkpoints/state8_eedi_same_question_unified_canonical_v1_20260811
+      STATE8_FINAL_EVAL_PROGRESS_NAMESPACE: state8_eedi_same_question_final_full259845
+- name: state8-final-eedi-same-question-c4-final150
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: 'set -euo pipefail
+
+    trap ''rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc"
+    "$${BASH_COMMAND}" >&2; exit "$$rc"'' ERR
+
+    bash scripts/run_state8_eedi_same_question_final_eedi_c4.sh
+
+    '
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 259200
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      VENV_ROOT: /tmp/studentmodeling-state8-final-eval-venv
+      STATE8_FINAL_EVAL_RUN_DIR: /mnt/amulet/studentmodeling/checkpoints/state8_eedi_same_question_unified_canonical_v1_20260811
+      STATE8_FINAL_EVAL_PROGRESS_NAMESPACE: state8_eedi_same_question_final_full259845

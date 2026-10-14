@@ -1,0 +1,68 @@
+# Derived from accepted feeds_c4_execution_training_v1_recovery1_20260906.yaml.
+description: 'Frozen C4 A/B final checkpoints: unseen-rule generalization; 864 candidate-free
+  generations per arm; inference only'
+target:
+  service: manifold
+  name: Feeds-LLM
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+  - python -m venv --system-site-packages /tmp/studentmodeling-c4-freegen-venv
+  - /tmp/studentmodeling-c4-freegen-venv/bin/python -m pip install -r requirements-feeds.txt
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore:
+  - '*'
+  - '!requirements-feeds.txt'
+  - '!scripts/'
+  - scripts/*
+  - '!scripts/copy_model_parallel.py'
+  - '!scripts/train_c1_lora.py'
+  - '!scripts/state_swap_misconception_smoke.py'
+  - '!scripts/c4_freegen_protocol.py'
+  - '!scripts/c4_rule_followup.py'
+  - '!scripts/c4_execution_data.py'
+  - '!scripts/c4_execution_model.py'
+  - '!scripts/c4_unseen_rules.py'
+  - '!scripts/evaluate_c4_unseen_rules.py'
+  - '!scripts/preflight_c4_unseen_rules.py'
+  - '!scripts/run_c4_unseen_rules_feeds.sh'
+  - '!manifests/'
+  - manifests/*
+  - '!manifests/c4_unseen_rules_v1_20260906.json'
+  - '!manifests/c4_unseen_rules_v1_feedsllm_20260906.sha256'
+  - '!reports/'
+  - reports/*
+  - '!reports/c4_unseen_rules_protocol_20260906.md'
+  - __pycache__/
+  - '*.pyc'
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+jobs:
+- name: c4-unseen-rules-arm-a-seed42
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: bash scripts/run_c4_unseen_rules_feeds.sh A
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 14400
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+- name: c4-unseen-rules-arm-b-seed42
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: bash scripts/run_c4_unseen_rules_feeds.sh B
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 14400
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml

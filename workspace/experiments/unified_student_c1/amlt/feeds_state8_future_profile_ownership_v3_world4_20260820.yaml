@@ -1,0 +1,61 @@
+# Derived from the validated single-A100 ownership-v3 recovery.  This preserves
+# the global batch (4), optimizer steps (250), sample order, seed, and objective,
+# while assigning one data-parallel rank to each GPU of an 80G4 node.
+description: Four-A100 exact data-parallel State8 ownership-v3 completion
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-state8-profile-ownership-world4-venv
+    - /tmp/studentmodeling-state8-profile-ownership-world4-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-state8-profile-ownership-world4-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore:
+    - .git/
+    - .vscode/
+    - .pytest_cache/
+    - amlt/
+    - data/
+    - results/
+    - reports/
+    - state8_exact_scientific_rescue_bundle_20260808/
+    - state8_midpoint_diagnosis_first_bundle_20260808/
+    - strong1_rescue_bundle_20260808/
+    - task_anchor_bundle_20260808/
+    - __pycache__/
+    - '*.pyc'
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: state8-future-profile-ownership-seed8801-v3-world4
+    sku: 80G4-A100
+    process_count_per_node: -1
+    mpi: true
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_state8_student_profile_readout.sh | cut -d' ' -f1)" = 3fd01b0a79a229ceb37dd48beeb468eb3d1a6ab4abdc4c7f4d408f5a18f4f445
+      export PROFILE_READOUT_DISTRIBUTED_WORLD_SIZE=4
+      export PROFILE_READOUT_GRADIENT_ACCUMULATION_STEPS=1
+      export PROFILE_READOUT_RUN_DIR=/mnt/amulet/studentmodeling/checkpoints/state8_future_profile_ownership_seed8801_v3_world4
+      export PROFILE_READOUT_STABLE_DIR=/mnt/amulet/studentmodeling/diagnostics/state8_future_profile_ownership_seed8801_v3_world4
+      bash scripts/run_state8_student_profile_readout.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-profile-ownership-world4-venv

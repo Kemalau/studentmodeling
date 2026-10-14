@@ -1,0 +1,41 @@
+description: Frozen State8 reusable student-profile readout on future-validated DBE-KT22 outcomes
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-dbe-profile-venv
+    - /tmp/studentmodeling-dbe-profile-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-dbe-profile-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: dbe-state8-student-profile-probe
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_dbe_student_profile_probe.sh | cut -d' ' -f1)" = 50d59de357cf96902474790d790cc0a07c49bca6a983919e8b0568fc191ad536
+      bash scripts/run_dbe_student_profile_probe.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-dbe-profile-venv

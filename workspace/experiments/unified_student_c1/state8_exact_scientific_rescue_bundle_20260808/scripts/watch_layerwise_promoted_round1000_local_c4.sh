@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+export AZURE_CONFIG_DIR=/home/v-yuejiali/.azure-studentmodeling-feeds
+export STATE_SLUG=task_retention_promoted_final_fit
+export LOCAL_C4_SUBDIR=local_round1000_c4
+export CHECKPOINT_ROUND=1000
+export EXPECTED_WORLD_SIZE=16
+export ARTIFACT_LABEL=promoted-eedi-full-open-t3-state-path-lr2e6
+export EXPECTED_PROMOTED_MANIFEST=/home/v-yuejiali/studentmodeling/workspace/experiments/unified_student_c1/results/layerwise_unified_final_pipeline_20260731/task_retention_promoted_final_fit/selected.json
+export REMOTE_PREFIX=studentmodeling/checkpoints/layerwise_unified_world_model_seed42_taskretention_eedi_full_open_t3_state_path_v1_20260802/checkpoint-round-1000
+exec bash /home/v-yuejiali/studentmodeling/workspace/experiments/unified_student_c1/scripts/watch_layerwise_remote_checkpoint_local_c4.sh

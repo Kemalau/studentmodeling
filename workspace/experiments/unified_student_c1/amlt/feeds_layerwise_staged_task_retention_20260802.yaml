@@ -1,0 +1,47 @@
+# Generated from `amlt template -t Feeds -n 1` and filled with the approved
+# immutable environment used by the matched task-retention diagnostics.
+# yaml-language-server: $schema=file:///home/v-yuejiali/studentmodeling/workspace/experiments/unified_student_c1/.vscode/amlt-config.schema.json
+description: Three-phase T3 formation and balanced T6 consolidation diagnostic from immutable layerwise round-750
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-layerwise-staged-venv
+    - /tmp/studentmodeling-layerwise-staged-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-layerwise-staged-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: layerwise-staged-t3-t6-standard-seed42
+    sku: 80G4-A100
+    process_count_per_node: -1
+    mpi: true
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      bash scripts/run_layerwise_task_retention_rehearsal.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-layerwise-staged-venv
+        BRANCH: staged_t3_t6
+        LOSS_PROFILE: standard
+        MANIFEST: manifests/layerwise_task_retention_staged_t3_t6_seed42_v1.json
+        MANIFEST_SHA256: a4eb41b2130f7e0810eeff36b5f3d16b8dd2c8631c50dbd25216f0793af23557

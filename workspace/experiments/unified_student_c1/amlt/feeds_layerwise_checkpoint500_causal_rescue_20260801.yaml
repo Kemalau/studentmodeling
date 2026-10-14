@@ -1,0 +1,250 @@
+# Generated from `amlt template -t Feeds -f amlt/feeds_layerwise_checkpoint500_causal_rescue_20260801.yaml -y`.
+# yaml-language-server: $schema=file:///home/v-yuejiali/studentmodeling/workspace/experiments/unified_student_c1/.vscode/amlt-config.schema.json
+description: Conditional two-arm causal-specificity rescue from the immutable layerwise round-500 checkpoint
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-layerwise-causal-rescue-venv
+    - /tmp/studentmodeling-layerwise-causal-rescue-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-layerwise-causal-rescue-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore:
+    - .git/
+    - .vscode/
+    - amlt/
+    - data/
+    - results/
+    - __pycache__/
+    - '*.pyc'
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: layerwise-c500-rescue-dense-same-total-seed42
+    sku: 80G4-A100
+    process_count_per_node: -1
+    mpi: true
+    sla_tier: Standard
+    command: &rescue_command |
+      set -euo pipefail
+      export PATH="/tmp/studentmodeling-layerwise-causal-rescue-venv/bin:$$PATH"
+      export PYTHONPATH="$$AMLT_CODE_DIR/scripts$${PYTHONPATH:+:$$PYTHONPATH}"
+      export HF_HOME=/tmp/hf_cache
+      export HF_HUB_CACHE=/tmp/hf_cache/hub
+      export HF_HUB_DISABLE_XET=1
+      export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+      export TRANSFORMERS_VERBOSITY=error
+      : "$${BRANCH:?BRANCH is required}"
+      : "$${CAUSAL_REPEAT_FRACTION:?CAUSAL_REPEAT_FRACTION is required}"
+      : "$${CAUSAL_WEIGHT:?CAUSAL_WEIGHT is required}"
+      export LOCAL_MODEL=/tmp/Qwen3-32B
+      export RAW_FULL=/mnt/amulet/studentmodeling/full_trainplusvalid_no_t4_strict_t6/train.jsonl
+      export RAW_SPLIT=/tmp/layerwise_rescue_full_trainvalid_v1
+      export RECURRENT_SPLIT=/tmp/layerwise_rescue_recurrent_full259845_u4_v1
+      export FINAL_JSONL="$$RECURRENT_SPLIT/final_fit_trainvalid.jsonl"
+      export C4_DATA=/mnt/amulet/studentmodeling/c4_fullopen_20260724/malrule_c1_clean
+      export CAUSAL_DATA=/tmp/layerwise_rescue_cf4_u4_v1
+      export CACHE_ROOT=/mnt/amulet/studentmodeling/world_model_v1/final_fit/cache_full259845_top256_seed42_v2_16way
+      export CHECKPOINT=/mnt/amulet/studentmodeling/diagnostics/layerwise_unified_finalfit_seed42_20260801_snapshot/checkpoint-round-500
+      export RUN_DIR="/mnt/amulet/studentmodeling/diagnostics/layerwise_checkpoint500_causal_rescue_$${BRANCH}_seed42_20260801"
+      export C4_PROGRESS_DIR="$$RUN_DIR/c4_eval_progress_v1"
+      mkdir -p "$$HF_HUB_CACHE" "$$RAW_SPLIT" "$$RECURRENT_SPLIT" "$$CAUSAL_DATA" \
+        "$$RUN_DIR" "$$C4_PROGRESS_DIR" "$$AMLT_OUTPUT_DIR/model" \
+        "$$AMLT_OUTPUT_DIR/metrics" "$$AMLT_OUTPUT_DIR/eval/c4"
+      test "$$(df --output=avail /tmp | tail -1)" -ge 125829120
+      test -f "$$RAW_FULL"
+      test -f "$$C4_DATA/train.jsonl"
+      test -f "$$C4_DATA/val.jsonl"
+      test -f "$$C4_DATA/test_same_template.jsonl"
+      test -f "$$CACHE_ROOT/integrity.json"
+      test -f "$$CACHE_ROOT/manifest.json"
+      test -f "$$CHECKPOINT/adapter/adapter_model.safetensors"
+      test -f "$$CHECKPOINT/recurrent_state.pt"
+      test -f "$$CHECKPOINT/checkpoint_completion.json"
+      test "$$(sha256sum scripts/train_recurrent_student_m4.py | cut -d' ' -f1)" = 4a9518f50c6840e068bda0848b50ef0332e239d5ed2475b0785f0fc71680561f
+      test "$$(sha256sum scripts/distributed_epoch.py | cut -d' ' -f1)" = 02187fb5c46f4edfaf947345a3de38082b9a108001510ebde3cc0ce4203c5098
+      test "$$(sha256sum scripts/frozen_layerwise_finalfit/layerwise_recurrent_student_model.py | cut -d' ' -f1)" = 1706a01450660c833534e487a8b7aad56a61541ce41cc17ca2c8ed16e2e23d3c
+      test "$$(sha256sum tests/frozen_layerwise_finalfit/test_layerwise_recurrent_student_model.py | cut -d' ' -f1)" = c71470252dbaaeebb2869b162e73f7a6e4edf34f75df48f156575bd3927992f2
+      test "$$(sha256sum scripts/evaluate_recurrent_causal_gate.py | cut -d' ' -f1)" = fd6510465abafbd897ac4acbf27dd0da14b179637ba9a632f4c5cb539214c5ad
+      test "$$(sha256sum scripts/split_full_mix_by_original_split.py | cut -d' ' -f1)" = 6dd0bab1e1e669a6012fbd6dc5947335294ec456a04b4c92dc68240e81974801
+      test "$$(sha256sum scripts/build_unified_recurrent_manifest.py | cut -d' ' -f1)" = 8bc822ec33165037dff8353707a037a0edc12679cd67b66885aa94a4288542f6
+      test "$$(sha256sum scripts/audit_unified_recurrent_manifest.py | cut -d' ' -f1)" = 6de4fcab57aa8dbd0b56f07972e341f64b60668474f03069cc47878a80e434a0
+      test "$$(sha256sum scripts/merge_recurrent_full_corpus.py | cut -d' ' -f1)" = 1bfdf4408867b03d171ef52f7c9c8b8dc328becf759dc304adaf5e37612c4e34
+      test "$$(sha256sum scripts/build_recurrent_causal_pairs.py | cut -d' ' -f1)" = 2daed709603a63a487705bce87539b58c7e01d239397758305d3b023f5eb26b7
+      test "$$(sha256sum scripts/teacher_cache.py | cut -d' ' -f1)" = 04f057df2ccdc174e3094bab1c79d9bdbee4c9c67657615f1e49c3e68903cc4b
+      test "$$(sha256sum scripts/audit_layerwise_distributed_checkpoint.py | cut -d' ' -f1)" = 6690ece8935c6343bec7136ad34a9899b72a866c7bde6286ca26b2c82890007f
+      test "$$(sha256sum manifests/cf4_balanced_paired_state_swap_train_seed20260731_v1.json | cut -d' ' -f1)" = 4e7907cf4d74eced4f4c5c2dddf7213a2649cddca081fd2b4a51f35934b35773
+      test "$$(sha256sum manifests/cf4_balanced_paired_state_swap_valid_seed20260801_v1.json | cut -d' ' -f1)" = 1a2f45ced0a123d40e1a9646035b07e3b31203567718e6de982cde24bc45def9
+      test "$$(sha256sum manifests/c4_stage_a_gate_pairs_seed42_n150_v1.json | cut -d' ' -f1)" = edcdb934a65252557f6c569eea9ef7a85e5445549deac9fb4829c3f579e1a9b8
+      cp scripts/frozen_layerwise_finalfit/layerwise_recurrent_student_model.py scripts/layerwise_recurrent_student_model.py
+      cp tests/frozen_layerwise_finalfit/test_layerwise_recurrent_student_model.py tests/test_layerwise_recurrent_student_model.py
+      python -m unittest discover -s tests -p 'test_train_recurrent_student_m4.py' -v
+      python -m unittest discover -s tests -p 'test_layerwise_recurrent_student_model.py' -v
+      python -m unittest discover -s tests -p 'test_distributed_epoch.py' -v
+      python -m unittest discover -s tests -p 'test_evaluate_recurrent_causal_gate.py' -v
+
+      exec 9>/tmp/layerwise-rescue-checkpoint-audit.lock
+      flock -x 9
+      if [[ ! -f /tmp/layerwise-rescue-checkpoint-audit.complete ]]; then
+        python scripts/audit_layerwise_distributed_checkpoint.py \
+          --checkpoint "$$CHECKPOINT/recurrent_state.pt" --expected-round 500 \
+          --output /tmp/layerwise-rescue-checkpoint-audit.json
+        python - /tmp/layerwise-rescue-checkpoint-audit.json <<'PY'
+      import json,sys
+      x=json.load(open(sys.argv[1],encoding='utf-8'))
+      assert x['status']=='passed' and x['exact_resume_ready'] is True,x
+      assert x['checkpoint_round']==500 and x['world_size']==16,x
+      assert x['history_rows']==8000 and x['observed_causal_history_rows']==400,x
+      PY
+        touch /tmp/layerwise-rescue-checkpoint-audit.complete
+      fi
+      flock -u 9
+
+      exec 8>/tmp/layerwise-rescue-data.lock
+      flock -x 8
+      if [[ ! -f /tmp/layerwise-rescue-data.complete ]]; then
+        rm -rf "$$RAW_SPLIT" "$$RECURRENT_SPLIT" "$$CAUSAL_DATA"
+        mkdir -p "$$RAW_SPLIT" "$$RECURRENT_SPLIT" "$$CAUSAL_DATA"
+        python scripts/split_full_mix_by_original_split.py \
+          --input-jsonl "$$RAW_FULL" --output-dir "$$RAW_SPLIT"
+        python scripts/build_unified_recurrent_manifest.py \
+          --train-jsonl "$$RAW_SPLIT/train.jsonl" --valid-jsonl "$$RAW_SPLIT/valid.jsonl" \
+          --output-dir "$$RECURRENT_SPLIT" --max-updates 4 --seed 20260730
+        python scripts/audit_unified_recurrent_manifest.py \
+          --train-jsonl "$$RECURRENT_SPLIT/train.jsonl" --valid-jsonl "$$RECURRENT_SPLIT/valid.jsonl" \
+          --output-json "$$RECURRENT_SPLIT/audit.json"
+        python scripts/merge_recurrent_full_corpus.py \
+          --train-jsonl "$$RECURRENT_SPLIT/train.jsonl" --valid-jsonl "$$RECURRENT_SPLIT/valid.jsonl" \
+          --output-jsonl "$$FINAL_JSONL" --manifest "$$RECURRENT_SPLIT/final_fit_manifest.json"
+        python scripts/build_recurrent_causal_pairs.py \
+          --train-source "$$C4_DATA/train.jsonl" --valid-source "$$C4_DATA/val.jsonl" \
+          --train-pairs manifests/cf4_balanced_paired_state_swap_train_seed20260731_v1.json \
+          --valid-pairs manifests/cf4_balanced_paired_state_swap_valid_seed20260801_v1.json \
+          --output-dir "$$CAUSAL_DATA" --max-updates 4
+        touch /tmp/layerwise-rescue-data.complete
+      fi
+      flock -u 8
+      test "$$(sha256sum "$$RECURRENT_SPLIT/train.jsonl" | cut -d' ' -f1)" = 2a2f650bb077196a79deaa7eac363d5224fd5936e9c51e60d3fd5f27775282c2
+      test "$$(sha256sum "$$RECURRENT_SPLIT/valid.jsonl" | cut -d' ' -f1)" = 78bfce75576dc3873cbb6459669a952adeedb8b77bda15f281af9519e2506d14
+      test "$$(sha256sum "$$FINAL_JSONL" | cut -d' ' -f1)" = 9961f746cb17e6c314e182d3453b6157022fb48b8de44d2e68bc8e87a1131ccd
+      test "$$(sha256sum "$$CAUSAL_DATA/train.jsonl" | cut -d' ' -f1)" = 30f68f54120e5a9ada0a37b1dba2b6480de0f8eaeac98d0b7ed7c627429f9766
+      test "$$(sha256sum "$$CAUSAL_DATA/valid.jsonl" | cut -d' ' -f1)" = 8e038c3a60c2e1b420779cd54eb203b12ae5d51544c87a805fe19d47fdbe294e
+
+      exec 7>/tmp/layerwise-rescue-model.lock
+      flock -x 7
+      if [[ ! -f /tmp/layerwise-rescue-model.complete ]]; then
+        rm -rf "$$LOCAL_MODEL"; mkdir -p "$$LOCAL_MODEL"
+        python scripts/copy_model_parallel.py \
+          --source /mnt/amulet/studentmodeling/models/Qwen3-32B \
+          --destination "$$LOCAL_MODEL" --workers 16
+        test -f "$$LOCAL_MODEL/model.safetensors.index.json"
+        touch /tmp/layerwise-rescue-model.complete
+      fi
+      flock -u 7
+
+      export CUDA_VISIBLE_DEVICES="$${OMPI_COMM_WORLD_LOCAL_RANK:?MPI local rank is required}"
+      export RANK="$${OMPI_COMM_WORLD_RANK:?MPI rank is required}"
+      export WORLD_SIZE="$${OMPI_COMM_WORLD_SIZE:?MPI world size is required}"
+      export LOCAL_RANK=0
+      rm -rf "$$RUN_DIR"
+      python -u scripts/train_recurrent_student_m4.py \
+        --model "$$LOCAL_MODEL" --init-adapter "$$CHECKPOINT/adapter" \
+        --state-architecture layerwise --layerwise-operation-checkpointing \
+        --layerwise-transition-rank 256 \
+        --train-jsonl "$$FINAL_JSONL" --valid-jsonl "$$RECURRENT_SPLIT/valid.jsonl" \
+        --causal-train-jsonl "$$CAUSAL_DATA/train.jsonl" \
+        --causal-valid-jsonl "$$CAUSAL_DATA/valid.jsonl" \
+        --teacher-cache "$$CACHE_ROOT" --behavior-kd-weight 0.5 --behavior-kd-temperature 1.0 \
+        --output-dir "$$RUN_DIR" --state-token-alias '<|vision_pad|>' \
+        --max-length 1536 --learning-rate 5e-7 --lr-scheduler constant \
+        --generation-weight 1.0 --consistency-weight 0.25 --direct-replay-weight 0.25 \
+        --causal-weight "$$CAUSAL_WEIGHT" --causal-margin 0.5 \
+        --causal-preference-reduction sum --causal-objective-mode specificity_triplet \
+        --causal-repeat-fraction "$$CAUSAL_REPEAT_FRACTION" --normalize-causal-exposure \
+        --gradient-accumulation-steps 1 --eval-limit 300 --causal-eval-limit 165 \
+        --save-steps 250 --checkpoint-retention 1 \
+        --diagnostic-warm-start-checkpoint "$$CHECKPOINT/recurrent_state.pt" \
+        --diagnostic-start-global-position 8000 --diagnostic-stop-after-round 2250 \
+        --distributed-mpi --distributed-world-size 4 --seed 42
+      if [[ "$${OMPI_COMM_WORLD_RANK:-0}" != 0 ]]; then exit 0; fi
+      python - "$$RUN_DIR" "$$BRANCH" "$$CAUSAL_REPEAT_FRACTION" "$$CAUSAL_WEIGHT" <<'PY'
+      import json,pathlib,sys
+      root=pathlib.Path(sys.argv[1]); branch=sys.argv[2]
+      completion=json.load(open(root/'completion.json',encoding='utf-8'))
+      config=json.load(open(root/'run_config.json',encoding='utf-8'))
+      expected_causal={'dense_same_total':100,'strong_same_density':50}[branch]
+      assert completion['status']=='diagnostic_complete' and completion['diagnostic'] is True,completion
+      assert completion['micro_steps']==1000 and completion['optimizer_steps']==250,completion
+      assert completion['history_rows']==1000 and completion['history_global_position_start']==8000,completion
+      assert completion['history_global_position_end']==8999 and completion['causal_pairs_seen']==expected_causal,completion
+      assert config['diagnostic_weight_only_warm_start'] is True,config
+      assert config['diagnostic_optimizer_reset'] is True and config['diagnostic_segment_rounds']==250,config
+      assert config['diagnostic_warm_start_source_world_size']==16 and config['diagnostic_warm_start_source_round']==500,config
+      assert config['diagnostic_start_global_position']==8000 and config['diagnostic_stop_after_round']==2250,config
+      assert config['planned_optimizer_steps']==250 and config['layerwise_transition_rank']==256,config
+      assert config['causal_objective_mode']=='specificity_triplet',config
+      assert float(config['causal_repeat_fraction'])==float(sys.argv[3]),config
+      assert float(config['causal_weight'])==float(sys.argv[4]),config
+      receipt={'stage':'layerwise_checkpoint500_causal_rescue_training','branch':branch,
+               'diagnostic_only':True,'exact_resume':False,'optimizer_reset':True,
+               'source_checkpoint_round':500,'source_world_size':16,'current_world_size':4,
+               'start_global_position':8000,'end_global_position':8999,
+               'micro_steps':1000,'optimizer_steps':250,'causal_pairs_seen':expected_causal}
+      (root/'rescue_training_receipt.json').write_text(json.dumps(receipt,indent=2,sort_keys=True)+'\n')
+      print(json.dumps(receipt,indent=2,sort_keys=True))
+      PY
+      export C4_PROGRESS_KEY="$$(python - "$$RUN_DIR/completion.json" <<'PY'
+      import json,sys
+      x=json.load(open(sys.argv[1],encoding='utf-8'))
+      print(f"adapter={x['sha256']['adapter_model']}:state={x['sha256']['recurrent_state']}")
+      PY
+      )"
+      python -u scripts/evaluate_recurrent_causal_gate.py \
+        --model "$$LOCAL_MODEL" --adapter "$$RUN_DIR/final_adapter" \
+        --recurrent-state "$$RUN_DIR/recurrent_state.pt" --state-architecture layerwise \
+        --jsonl "$$C4_DATA/test_same_template.jsonl" \
+        --pair-manifest manifests/c4_stage_a_gate_pairs_seed42_n150_v1.json \
+        --output-json "$$AMLT_OUTPUT_DIR/eval/c4/recurrent_causal_gate.json" \
+        --state-token-alias '<|vision_pad|>' --max-length 1536 --num-pairs 150 --seed 42 \
+        --progress-dir "$$C4_PROGRESS_DIR" --progress-key "$$C4_PROGRESS_KEY"
+      cp -r "$$RUN_DIR/final_adapter/." "$$AMLT_OUTPUT_DIR/model/"
+      cp "$$RUN_DIR/recurrent_state.pt" "$$AMLT_OUTPUT_DIR/model/recurrent_state.pt"
+      cp "$$RUN_DIR"/*.json "$$AMLT_OUTPUT_DIR/metrics/"
+      cp "$$RECURRENT_SPLIT/audit.json" "$$AMLT_OUTPUT_DIR/metrics/data_audit.json"
+      cp /tmp/layerwise-rescue-checkpoint-audit.json "$$AMLT_OUTPUT_DIR/metrics/checkpoint_resume_audit.json"
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 86400
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        BRANCH: dense_same_total
+        CAUSAL_REPEAT_FRACTION: '0.10'
+        CAUSAL_WEIGHT: '1.0'
+
+  - name: layerwise-c500-rescue-strong-same-density-seed42
+    sku: 80G4-A100
+    process_count_per_node: -1
+    mpi: true
+    sla_tier: Standard
+    command: *rescue_command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 86400
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        BRANCH: strong_same_density
+        CAUSAL_REPEAT_FRACTION: '0.05'
+        CAUSAL_WEIGHT: '2.0'

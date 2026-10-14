@@ -1,0 +1,71 @@
+description: Frozen 150-pair C4 diagnostic of atomic M4 round-1750 checkpoint
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+  - python -m venv --system-site-packages /tmp/studentmodeling-m4-c4-probe-venv
+  - /tmp/studentmodeling-m4-c4-probe-venv/bin/python -m pip install --upgrade pip
+  - /tmp/studentmodeling-m4-c4-probe-venv/bin/python -m pip install -r requirements-feeds.txt
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore:
+  - .git/
+  - .vscode/
+  - amlt/
+  - data/
+  - results/
+  - __pycache__/
+  - '*.pyc'
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+jobs:
+- name: m4-checkpoint1750-c4-seed42
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: "set -euo pipefail\nexport PATH=\"/tmp/studentmodeling-m4-c4-probe-venv/bin:$$PATH\"\
+    \nexport PYTHONPATH=\"$$AMLT_CODE_DIR/scripts$${PYTHONPATH:+:$$PYTHONPATH}\"\n\
+    export HF_HOME=/tmp/hf_cache\nexport HF_HUB_CACHE=/tmp/hf_cache/hub\nexport HF_HUB_DISABLE_XET=1\n\
+    export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True\nexport TRANSFORMERS_VERBOSITY=error\n\
+    export LOCAL_MODEL=/tmp/Qwen3-32B\nexport RUN_DIR=/mnt/amulet/studentmodeling/checkpoints/world_model_v1_m4_generation_kd_trainable_seed42_fixedu4_v2_20260730\n\
+    export CHECKPOINT=\"$$RUN_DIR/checkpoint-round-1750\"\nexport BASE_DATA=/mnt/amulet/studentmodeling/c4_fullopen_20260724/malrule_c1_clean\n\
+    mkdir -p \"$$HF_HUB_CACHE\" \"$$AMLT_OUTPUT_DIR/eval/c4\"\ntest -f \"$$CHECKPOINT/adapter/adapter_model.safetensors\"\
+    \ntest -f \"$$CHECKPOINT/recurrent_state.pt\"\ntest -f \"$$CHECKPOINT/checkpoint_completion.json\"\
+    \npython - \"$$CHECKPOINT\" <<'PY'\nimport hashlib, json, os, sys\nroot = sys.argv[1]\n\
+    receipt = json.load(open(root + '/checkpoint_completion.json', encoding='utf-8'))\n\
+    digest = lambda path: hashlib.sha256(open(path, 'rb').read()).hexdigest()\nassert\
+    \ receipt.get('status') == 'complete' and receipt.get('round') == 1750, receipt\n\
+    assert receipt.get('world_size') == 4, receipt\nassert receipt['sha256']['adapter_model']\
+    \ == digest(root + '/adapter/adapter_model.safetensors')\nassert receipt['sha256']['recurrent_state']\
+    \ == digest(root + '/recurrent_state.pt')\nPY\ntest \"$$(sha256sum \"$$BASE_DATA/test_same_template.jsonl\"\
+    \ | cut -d' ' -f1)\" = 079f7634cc54dfd55dfc234503bb5925ab734b1ca74aa2f2a9a17cc4375a2c2f\n\
+    test \"$$(sha256sum manifests/c4_stage_a_gate_pairs_seed42_n150_v1.json | cut\
+    \ -d' ' -f1)\" = edcdb934a65252557f6c569eea9ef7a85e5445549deac9fb4829c3f579e1a9b8\n\
+    test \"$$(sha256sum scripts/evaluate_recurrent_causal_gate.py | cut -d' ' -f1)\"\
+    \ = 9dca3271d29153baf66b440239467e6889c0f2c64677c4e31fd4e2d8a5710c10\ntest \"\
+    $$(sha256sum scripts/recurrent_student_model.py | cut -d' ' -f1)\" = 9e0431dccb524f67b401f7ea911e11c96fc3061432ffdc73e0cac2bbc2acc5a0\n\
+    python -m unittest discover -s tests -p 'test_evaluate_recurrent_causal_gate.py'\
+    \ -v\npython scripts/copy_model_parallel.py --source /mnt/amulet/studentmodeling/models/Qwen3-32B\
+    \ --destination \"$$LOCAL_MODEL\" --workers 16\ntest -f \"$$LOCAL_MODEL/model.safetensors.index.json\"\
+    \nnvidia-smi --query-gpu=index,name,memory.total --format=csv,noheader\npython\
+    \ -u scripts/evaluate_recurrent_causal_gate.py \\\n  --model \"$$LOCAL_MODEL\"\
+    \ \\\n  --adapter \"$$CHECKPOINT/adapter\" \\\n  --recurrent-state \"$$CHECKPOINT/recurrent_state.pt\"\
+    \ \\\n  --jsonl \"$$BASE_DATA/test_same_template.jsonl\" \\\n  --pair-manifest\
+    \ manifests/c4_stage_a_gate_pairs_seed42_n150_v1.json \\\n  --output-json \"$$AMLT_OUTPUT_DIR/eval/c4/recurrent_causal_gate.json\"\
+    \ \\\n  --state-token-alias '<|vision_pad|>' \\\n  --max-length 1536 \\\n  --num-pairs\
+    \ 150 \\\n  --seed 42\nprintf '%s\\n' 'diagnostic_only=true' 'checkpoint_round=1750'\
+    \ 'formal_final_c4_required=true' \\\n  > \"$$AMLT_OUTPUT_DIR/eval/c4/probe_scope.txt\"\
+    \n"
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 172800
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml

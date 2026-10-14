@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+project_dir=/home/v-yuejiali/studentmodeling/workspace/experiments/unified_student_c1
+cd "$project_dir"
+
+export AZURE_CONFIG_DIR=/home/v-yuejiali/.azure-studentmodeling-feeds
+export STATE_SLUG=eedi_full_open_t3_selective_kd_lr_scan
+export LOSS_PROFILE_EXPECTED=state_kd
+export ARTIFACT_LABEL=open-t3-selective-kd-lr2e6
+export CHECKPOINT_ROUND=3800
+export LOCAL_PREFLIGHT_SUBDIR=local_lr2e6_round3800_preflight
+export REMOTE_PREFIX=studentmodeling/diagnostics/layerwise_task_retention_service_recovery/eedi_full_open_t3/state_kd/lr2e-6_start12000_stop4250_97bef6748b1fa8d75809e9e01c9b76d57b6534d336b7037217289932a31df393_b926ee1acc6bf8a098693cef8705f88c739be214629dcea723daed6a0827c440_2474b77459701fa36ec564c84b7f3b6b0d158c9ab128b5147111d252662b0931/checkpoint-round-3800
+
+exec bash scripts/watch_layerwise_equal_state_path_local_preflight.sh

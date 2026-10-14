@@ -1,0 +1,58 @@
+# Generated from the Feeds/Manifold AMLT template and specialized for the two
+# immutable outputs of the strong-one-slot-to-State8 bridge experiment.
+description: Strict State8 answer-C4 and natural-diagnosis-C4 evaluation for both bridge arms
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-state8-strong1-widen8-eval-venv
+    - /tmp/studentmodeling-state8-strong1-widen8-eval-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-state8-strong1-widen8-eval-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - &base
+    name: state8-strong1-widen8-eval-lr5e7-seed58
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: &command |
+      set -euo pipefail
+      trap 'rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc" "$${BASH_COMMAND}" >&2; exit "$$rc"' ERR
+      bash scripts/run_state8_strong1_widen8_eval.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env: &env
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-strong1-widen8-eval-venv
+        CANDIDATE_SLUG: lr5e7_seed58
+        STATE8_EVAL_ROOT: /mnt/amulet/studentmodeling/diagnostics/state8_qualified_teacher_curriculum_highkd_v1_immutable_taxonomy_semantic_v1_strong1_widen8_lr5e7_seed58
+
+  - <<: *base
+    name: state8-strong1-widen8-eval-lr1e6-seed59
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env:
+        <<: *env
+        CANDIDATE_SLUG: lr1e6_seed59
+        STATE8_EVAL_ROOT: /mnt/amulet/studentmodeling/diagnostics/state8_qualified_teacher_curriculum_highkd_v1_immutable_taxonomy_semantic_v1_strong1_widen8_lr1e6_seed59
+

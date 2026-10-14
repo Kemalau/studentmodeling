@@ -1,0 +1,112 @@
+{
+  "chronological_cutoff_fraction": 0.5,
+  "confirmatory_use_policy": {
+    "checkpoint": "one frozen checkpoint selected without XES profile-test metrics",
+    "failed_gate_policy": "Report failure as confirmatory evidence; any later repair is a new development cycle and requires a new untouched dataset.",
+    "official_test_forbidden_uses": [
+      "checkpoint selection",
+      "hyperparameter selection",
+      "early stopping",
+      "threshold selection",
+      "prompt revision",
+      "gate revision"
+    ],
+    "readout_and_alpha_selection": "official-train and validation students only"
+  },
+  "created_utc_date": "2026-08-20",
+  "diagnostic_only": [
+    "cross-student literal text swap",
+    "raw representation cosine similarity"
+  ],
+  "files": {
+    "test": {
+      "path": "manifests/xes_state8_profile_confirmatory_v1/test.jsonl",
+      "rows": 466,
+      "sha256": "aa4f08f11453372d32229de2cb4fa7547f1de90379d6feffcfbe58de1c7fb1a2"
+    },
+    "train": {
+      "path": "manifests/xes_state8_profile_confirmatory_v1/train.jsonl",
+      "rows": 800,
+      "sha256": "0df123f919eeb00b8aa1902ba8fa72f67f68a5b254e9c799cf93a9a03a06a4c0"
+    },
+    "valid": {
+      "path": "manifests/xes_state8_profile_confirmatory_v1/valid.jsonl",
+      "rows": 200,
+      "sha256": "72947f89e7d4ba5571120e0c7c90c3f723ad3f37d176061e7b77accff3610145"
+    }
+  },
+  "fit_caps": {
+    "test": "all qualified official-test students",
+    "train": 800,
+    "valid": 200
+  },
+  "information_boundary": {
+    "readout": "State8 only; no raw history or student ID",
+    "state_updater": "last 12 observed interactions before cutoff",
+    "target": "post-cutoff KC correctness only"
+  },
+  "kc_vocabulary": [
+    "拓展思维----计数模块----枚举法综合----树形图",
+    "拓展思维----应用题模块----周期问题----基本排列的周期问题",
+    "拓展思维----计算模块----整数----整数乘除----整数乘除法巧算----整数好朋友数",
+    "拓展思维----计算模块----整数----整数提取公因数----整数乘法巧算之提取公因数（普通型）",
+    "拓展思维----应用题模块----方阵问题----实心方阵----实心方阵基本问题",
+    "拓展思维----计数模块----容斥原理----二量容斥",
+    "拓展思维----应用题模块----和差倍问题----和倍问题----二量和倍问题----两量和倍",
+    "拓展思维----应用题模块----周期问题----时间中的周期问题----日期中的周期",
+    "拓展思维----计算模块----数列与数表----等差数列----等差数列求和",
+    "拓展思维----数论模块----奇数与偶数----奇数与偶数的混合计算",
+    "拓展思维----计算模块----数列与数表----等差数列----等差数列求通项",
+    "拓展思维----应用题模块----和差倍问题----差倍----两量差倍----整数差倍",
+    "拓展思维----几何模块----直线型----图形认知----正方形和长方形----长方形和正方形面积公式",
+    "拓展思维----数论模块----奇数与偶数----奇数与偶数的应用",
+    "拓展思维----应用题模块----和差倍问题----和倍问题----多量和倍问题----多量和倍",
+    "知识点----应用题模块----方阵问题----实心方阵----实心方阵基本问题",
+    "拓展思维----应用题模块----鸡兔同笼问题----假设法解鸡兔同笼----基本型----原型题",
+    "拓展思维----计算模块----整数----整数分配律----整数除法巧算之类分配律",
+    "课内题型----综合与实践----应用题----倍数问题----已知两量之间倍数关系和两量之差，求两个量",
+    "知识点----计算模块----整数----整数提取公因数----整数乘法巧算之提取公因数（普通型）",
+    "知识点----计算模块----整数----整数乘除----整数乘除法巧算",
+    "拓展思维----计数模块----枚举法综合----字典排序法----组数----数字组数（不可重复）",
+    "拓展思维----应用题模块----和差倍问题----差倍----两量差倍----非整数倍差倍剩余",
+    "知识点----计算模块----整数----整数乘除----整数乘除法巧算----整数好朋友数",
+    "拓展思维----应用题模块----归一归总问题----双归一问题",
+    "拓展思维----计算模块----整数----整数乘除----整数乘除法巧算",
+    "课内题型----综合与实践----应用题----倍数问题----已知两量之间倍数关系和两量之和，求两个量",
+    "拓展思维----计算模块----整数----整数乘除----整数除法运算----除法竖式",
+    "知识点----计算模块----数列与数表----等差数列----等差数列求和",
+    "拓展思维----数论模块----奇数与偶数----奇数与偶数的加减规律"
+  ],
+  "kc_vocabulary_selection": "top frequency from official-train prefixes only",
+  "max_state_history": 12,
+  "min_eligible_kcs": 4,
+  "min_future_attempts_per_kc": 5,
+  "official_test_metrics_inspected_before_freeze": false,
+  "official_test_students_are_confirmatory": true,
+  "primary_claim": "A frozen strict-state-only State8 supports student-specific future-KC prediction and readable weakness profiles on held-out XES students.",
+  "primary_gates": {
+    "closed_information_route": true,
+    "disjoint_history_prediction_stability_p_one_sided": "<0.05",
+    "heldout_student_support": ">=80",
+    "state_ownership_permutation_p_one_sided": "<0.05",
+    "state_vs_population_rmse_bootstrap_probability": ">0.95",
+    "state_vs_population_weak_f1_bootstrap_probability": ">0.95",
+    "state_vs_same_window_rmse_bootstrap_probability": ">0.95",
+    "state_vs_same_window_weak_f1_bootstrap_probability": ">0.95"
+  },
+  "protocol_version": "2026-08-20.v1",
+  "qualified_students_before_deterministic_fit_caps": {
+    "test": 466,
+    "train": 1815,
+    "valid": 212
+  },
+  "raw_students": {
+    "official_test": 3613,
+    "official_train_valid": 14453
+  },
+  "seed": 42,
+  "source": "XES3G5M real longitudinal interactions",
+  "stage": "xes_state8_profile_confirmatory_holdout_v1",
+  "status": "frozen_before_confirmatory_evaluation",
+  "student_disjoint": true
+}

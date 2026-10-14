@@ -1,0 +1,58 @@
+# Evaluation-only recovery after the original 200-step job completed training
+# and failed in the audit metadata reader.  This job reads the immutable DBE
+# checkpoint and does not inspect the frozen XES confirmatory test.
+description: State8 lrfix-v4 DBE smoke, evaluation-only metadata-fix recovery audit
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-state8-lrfix-v4-smoke-recovery-audit-venv
+    - /tmp/studentmodeling-state8-lrfix-v4-smoke-recovery-audit-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-state8-lrfix-v4-smoke-recovery-audit-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore:
+    - .git/
+    - .vscode/
+    - .pytest_cache/
+    - amlt/
+    - data/
+    - results/
+    - reports/
+    - state8_exact_scientific_rescue_bundle_20260808/
+    - state8_midpoint_diagnosis_first_bundle_20260808/
+    - strong1_rescue_bundle_20260808/
+    - task_anchor_bundle_20260808/
+    - __pycache__/
+    - '*.pyc'
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: state8-lrfix-v4-smoke-r2-metadatafix-evalonly-seed8801
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_state8_profile_ownership_lrfix_v4_smoke_recovery_audit.sh | cut -d' ' -f1)" = b7979d18ccf611359ff677c148ce5d953c95ffc79e37a45f11b4e94e322515cb
+      test "$$(sha256sum scripts/early_audit_state8_profile_ownership_checkpoint.py | cut -d' ' -f1)" = d1297ba5c841511061ca6d40f2b4c4e2b431b0d6c91eadb2756c95b5f40f45e6
+      bash scripts/run_state8_profile_ownership_lrfix_v4_smoke_recovery_audit.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-lrfix-v4-smoke-recovery-audit-venv

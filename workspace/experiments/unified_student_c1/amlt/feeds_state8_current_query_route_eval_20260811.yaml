@@ -1,0 +1,51 @@
+# Generated with `amlt template -t Feeds -y`, then specialized and hash-bound.
+description: Frozen State8 checkpoint-100 current-item query-routing counterfactual
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-current-query-route-venv
+    - /tmp/studentmodeling-current-query-route-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-current-query-route-venv/bin/python -m pip install -r requirements-feeds.txt
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+jobs:
+  - &base
+    name: state8-cp100-state-plus-current-item
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: &command |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_state8_current_query_route_eval.sh | cut -d' ' -f1)" = 4e99893a951136a03dc5d0cc21a5dc1a1a58089837afd0e90567a6796a033876
+      bash scripts/run_state8_current_query_route_eval.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env: &env
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-current-query-route-venv
+        ROUTE_MODE: state_plus_current_item
+        CHECKPOINT_ADAPTER_SHA256: 73b6633759febc6ccddac8e81d8715b512a86c3410cf6d2f160b48610d59c558
+        CHECKPOINT_STATE_SHA256: 6234a567af99f079d6fd9c223fabc1e1c0c8a4b8c220c7ff512ff1e8d2e19e72
+        CHECKPOINT_RECEIPT_SHA256: e79470cd6309841f5a240ffa1e416daeccaf47f8a9955de46f142e232ddf6bfd
+  - <<: *base
+    name: state8-cp100-current-item-only
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env:
+        <<: *env
+        ROUTE_MODE: current_item_only

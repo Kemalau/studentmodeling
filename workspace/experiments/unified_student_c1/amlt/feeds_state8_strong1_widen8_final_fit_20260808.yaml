@@ -1,0 +1,137 @@
+# Reuses the approved distributed State8 final-fit template.  The controller
+# submits exactly the short-screen winner; the jobs are mutually
+# exclusive selectors over hash-bound remote initialization roots.
+description: Selected strong1-to-State8 exact one-epoch unified final fit
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-state8-finalfit-venv
+    - /tmp/studentmodeling-state8-finalfit-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-state8-finalfit-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - &base
+    name: state8-strong1-widen8-lr5e7-seed58-unified-finalfit-seed42
+    sku: 80G4-A100
+    process_count_per_node: -1
+    mpi: true
+    sla_tier: Standard
+    command: &command |
+      set -euo pipefail
+      trap 'rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc" "$${BASH_COMMAND}" >&2; exit "$$rc"' ERR
+      bash scripts/run_state8_unified_final_fit_world4.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 43200
+      env: &env
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-finalfit-venv
+        FINALFIT_VARIANT: strong1_widen8_lr5e7_seed58
+        STATE8_CANONICAL_RUN_DIR: /mnt/amulet/studentmodeling/checkpoints/state8_strong1_widen8_unified_full259845_seed42_v1_20260808
+
+  - <<: *base
+    name: state8-strong1-widen8-lr1e6-seed59-unified-finalfit-seed42
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 43200
+      env:
+        <<: *env
+        FINALFIT_VARIANT: strong1_widen8_lr1e6_seed59
+
+  - <<: *base
+    name: state8-strong1-widen8-single-lr5e7-seed60-unified-finalfit-seed42
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 43200
+      env:
+        <<: *env
+        FINALFIT_VARIANT: strong1_widen8_single_lr5e7_seed60
+
+  - <<: *base
+    name: state8-strong1-rescue-taxonomy-joint-seed61-unified-finalfit-seed42
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 43200
+      env:
+        <<: *env
+        FINALFIT_VARIANT: strong1_rescue_taxonomy_joint_seed61
+
+  - <<: *base
+    name: state8-strong1-rescue-taskanchor-c4strong-seed62-unified-finalfit-seed42
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 43200
+      env:
+        <<: *env
+        FINALFIT_VARIANT: strong1_rescue_taskanchor_c4strong_seed62
+
+  - <<: *base
+    name: state8-strong1-midpoint-diagnosis-first-seed63-unified-finalfit-seed42
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 43200
+      env:
+        <<: *env
+        FINALFIT_VARIANT: strong1_midpoint_diagnosis_first_seed63
+
+  - <<: *base
+    name: state8-strong1-exact-diagnosis-curriculum-seed65-unified-finalfit-seed42
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 43200
+      env:
+        <<: *env
+        FINALFIT_VARIANT: strong1_exact_diagnosis_curriculum_seed65
+
+  - <<: *base
+    name: state8-strong1-exact-rescue-semantic-preserve-seed66-unified-finalfit-seed42
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 43200
+      env:
+        <<: *env
+        FINALFIT_VARIANT: strong1_exact_rescue_semantic_preserve_seed66
+
+  - <<: *base
+    name: state8-strong1-exact-rescue-causal-taskanchor-seed67-unified-finalfit-seed42
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 43200
+      env:
+        <<: *env
+        FINALFIT_VARIANT: strong1_exact_rescue_causal_taskanchor_seed67
+
+  - <<: *base
+    name: state8-strong1-exact-rescue-retention-preserve-seed68-unified-finalfit-seed42
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 43200
+      env:
+        <<: *env
+        FINALFIT_VARIANT: strong1_exact_rescue_retention_preserve_seed68

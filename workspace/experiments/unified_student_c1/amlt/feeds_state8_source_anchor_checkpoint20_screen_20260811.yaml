@@ -1,0 +1,67 @@
+# Generated from the Feeds/Manifold AMLT template and specialized for an
+# immutable read-only State8 source-anchor checkpoint-20 diagnostic screen.
+description: State8 source-anchor checkpoint-20 semantic collapse screen
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-state8-source-anchor-cp20-screen-venv
+    - /tmp/studentmodeling-state8-source-anchor-cp20-screen-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-state8-source-anchor-cp20-screen-venv/bin/python -m pip install -r requirements-feeds.txt
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+jobs:
+  - &base
+    name: state8-source-anchor-cp20-full-mse1
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: &command |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_state8_source_anchor_checkpoint20_screen.sh | cut -d' ' -f1)" = 757e58405b9f96cd18d73ef840eb779d2848f7dbc51eb664e661e01ef1fea4ab
+      bash scripts/run_state8_source_anchor_checkpoint20_screen.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env: &env
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-source-anchor-cp20-screen-venv
+        SOURCE_ANCHOR_ARM: full_mse1
+        SOURCE_ANCHOR_ADAPTER_SHA256: 29d6c7a3bbcf64cb6b3653c4a0505612d7ec14f60fd4062f50c8d6f7a3219ed5
+        SOURCE_ANCHOR_STATE_SHA256: d8bc9e8cbed4e6123881997fbd74df6eb2834844ab572d570138880df0f6cd34
+        SOURCE_ANCHOR_RECEIPT_SHA256: ce81080f9f383c92a1efc4fe624cde25f92b6fdfe142aa8ab72de5255ae862cc
+  - <<: *base
+    name: state8-source-anchor-cp20-updater-mse1
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env:
+        <<: *env
+        SOURCE_ANCHOR_ARM: updater_mse1
+        SOURCE_ANCHOR_ADAPTER_SHA256: 73b6633759febc6ccddac8e81d8715b512a86c3410cf6d2f160b48610d59c558
+        SOURCE_ANCHOR_STATE_SHA256: 6d7c34d32f34cd119e9d536cbdf4a71ce9c99a68c2a5c3884f7b6a851c2622d7
+        SOURCE_ANCHOR_RECEIPT_SHA256: 1d8952727cc2eb8ecce4b415c9988e68ba7512e317cfbecfd24e1ee0c6e085f2
+  - <<: *base
+    name: state8-source-anchor-cp20-full-mse2
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env:
+        <<: *env
+        SOURCE_ANCHOR_ARM: full_mse2
+        SOURCE_ANCHOR_ADAPTER_SHA256: 590349bbdbc6dc825576da4e962cc04136145cd6175aedc822c6336327419e70
+        SOURCE_ANCHOR_STATE_SHA256: 184bbec0f6e515d04fd3c59ceb9cf616a128f269242b5c33f662c5193fc1f44b
+        SOURCE_ANCHOR_RECEIPT_SHA256: fdf0c65f7fbcf2b4a4b6e1753fda6c087bf239edd186d09eb604627b3e7c5c14

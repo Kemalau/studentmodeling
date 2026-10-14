@@ -1,0 +1,101 @@
+{
+  "canonical_seed42": {
+    "D_specific": 0.22105263157894736,
+    "arms": {
+      "noop": 0.0,
+      "random": 0.18947368421052632,
+      "samemal": 0.042105263157894736,
+      "swap": 0.4105263157894737
+    },
+    "clean_n": 95,
+    "response_cross_accuracy": 0.9066666666666666,
+    "state_probe_cross_accuracy": 0.932806324110672
+  },
+  "definition": {
+    "D_specific": "flip_to_A(swap) - flip_to_A(norm-matched Gaussian noise)",
+    "gate": 0.15,
+    "outcome": "flip_to_A_rate on native-stay_B clean recipients",
+    "random_control": "independent norm-matched Gaussian residual noise, not a random student's state"
+  },
+  "history_free_bridge": {
+    "final_vector": {
+      "D_specific": 0.0,
+      "clean_n": 61,
+      "persistent_history_kv_cache": false,
+      "raw_history_visible_to_decoder": false,
+      "state_shape": [
+        5120
+      ]
+    },
+    "trajectory": {
+      "D_specific": 0.2061855670103093,
+      "clean_n": 97,
+      "persistent_history_kv_cache": false,
+      "raw_history_visible_to_decoder": false,
+      "state_shape": [
+        64,
+        5120
+      ]
+    }
+  },
+  "seed_replication": {
+    "cf1": {
+      "13": {
+        "D_specific": 0.18811881188118812,
+        "clean_n": 101,
+        "response_cross_accuracy": 0.92,
+        "state_probe_cross_accuracy": 0.9130434782608695
+      },
+      "42": {
+        "D_specific": 0.22105263157894736,
+        "clean_n": 95,
+        "response_cross_accuracy": 0.9066666666666666,
+        "state_probe_cross_accuracy": 0.932806324110672
+      },
+      "97": {
+        "D_specific": 0.015151515151515152,
+        "clean_n": 66,
+        "response_cross_accuracy": 0.6433333333333333,
+        "state_probe_cross_accuracy": 0.691699604743083
+      }
+    },
+    "original_only": {
+      "13": {
+        "D_specific": -0.01818181818181818,
+        "clean_n": 55,
+        "response_cross_accuracy": 0.6133333333333333,
+        "state_probe_cross_accuracy": 0.7351778656126482
+      },
+      "42": {
+        "D_specific": -0.01694915254237288,
+        "clean_n": 59,
+        "response_cross_accuracy": 0.8166666666666667,
+        "state_probe_cross_accuracy": 0.8063241106719368
+      },
+      "97": {
+        "D_specific": 0.0,
+        "clean_n": 54,
+        "response_cross_accuracy": 0.8133333333333334,
+        "state_probe_cross_accuracy": 0.8181818181818182
+      }
+    }
+  },
+  "sources": {
+    "canonical_seed42": {
+      "path": "/home/v-yuejiali/studentmodeling/workspace/experiments/unified_student_c1/results/state_curriculum_comparison/state-curriculum-stage-a-alias-gate-20260727/qwen3-32b-state-curriculum-stage-a-cf1-alias-gate/gate/stage_a_alias_gate_summary.json",
+      "sha256": "67c5613447fea1116e3b83e5f6222155b7f692ed7fbd84b3cdf20eaf7538e0f1"
+    },
+    "factorial": {
+      "path": "/home/v-yuejiali/studentmodeling/workspace/experiments/unified_student_c1/results/state_alias_factorial_monitor_20260729/summary.json",
+      "sha256": "b894e0551219143b5671c4e253d8e27e31b5e8dee986edea5b0fc092a9ae739b"
+    },
+    "final_vector_bridge": {
+      "path": "/home/v-yuejiali/studentmodeling/workspace/experiments/unified_student_c1/results/single_layer_state_bridge/raw_20260823/recurrent-cf1-single-vector-layer-bridge-c4-seed42-20260731/cf1-single-vector-layer63-c4-n150-seed42/gate/single_layer_state_bridge.json",
+      "sha256": "fb0b3cd3143cb856d9c1e2265e1a2039fc6b2adbed51541c538a3a7bca0a485d"
+    },
+    "layerwise_bridge": {
+      "path": "/home/v-yuejiali/studentmodeling/workspace/experiments/unified_student_c1/results/layerwise_state_bridge/raw_20260823/recurrent-cf1-layerwise-state-bridge-c4-seed42-20260731/cf1-layerwise-state-bridge-compact-n150-seed42/gate/layerwise_state_bridge.json",
+      "sha256": "399a0a65eb8d28e7c218e73c5aacf26259729fe9c5efe131b76d47221f2bc393"
+    }
+  }
+}

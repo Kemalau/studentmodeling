@@ -1,0 +1,261 @@
+description: Zero-training formal performance screen of CF1 layerwise recurrent state
+  decoded by the complete-task adapter
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+  - python -m venv --system-site-packages /tmp/studentmodeling-m4-eval-venv
+  - /tmp/studentmodeling-m4-eval-venv/bin/python -m pip install --upgrade pip
+  - /tmp/studentmodeling-m4-eval-venv/bin/python -m pip install -r requirements-feeds.txt
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore:
+  - .git/
+  - .vscode/
+  - amlt/
+  - data/
+  - results/
+  - __pycache__/
+  - '*.pyc'
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+jobs:
+- name: layerwise-formal-screen-t1_t6-seed42
+  sku: 80G1-A100
+  sla_tier: Standard
+  command: "set -euo pipefail\nexport PATH=\"/tmp/studentmodeling-m4-eval-venv/bin:$$PATH\"\
+    \nexport PYTHONPATH=\"$$AMLT_CODE_DIR/scripts$${PYTHONPATH:+:$$PYTHONPATH}\"\n\
+    export HF_HOME=/tmp/hf_cache\nexport HF_HUB_CACHE=/tmp/hf_cache/hub\nexport HF_HUB_DISABLE_XET=1\n\
+    export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True\nexport TRANSFORMERS_VERBOSITY=error\n\
+    export LOCAL_MODEL=/tmp/Qwen3-32B\nexport RAW_EVAL=/mnt/amulet/studentmodeling/formal_evaluation_v1/test.jsonl\n\
+    export RECURRENT_EVAL=/tmp/layerwise_formal_screen_fixedu4_v1/test.jsonl\nexport\
+    \ CAPTURE_ADAPTER=/mnt/amulet/studentmodeling/checkpoints/state_curriculum_stage_a_cf1_alias_visionpad_seed42_20260727/final_adapter\n\
+    export DECODE_ADAPTER=/mnt/amulet/studentmodeling/adapters/qwen3_32b_full_trainvalid_no_t4_strictt6_1ep/final_adapter\n\
+    mkdir -p \"$$HF_HUB_CACHE\" \"$$(dirname \"$$RECURRENT_EVAL\")\" \"$$AMLT_OUTPUT_DIR/eval/$$EVAL_GROUP\"\
+    \ntest -f \"$$RAW_EVAL\"\ntest -f \"$$CAPTURE_ADAPTER/adapter_model.safetensors\"\
+    \ntest -f \"$$DECODE_ADAPTER/adapter_model.safetensors\"\ntest \"$$(sha256sum\
+    \ \"$$RAW_EVAL\" | cut -d' ' -f1)\" = bff7726953ae048bedf6dacdbb7500a54cb8de305e406f2497ef1f11c04167f8\n\
+    test \"$$(sha256sum scripts/evaluate_recurrent_formal_protocols.py | cut -d' '\
+    \ -f1)\" = eb0243cf232d7e634f0ad784d30e66f93f42f84833a748ec453b648cff0eccda\n\
+    test \"$$(sha256sum scripts/layerwise_recurrent_student_model.py | cut -d' ' -f1)\"\
+    \ = b6e63f4321962e8569c9c7955ba9620a51c6252bf8d70958af46022faca39fa8\ntest \"\
+    $$(sha256sum tests/test_evaluate_recurrent_formal_protocols.py | cut -d' ' -f1)\"\
+    \ = 5348b1d61388943e034f7d2ca5865f22630f4b13fd28cfed487dec1738747b66\ntest \"\
+    $$(sha256sum tests/test_layerwise_recurrent_student_model.py | cut -d' ' -f1)\"\
+    \ = cf8181e623673dfd03c85b317f3f69e58f231a32b66e7db08c9ea40623fb66f1\ntest \"\
+    $$(sha256sum scripts/build_recurrent_evaluation_manifest.py | cut -d' ' -f1)\"\
+    \ = d335b0b97471683eb1f317f21af6f0dd36ccca0fe6a8e495838112785ea85a8e\npython -m\
+    \ unittest discover -s tests -p 'test_evaluate_recurrent_formal_protocols.py'\
+    \ -v\npython -m unittest discover -s tests -p 'test_layerwise_recurrent_student_model.py'\
+    \ -v\npython scripts/build_recurrent_evaluation_manifest.py \\\n  --input-jsonl\
+    \ \"$$RAW_EVAL\" \\\n  --output-jsonl \"$$RECURRENT_EVAL\" \\\n  --audit-json\
+    \ /tmp/layerwise_formal_screen_fixedu4_v1/audit.json \\\n  --max-updates 4 \\\n\
+    \  --seed 20260730\ntest \"$$(sha256sum \"$$RECURRENT_EVAL\" | cut -d' ' -f1)\"\
+    \ = a368cefb0c49cb6a305ad1a892808361fba2d44d555a0a28ea64e56babe32525\nrm -rf \"\
+    $$LOCAL_MODEL\"\nmkdir -p \"$$LOCAL_MODEL\"\npython scripts/copy_model_parallel.py\
+    \ \\\n  --source /mnt/amulet/studentmodeling/models/Qwen3-32B \\\n  --destination\
+    \ \"$$LOCAL_MODEL\" \\\n  --workers 16\ntest -f \"$$LOCAL_MODEL/model.safetensors.index.json\"\
+    \nnvidia-smi --query-gpu=index,name,memory.total --format=csv,noheader\npython\
+    \ -u scripts/evaluate_recurrent_formal_protocols.py \\\n  --model \"$$LOCAL_MODEL\"\
+    \ \\\n  --adapter \"$$CAPTURE_ADAPTER\" \\\n  --decode-adapter \"$$DECODE_ADAPTER\"\
+    \ \\\n  --state-architecture layerwise \\\n  --eval-jsonl \"$$RECURRENT_EVAL\"\
+    \ \\\n  --output-dir \"$$AMLT_OUTPUT_DIR/eval/$$EVAL_GROUP\" \\\n  --state-token-alias\
+    \ '<|vision_pad|>' \\\n  --max-samples-per-group 50 \\\n  --state-batch-size 2\
+    \ \\\n  --candidate-row-batch-size 2 \\\n  --max-length 1536 \\\n  --max-new-tokens\
+    \ 128 \\\n  --tasks $$TASKS \\\n  --seed 42 \\\n  --save-unredacted-predictions\n\
+    cp /tmp/layerwise_formal_screen_fixedu4_v1/audit.json \"$$AMLT_OUTPUT_DIR/eval/$$EVAL_GROUP/manifest_audit.json\"\
+    \nprintf '%s\n' \\\n  'stage=zero_training_layerwise_formal_screen' \\\n  'capture_adapter=cf1_visionpad'\
+    \ \\\n  'decode_adapter=full_task' \\\n  'state_architecture=one_address_layerwise_residual_trajectory'\
+    \ \\\n  'raw_history_visible_to_decoder=false' \\\n  'persistent_history_kv_cache=false'\
+    \ \\\n  'optimizer_steps=0' \\\n  > \"$$AMLT_OUTPUT_DIR/eval/$$EVAL_GROUP/scope.txt\"\
+    \n"
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 172800
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      EVAL_GROUP: t1_t6
+      TASKS: predict_correctness predict_error_persistence
+  mpi: false
+  process_count_per_node: 1
+- name: layerwise-formal-screen-t2-seed42
+  sku: 80G1-A100
+  sla_tier: Standard
+  command: "set -euo pipefail\nexport PATH=\"/tmp/studentmodeling-m4-eval-venv/bin:$$PATH\"\
+    \nexport PYTHONPATH=\"$$AMLT_CODE_DIR/scripts$${PYTHONPATH:+:$$PYTHONPATH}\"\n\
+    export HF_HOME=/tmp/hf_cache\nexport HF_HUB_CACHE=/tmp/hf_cache/hub\nexport HF_HUB_DISABLE_XET=1\n\
+    export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True\nexport TRANSFORMERS_VERBOSITY=error\n\
+    export LOCAL_MODEL=/tmp/Qwen3-32B\nexport RAW_EVAL=/mnt/amulet/studentmodeling/formal_evaluation_v1/test.jsonl\n\
+    export RECURRENT_EVAL=/tmp/layerwise_formal_screen_fixedu4_v1/test.jsonl\nexport\
+    \ CAPTURE_ADAPTER=/mnt/amulet/studentmodeling/checkpoints/state_curriculum_stage_a_cf1_alias_visionpad_seed42_20260727/final_adapter\n\
+    export DECODE_ADAPTER=/mnt/amulet/studentmodeling/adapters/qwen3_32b_full_trainvalid_no_t4_strictt6_1ep/final_adapter\n\
+    mkdir -p \"$$HF_HUB_CACHE\" \"$$(dirname \"$$RECURRENT_EVAL\")\" \"$$AMLT_OUTPUT_DIR/eval/$$EVAL_GROUP\"\
+    \ntest -f \"$$RAW_EVAL\"\ntest -f \"$$CAPTURE_ADAPTER/adapter_model.safetensors\"\
+    \ntest -f \"$$DECODE_ADAPTER/adapter_model.safetensors\"\ntest \"$$(sha256sum\
+    \ \"$$RAW_EVAL\" | cut -d' ' -f1)\" = bff7726953ae048bedf6dacdbb7500a54cb8de305e406f2497ef1f11c04167f8\n\
+    test \"$$(sha256sum scripts/evaluate_recurrent_formal_protocols.py | cut -d' '\
+    \ -f1)\" = eb0243cf232d7e634f0ad784d30e66f93f42f84833a748ec453b648cff0eccda\n\
+    test \"$$(sha256sum scripts/layerwise_recurrent_student_model.py | cut -d' ' -f1)\"\
+    \ = b6e63f4321962e8569c9c7955ba9620a51c6252bf8d70958af46022faca39fa8\ntest \"\
+    $$(sha256sum tests/test_evaluate_recurrent_formal_protocols.py | cut -d' ' -f1)\"\
+    \ = 5348b1d61388943e034f7d2ca5865f22630f4b13fd28cfed487dec1738747b66\ntest \"\
+    $$(sha256sum tests/test_layerwise_recurrent_student_model.py | cut -d' ' -f1)\"\
+    \ = cf8181e623673dfd03c85b317f3f69e58f231a32b66e7db08c9ea40623fb66f1\ntest \"\
+    $$(sha256sum scripts/build_recurrent_evaluation_manifest.py | cut -d' ' -f1)\"\
+    \ = d335b0b97471683eb1f317f21af6f0dd36ccca0fe6a8e495838112785ea85a8e\npython -m\
+    \ unittest discover -s tests -p 'test_evaluate_recurrent_formal_protocols.py'\
+    \ -v\npython -m unittest discover -s tests -p 'test_layerwise_recurrent_student_model.py'\
+    \ -v\npython scripts/build_recurrent_evaluation_manifest.py \\\n  --input-jsonl\
+    \ \"$$RAW_EVAL\" \\\n  --output-jsonl \"$$RECURRENT_EVAL\" \\\n  --audit-json\
+    \ /tmp/layerwise_formal_screen_fixedu4_v1/audit.json \\\n  --max-updates 4 \\\n\
+    \  --seed 20260730\ntest \"$$(sha256sum \"$$RECURRENT_EVAL\" | cut -d' ' -f1)\"\
+    \ = a368cefb0c49cb6a305ad1a892808361fba2d44d555a0a28ea64e56babe32525\nrm -rf \"\
+    $$LOCAL_MODEL\"\nmkdir -p \"$$LOCAL_MODEL\"\npython scripts/copy_model_parallel.py\
+    \ \\\n  --source /mnt/amulet/studentmodeling/models/Qwen3-32B \\\n  --destination\
+    \ \"$$LOCAL_MODEL\" \\\n  --workers 16\ntest -f \"$$LOCAL_MODEL/model.safetensors.index.json\"\
+    \nnvidia-smi --query-gpu=index,name,memory.total --format=csv,noheader\npython\
+    \ -u scripts/evaluate_recurrent_formal_protocols.py \\\n  --model \"$$LOCAL_MODEL\"\
+    \ \\\n  --adapter \"$$CAPTURE_ADAPTER\" \\\n  --decode-adapter \"$$DECODE_ADAPTER\"\
+    \ \\\n  --state-architecture layerwise \\\n  --eval-jsonl \"$$RECURRENT_EVAL\"\
+    \ \\\n  --output-dir \"$$AMLT_OUTPUT_DIR/eval/$$EVAL_GROUP\" \\\n  --state-token-alias\
+    \ '<|vision_pad|>' \\\n  --max-samples-per-group 50 \\\n  --state-batch-size 2\
+    \ \\\n  --candidate-row-batch-size 2 \\\n  --max-length 1536 \\\n  --max-new-tokens\
+    \ 128 \\\n  --tasks $$TASKS \\\n  --seed 42 \\\n  --save-unredacted-predictions\n\
+    cp /tmp/layerwise_formal_screen_fixedu4_v1/audit.json \"$$AMLT_OUTPUT_DIR/eval/$$EVAL_GROUP/manifest_audit.json\"\
+    \nprintf '%s\n' \\\n  'stage=zero_training_layerwise_formal_screen' \\\n  'capture_adapter=cf1_visionpad'\
+    \ \\\n  'decode_adapter=full_task' \\\n  'state_architecture=one_address_layerwise_residual_trajectory'\
+    \ \\\n  'raw_history_visible_to_decoder=false' \\\n  'persistent_history_kv_cache=false'\
+    \ \\\n  'optimizer_steps=0' \\\n  > \"$$AMLT_OUTPUT_DIR/eval/$$EVAL_GROUP/scope.txt\"\
+    \n"
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 172800
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      EVAL_GROUP: t2
+      TASKS: predict_response
+  mpi: false
+  process_count_per_node: 1
+- name: layerwise-formal-screen-t3-seed42
+  sku: 80G1-A100
+  sla_tier: Standard
+  command: "set -euo pipefail\nexport PATH=\"/tmp/studentmodeling-m4-eval-venv/bin:$$PATH\"\
+    \nexport PYTHONPATH=\"$$AMLT_CODE_DIR/scripts$${PYTHONPATH:+:$$PYTHONPATH}\"\n\
+    export HF_HOME=/tmp/hf_cache\nexport HF_HUB_CACHE=/tmp/hf_cache/hub\nexport HF_HUB_DISABLE_XET=1\n\
+    export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True\nexport TRANSFORMERS_VERBOSITY=error\n\
+    export LOCAL_MODEL=/tmp/Qwen3-32B\nexport RAW_EVAL=/mnt/amulet/studentmodeling/formal_evaluation_v1/test.jsonl\n\
+    export RECURRENT_EVAL=/tmp/layerwise_formal_screen_fixedu4_v1/test.jsonl\nexport\
+    \ CAPTURE_ADAPTER=/mnt/amulet/studentmodeling/checkpoints/state_curriculum_stage_a_cf1_alias_visionpad_seed42_20260727/final_adapter\n\
+    export DECODE_ADAPTER=/mnt/amulet/studentmodeling/adapters/qwen3_32b_full_trainvalid_no_t4_strictt6_1ep/final_adapter\n\
+    mkdir -p \"$$HF_HUB_CACHE\" \"$$(dirname \"$$RECURRENT_EVAL\")\" \"$$AMLT_OUTPUT_DIR/eval/$$EVAL_GROUP\"\
+    \ntest -f \"$$RAW_EVAL\"\ntest -f \"$$CAPTURE_ADAPTER/adapter_model.safetensors\"\
+    \ntest -f \"$$DECODE_ADAPTER/adapter_model.safetensors\"\ntest \"$$(sha256sum\
+    \ \"$$RAW_EVAL\" | cut -d' ' -f1)\" = bff7726953ae048bedf6dacdbb7500a54cb8de305e406f2497ef1f11c04167f8\n\
+    test \"$$(sha256sum scripts/evaluate_recurrent_formal_protocols.py | cut -d' '\
+    \ -f1)\" = eb0243cf232d7e634f0ad784d30e66f93f42f84833a748ec453b648cff0eccda\n\
+    test \"$$(sha256sum scripts/layerwise_recurrent_student_model.py | cut -d' ' -f1)\"\
+    \ = b6e63f4321962e8569c9c7955ba9620a51c6252bf8d70958af46022faca39fa8\ntest \"\
+    $$(sha256sum tests/test_evaluate_recurrent_formal_protocols.py | cut -d' ' -f1)\"\
+    \ = 5348b1d61388943e034f7d2ca5865f22630f4b13fd28cfed487dec1738747b66\ntest \"\
+    $$(sha256sum tests/test_layerwise_recurrent_student_model.py | cut -d' ' -f1)\"\
+    \ = cf8181e623673dfd03c85b317f3f69e58f231a32b66e7db08c9ea40623fb66f1\ntest \"\
+    $$(sha256sum scripts/build_recurrent_evaluation_manifest.py | cut -d' ' -f1)\"\
+    \ = d335b0b97471683eb1f317f21af6f0dd36ccca0fe6a8e495838112785ea85a8e\npython -m\
+    \ unittest discover -s tests -p 'test_evaluate_recurrent_formal_protocols.py'\
+    \ -v\npython -m unittest discover -s tests -p 'test_layerwise_recurrent_student_model.py'\
+    \ -v\npython scripts/build_recurrent_evaluation_manifest.py \\\n  --input-jsonl\
+    \ \"$$RAW_EVAL\" \\\n  --output-jsonl \"$$RECURRENT_EVAL\" \\\n  --audit-json\
+    \ /tmp/layerwise_formal_screen_fixedu4_v1/audit.json \\\n  --max-updates 4 \\\n\
+    \  --seed 20260730\ntest \"$$(sha256sum \"$$RECURRENT_EVAL\" | cut -d' ' -f1)\"\
+    \ = a368cefb0c49cb6a305ad1a892808361fba2d44d555a0a28ea64e56babe32525\nrm -rf \"\
+    $$LOCAL_MODEL\"\nmkdir -p \"$$LOCAL_MODEL\"\npython scripts/copy_model_parallel.py\
+    \ \\\n  --source /mnt/amulet/studentmodeling/models/Qwen3-32B \\\n  --destination\
+    \ \"$$LOCAL_MODEL\" \\\n  --workers 16\ntest -f \"$$LOCAL_MODEL/model.safetensors.index.json\"\
+    \nnvidia-smi --query-gpu=index,name,memory.total --format=csv,noheader\npython\
+    \ -u scripts/evaluate_recurrent_formal_protocols.py \\\n  --model \"$$LOCAL_MODEL\"\
+    \ \\\n  --adapter \"$$CAPTURE_ADAPTER\" \\\n  --decode-adapter \"$$DECODE_ADAPTER\"\
+    \ \\\n  --state-architecture layerwise \\\n  --eval-jsonl \"$$RECURRENT_EVAL\"\
+    \ \\\n  --output-dir \"$$AMLT_OUTPUT_DIR/eval/$$EVAL_GROUP\" \\\n  --state-token-alias\
+    \ '<|vision_pad|>' \\\n  --max-samples-per-group 50 \\\n  --state-batch-size 2\
+    \ \\\n  --candidate-row-batch-size 2 \\\n  --max-length 1536 \\\n  --max-new-tokens\
+    \ 128 \\\n  --tasks $$TASKS \\\n  --seed 42 \\\n  --save-unredacted-predictions\n\
+    cp /tmp/layerwise_formal_screen_fixedu4_v1/audit.json \"$$AMLT_OUTPUT_DIR/eval/$$EVAL_GROUP/manifest_audit.json\"\
+    \nprintf '%s\n' \\\n  'stage=zero_training_layerwise_formal_screen' \\\n  'capture_adapter=cf1_visionpad'\
+    \ \\\n  'decode_adapter=full_task' \\\n  'state_architecture=one_address_layerwise_residual_trajectory'\
+    \ \\\n  'raw_history_visible_to_decoder=false' \\\n  'persistent_history_kv_cache=false'\
+    \ \\\n  'optimizer_steps=0' \\\n  > \"$$AMLT_OUTPUT_DIR/eval/$$EVAL_GROUP/scope.txt\"\
+    \n"
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 172800
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      EVAL_GROUP: t3
+      TASKS: diagnose_misconception
+  mpi: false
+  process_count_per_node: 1
+- name: layerwise-formal-screen-t5-seed42
+  sku: 80G1-A100
+  sla_tier: Standard
+  command: "set -euo pipefail\nexport PATH=\"/tmp/studentmodeling-m4-eval-venv/bin:$$PATH\"\
+    \nexport PYTHONPATH=\"$$AMLT_CODE_DIR/scripts$${PYTHONPATH:+:$$PYTHONPATH}\"\n\
+    export HF_HOME=/tmp/hf_cache\nexport HF_HUB_CACHE=/tmp/hf_cache/hub\nexport HF_HUB_DISABLE_XET=1\n\
+    export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True\nexport TRANSFORMERS_VERBOSITY=error\n\
+    export LOCAL_MODEL=/tmp/Qwen3-32B\nexport RAW_EVAL=/mnt/amulet/studentmodeling/formal_evaluation_v1/test.jsonl\n\
+    export RECURRENT_EVAL=/tmp/layerwise_formal_screen_fixedu4_v1/test.jsonl\nexport\
+    \ CAPTURE_ADAPTER=/mnt/amulet/studentmodeling/checkpoints/state_curriculum_stage_a_cf1_alias_visionpad_seed42_20260727/final_adapter\n\
+    export DECODE_ADAPTER=/mnt/amulet/studentmodeling/adapters/qwen3_32b_full_trainvalid_no_t4_strictt6_1ep/final_adapter\n\
+    mkdir -p \"$$HF_HUB_CACHE\" \"$$(dirname \"$$RECURRENT_EVAL\")\" \"$$AMLT_OUTPUT_DIR/eval/$$EVAL_GROUP\"\
+    \ntest -f \"$$RAW_EVAL\"\ntest -f \"$$CAPTURE_ADAPTER/adapter_model.safetensors\"\
+    \ntest -f \"$$DECODE_ADAPTER/adapter_model.safetensors\"\ntest \"$$(sha256sum\
+    \ \"$$RAW_EVAL\" | cut -d' ' -f1)\" = bff7726953ae048bedf6dacdbb7500a54cb8de305e406f2497ef1f11c04167f8\n\
+    test \"$$(sha256sum scripts/evaluate_recurrent_formal_protocols.py | cut -d' '\
+    \ -f1)\" = eb0243cf232d7e634f0ad784d30e66f93f42f84833a748ec453b648cff0eccda\n\
+    test \"$$(sha256sum scripts/layerwise_recurrent_student_model.py | cut -d' ' -f1)\"\
+    \ = b6e63f4321962e8569c9c7955ba9620a51c6252bf8d70958af46022faca39fa8\ntest \"\
+    $$(sha256sum tests/test_evaluate_recurrent_formal_protocols.py | cut -d' ' -f1)\"\
+    \ = 5348b1d61388943e034f7d2ca5865f22630f4b13fd28cfed487dec1738747b66\ntest \"\
+    $$(sha256sum tests/test_layerwise_recurrent_student_model.py | cut -d' ' -f1)\"\
+    \ = cf8181e623673dfd03c85b317f3f69e58f231a32b66e7db08c9ea40623fb66f1\ntest \"\
+    $$(sha256sum scripts/build_recurrent_evaluation_manifest.py | cut -d' ' -f1)\"\
+    \ = d335b0b97471683eb1f317f21af6f0dd36ccca0fe6a8e495838112785ea85a8e\npython -m\
+    \ unittest discover -s tests -p 'test_evaluate_recurrent_formal_protocols.py'\
+    \ -v\npython -m unittest discover -s tests -p 'test_layerwise_recurrent_student_model.py'\
+    \ -v\npython scripts/build_recurrent_evaluation_manifest.py \\\n  --input-jsonl\
+    \ \"$$RAW_EVAL\" \\\n  --output-jsonl \"$$RECURRENT_EVAL\" \\\n  --audit-json\
+    \ /tmp/layerwise_formal_screen_fixedu4_v1/audit.json \\\n  --max-updates 4 \\\n\
+    \  --seed 20260730\ntest \"$$(sha256sum \"$$RECURRENT_EVAL\" | cut -d' ' -f1)\"\
+    \ = a368cefb0c49cb6a305ad1a892808361fba2d44d555a0a28ea64e56babe32525\nrm -rf \"\
+    $$LOCAL_MODEL\"\nmkdir -p \"$$LOCAL_MODEL\"\npython scripts/copy_model_parallel.py\
+    \ \\\n  --source /mnt/amulet/studentmodeling/models/Qwen3-32B \\\n  --destination\
+    \ \"$$LOCAL_MODEL\" \\\n  --workers 16\ntest -f \"$$LOCAL_MODEL/model.safetensors.index.json\"\
+    \nnvidia-smi --query-gpu=index,name,memory.total --format=csv,noheader\npython\
+    \ -u scripts/evaluate_recurrent_formal_protocols.py \\\n  --model \"$$LOCAL_MODEL\"\
+    \ \\\n  --adapter \"$$CAPTURE_ADAPTER\" \\\n  --decode-adapter \"$$DECODE_ADAPTER\"\
+    \ \\\n  --state-architecture layerwise \\\n  --eval-jsonl \"$$RECURRENT_EVAL\"\
+    \ \\\n  --output-dir \"$$AMLT_OUTPUT_DIR/eval/$$EVAL_GROUP\" \\\n  --state-token-alias\
+    \ '<|vision_pad|>' \\\n  --max-samples-per-group 50 \\\n  --state-batch-size 2\
+    \ \\\n  --candidate-row-batch-size 2 \\\n  --max-length 1536 \\\n  --max-new-tokens\
+    \ 128 \\\n  --tasks $$TASKS \\\n  --seed 42 \\\n  --save-unredacted-predictions\n\
+    cp /tmp/layerwise_formal_screen_fixedu4_v1/audit.json \"$$AMLT_OUTPUT_DIR/eval/$$EVAL_GROUP/manifest_audit.json\"\
+    \nprintf '%s\n' \\\n  'stage=zero_training_layerwise_formal_screen' \\\n  'capture_adapter=cf1_visionpad'\
+    \ \\\n  'decode_adapter=full_task' \\\n  'state_architecture=one_address_layerwise_residual_trajectory'\
+    \ \\\n  'raw_history_visible_to_decoder=false' \\\n  'persistent_history_kv_cache=false'\
+    \ \\\n  'optimizer_steps=0' \\\n  > \"$$AMLT_OUTPUT_DIR/eval/$$EVAL_GROUP/scope.txt\"\
+    \n"
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 172800
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      EVAL_GROUP: t5
+      TASKS: predict_prospective_error
+  mpi: false
+  process_count_per_node: 1

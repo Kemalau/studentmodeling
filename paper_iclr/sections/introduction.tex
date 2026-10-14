@@ -1,0 +1,120 @@
+\section{Introduction}
+\label{sec:introduction}
+
+What does a student know, and what will they do next?  Educational systems
+usually operationalize this question as a collection of separate prediction
+problems.  Knowledge tracing estimates whether the next response will be
+correct \citep{corbett1995knowledge,piech2015deep,ghosh2020context}; cognitive
+diagnosis associates performance with latent skills; response models predict
+a selected option; and misconception systems explain a particular error.
+These targets are related, but the models used to predict them rarely share an
+interface.  A system that outputs a scalar probability of correctness cannot
+directly say that a student is likely to add two denominators, produce the
+resulting fraction, or preserve that error on a later problem without adding a
+new task-specific output space.
+
+This separation matters because correctness is a lossy description of student
+behavior.  Two students can both answer incorrectly while producing different
+responses for different reasons, and those differences determine which future
+errors are plausible and which feedback would be appropriate.  Recent datasets
+make richer modeling possible: Eedi links distractors to expert-authored
+misconceptions \citep{wang2021diagnostic}; MalruleLib provides executable
+mathematical error rules \citep{chen2026malrulelib}; and FoundationalASSIST
+contains longitudinal problem text together with students' first responses
+\citep{worden2026foundationalassist}.  Yet the dominant knowledge-tracing
+formulation still maps an interaction sequence to a fixed correctness head.
+
+Large language models (LLMs) offer a natural way to express heterogeneous
+targets as conditional generation.  They can consume problem text, answer
+choices, skill descriptions, and student histories in a shared context, then
+emit either a class label or an open-form response.  However, using an LLM does
+not by itself produce a valid student model.  A capable language model may
+solve the problem rather than imitate the student, rely on item priors rather
+than the student's history, or generate a plausible explanation unrelated to
+the student's observed error.  Prior work has accordingly questioned whether
+LLMs can simulate students under perturbed evidence \citep{sonkar2023deduction}
+and whether apparent student simulations remain valid under stronger controls
+\citep{yuan2026valid}.  A useful generative student model must therefore pass
+both predictive and mechanistic tests: it should use student-specific evidence
+to predict multiple outcomes, and its internal student representation should
+have a demonstrable effect on those predictions.
+
+We introduce \model, a causally grounded conditional-generation model with an
+explicit recurrent student state.  After each observed interaction, a shared
+language-model updater transforms the previous continuous state and the new
+evidence into $z_t$.  A task-conditioned decoder then receives only $z_t$ and a
+query; the raw history is unavailable as a bypass.  The same model produces
+structured outputs for five constructs:
+(i)~next-response correctness, (ii)~the student's concrete response,
+(iii)~the misconception expressed by an observed error, (iv)~correctness and
+response on a future problem after unobserved intervening interactions, and
+(v)~the recurrence of the same wrong response on a later exposure.  The
+formulation includes both closed-choice and open-generation protocols; it does
+not average their unlike metrics into a single ``student modeling score.''
+
+The main methodological challenge is to make $z_t$ sufficient for prediction
+without sacrificing the performance of a full-context language model.  We use
+four complementary objectives.  First, a full-context teacher distills its
+output distribution into the state-only decoder.  Second, a trajectory
+consistency loss aligns recurrently updated states with states independently
+encoded from the corresponding complete history.  Third, executable
+misconceptions provide counterfactual supervision: swapping a donor student's
+state into a recipient query should generate the error obtained by applying the
+donor's rule.  The last objective grounds state interventions behaviorally
+rather than training an auxiliary misconception classifier.  Fourth, a
+future-profile objective aligns a frozen view of the state with later
+knowledge-component outcomes while teaching matched student--state ownership.
+
+We evaluate the resulting state with a student-disjoint longitudinal protocol.
+A readout selected only on training and validation students predicts held-out
+future knowledge-component rates and emits readable weakness profiles.  We
+compare it with a population prior and a same-window correctness/count
+baseline, then permute state ownership across test students and compare two
+disjoint views of each student's observed history.  The permutation asks
+whether the right student's state matters; the disjoint-view test asks whether
+the recovered information is stable.  Literal cross-student text transport is
+reported as a diagnostic rather than a primary gate because an arbitrary
+transplanted latent trajectory need not be in distribution.  This distinction
+is essential because decodability alone does not establish a causal role
+\citep{hewitt2019designing,elazar2021amnesic}.
+
+We instantiate the framework with a 32B-parameter language model and a mixture
+of six data sources spanning real longitudinal interaction logs, expert-labeled
+misconceptions, and executable synthetic error rules.  Our formal evaluation
+keeps students disjoint across longitudinal splits and separates temporal
+prediction, non-temporal profile prediction, full-taxonomy misconception
+retrieval, open generation, and controlled synthetic generalization.  This
+protocol is deliberately stricter than evaluating against a row-specific set
+of candidates known to contain the gold answer.  It also makes the limits of
+each construct explicit: future performance within a knowledge component is
+not treated as a direct mastery label, and repeated incorrectness without a
+recorded response is not treated as persistence of the same misconception.
+
+Our contributions are:
+\begin{itemize}
+    \item \textbf{A recurrent generative student state.} We cast correctness,
+    concrete response prediction, misconception diagnosis, prospective
+    behavior, and exact wrong-response recurrence as task-conditioned
+    generation from one continuously updated state.
+    \item \textbf{A construct-aware multi-source evaluation.} We align six
+    educational data sources while preserving source-specific semantics and
+    compare the unified model with classical and neural specialists, including
+    IRT, PFA, BKT, DKT, AKT, retrieval, and response-frequency models.
+    \item \textbf{Transfer across synthetic and authentic errors.} We test
+    whether supervision from executable misconception rules improves diagnosis
+    of expert-labeled errors, with task-matched ablations that distinguish rule
+    supervision from merely adding synthetic responses.
+    \item \textbf{Grounded state training.} Full-context distillation preserves
+    predictive information, trajectory consistency teaches incremental
+    updating, executable counterfactuals supervise task behavior, and future
+    profile supervision binds states to student-specific outcomes.
+    \item \textbf{A reusable, audited student state.} We combine held-out future
+    prediction, readable profiles, state-ownership permutations, matched
+    baselines, and disjoint-history stability to test whether the learned state
+    is useful and student-specific.
+\end{itemize}
+
+Together, these contributions shift the question from whether a language model
+can predict one educational label to whether one model can represent a
+student's behavior at several levels of specificity---and whether the internal
+state supporting those predictions can survive causal scrutiny.

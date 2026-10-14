@@ -1,0 +1,282 @@
+from __future__ import annotations
+
+import hashlib
+import json
+import sys
+from pathlib import Path
+
+import pytest
+
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+from publish_state8_final_checkpoint import (  # noqa: E402
+    DIAGNOSIS_FIRST_VARIANTS,
+    SAME_QUESTION_VARIANTS,
+    STAGE,
+    STRICT_TAXONOMY_VARIANTS,
+    TASK_ANCHOR_VARIANTS,
+    publish,
+)
+
+
+def sha(value: bytes) -> str:
+    return hashlib.sha256(value).hexdigest()
+
+
+def source(
+    root: Path,
+    variant: str = "t3_heavy",
+    adapter: bytes = b"adapter",
+    history_mode: str = "five_stage_curriculum",
+) -> Path:
+    root.mkdir()
+    (root / "final_adapter").mkdir()
+    state = b"state"
+    (root / "final_adapter/adapter_model.safetensors").write_bytes(adapter)
+    (root / "final_adapter/adapter_config.json").write_text("{}\n")
+    (root / "recurrent_state.pt").write_bytes(state)
+    completion = {
+        "status": "complete",
+        "micro_steps": 259845,
+        "exact_history_support": True,
+        "sha256": {"adapter_model": sha(adapter), "recurrent_state": sha(state)},
+    }
+    receipt = {
+        "stage": "state8_qualified_unified_final_fit_v1",
+        "status": "final_fit_complete",
+        "one_epoch_exact": True,
+        "selected_replay_variant": variant,
+        "state_shape": [64, 8, 5120],
+        "raw_history_visible_to_decoder": False,
+        "persistent_history_kv_cache": False,
+        "adapter_sha256": sha(adapter),
+        "recurrent_state_sha256": sha(state),
+        "history_training_mode": history_mode,
+    }
+    if history_mode == "strict_state_only":
+        diagnosis_first = variant in DIAGNOSIS_FIRST_VARIANTS
+        receipt.update(
+            {
+                "history_dropout_counts": {"1.0": 259845},
+                "online_kd_weight": 1.0,
+                "label_auxiliary_weight": 1.0 if diagnosis_first else 4.0,
+            }
+        )
+        if diagnosis_first:
+            receipt.update(
+                {
+                    "diagnosis_field_order": ["diagnosis", "evidence", "label"],
+                    "canonical_label_role": "auxiliary_ordinary_weight",
+                }
+            )
+    (root / "completion.json").write_text(json.dumps(completion))
+    (root / "state8_final_fit_receipt.json").write_text(json.dumps(receipt))
+    for name in (
+        "run_config.json",
+        "training_metrics.json",
+        "validation_metrics.json",
+        "causal_validation_metrics.json",
+    ):
+        (root / name).write_text("{}\n")
+    view = (
+        "state8_stateonly_teacher_repair.json"
+        if history_mode == "strict_state_only"
+        else "state8_external_teacher_curriculum.json"
+    )
+    (root / view).write_text("{}\n")
+    if variant in STRICT_TAXONOMY_VARIANTS:
+        (root / "taxonomy_causal_repair.json").write_text("{}\n")
+    if variant in TASK_ANCHOR_VARIANTS:
+        (root / "taxonomy_causal_repair.json").write_text("{}\n")
+        (root / "task_anchored_causal_repair.json").write_text("{}\n")
+    if variant in DIAGNOSIS_FIRST_VARIANTS:
+        (root / "diagnosis_first_causal_repair.json").write_text("{}\n")
+    if variant == "strong1_exact_rescue_causal_taskanchor_seed67":
+        (root / "diagnosis_first_task_anchored_causal_repair.json").write_text(
+            "{}\n"
+        )
+    if variant == "strong1_exact_rescue_retention_preserve_seed68":
+        (
+            root / "diagnosis_first_retention_anchored_causal_repair.json"
+        ).write_text("{}\n")
+    if variant == "diagnosis_first_matched_seed67":
+        (root / "diagnosis_first_matched_finalfit.json").write_text("{}\n")
+    if variant in SAME_QUESTION_VARIANTS:
+        (root / "diagnosis_first_source_anchored_repair.json").write_text("{}\n")
+        (root / "eedi_same_question_finalfit.json").write_text("{}\n")
+    return root
+
+
+def test_publish_is_complete_and_idempotent(tmp_path: Path) -> None:
+    src = source(tmp_path / "source")
+    dst = tmp_path / "canonical"
+    first = publish(src, dst)
+    second = publish(src, dst)
+    assert first == second
+    assert first["stage"] == STAGE
+    assert first["status"] == "complete"
+    assert first["selected_replay_variant"] == "t3_heavy"
+    assert set(first["payload_sha256"]) == {
+        "final_adapter/adapter_model.safetensors",
+        "recurrent_state.pt",
+        "completion.json",
+        "state8_final_fit_receipt.json",
+        "run_config.json",
+        "training_metrics.json",
+        "validation_metrics.json",
+        "causal_validation_metrics.json",
+        "state8_external_teacher_curriculum.json",
+    }
+    assert (dst / "final_adapter/adapter_model.safetensors").read_bytes() == b"adapter"
+    assert not (dst / "canonical_publish_receipt.json.partial").exists()
+    assert not list(tmp_path.glob("canonical.staging-*"))
+
+
+def test_publish_rejects_conflicting_existing_destination(tmp_path: Path) -> None:
+    first = source(tmp_path / "first")
+    second = source(tmp_path / "second", variant="balanced", adapter=b"different")
+    dst = tmp_path / "canonical"
+    publish(first, dst)
+    with pytest.raises(ValueError, match="different artifacts"):
+        publish(second, dst)
+
+
+def test_publish_accepts_strict_repair_variant(tmp_path: Path) -> None:
+    src = source(
+        tmp_path / "source",
+        variant="repair_logits",
+        history_mode="strict_state_only",
+    )
+    dst = tmp_path / "canonical"
+    receipt = publish(src, dst)
+    assert receipt["selected_replay_variant"] == "repair_logits"
+    assert (dst / "state8_stateonly_teacher_repair.json").is_file()
+
+
+def test_publish_accepts_highcausal_mid_variant(tmp_path: Path) -> None:
+    src = source(
+        tmp_path / "source",
+        variant="highcausal_mid",
+        history_mode="strict_state_only",
+    )
+    receipt = publish(src, tmp_path / "canonical")
+    assert receipt["selected_replay_variant"] == "highcausal_mid"
+
+
+def test_publish_accepts_highcausal_eedi_variant(tmp_path: Path) -> None:
+    src = source(
+        tmp_path / "source",
+        variant="highcausal_eedi",
+        history_mode="strict_state_only",
+    )
+    receipt = publish(src, tmp_path / "canonical")
+    assert receipt["selected_replay_variant"] == "highcausal_eedi"
+
+
+def test_publish_accepts_highcausal_taxonomy_variant(tmp_path: Path) -> None:
+    src = source(
+        tmp_path / "source",
+        variant="highcausal_taxonomy",
+        history_mode="strict_state_only",
+    )
+    receipt = publish(src, tmp_path / "canonical")
+    assert receipt["selected_replay_variant"] == "highcausal_taxonomy"
+    assert (tmp_path / "canonical/taxonomy_causal_repair.json").is_file()
+
+
+@pytest.mark.parametrize("variant", sorted(STRICT_TAXONOMY_VARIANTS))
+def test_publish_accepts_every_promoted_taxonomy_variant(
+    tmp_path: Path, variant: str
+) -> None:
+    src = source(tmp_path / "source", variant=variant, history_mode="strict_state_only")
+    receipt = publish(src, tmp_path / "canonical")
+    assert receipt["selected_replay_variant"] == variant
+    assert (tmp_path / "canonical/taxonomy_causal_repair.json").is_file()
+
+
+@pytest.mark.parametrize("variant", sorted(TASK_ANCHOR_VARIANTS))
+def test_publish_accepts_every_promoted_task_anchor_variant(
+    tmp_path: Path, variant: str
+) -> None:
+    src = source(tmp_path / "source", variant=variant, history_mode="strict_state_only")
+    receipt = publish(src, tmp_path / "canonical")
+    assert receipt["selected_replay_variant"] == variant
+    assert (tmp_path / "canonical/taxonomy_causal_repair.json").is_file()
+    assert (tmp_path / "canonical/task_anchored_causal_repair.json").is_file()
+
+
+def test_publish_accepts_composed_diagnosis_first_task_anchor_variant(
+    tmp_path: Path,
+) -> None:
+    variant = "strong1_exact_rescue_causal_taskanchor_seed67"
+    src = source(
+        tmp_path / "source", variant=variant, history_mode="strict_state_only"
+    )
+    receipt = publish(src, tmp_path / "canonical")
+    assert receipt["selected_replay_variant"] == variant
+    assert (
+        tmp_path
+        / "canonical/diagnosis_first_task_anchored_causal_repair.json"
+    ).is_file()
+    assert not (tmp_path / "canonical/task_anchored_causal_repair.json").exists()
+
+
+def test_publish_accepts_diagnosis_first_retention_anchor_variant(
+    tmp_path: Path,
+) -> None:
+    variant = "strong1_exact_rescue_retention_preserve_seed68"
+    src = source(
+        tmp_path / "source", variant=variant, history_mode="strict_state_only"
+    )
+    receipt = publish(src, tmp_path / "canonical")
+    assert receipt["selected_replay_variant"] == variant
+    assert (
+        tmp_path
+        / "canonical/diagnosis_first_retention_anchored_causal_repair.json"
+    ).is_file()
+
+
+@pytest.mark.parametrize("variant", sorted(SAME_QUESTION_VARIANTS))
+def test_publish_accepts_same_question_variants(tmp_path: Path, variant: str) -> None:
+    src = source(tmp_path / "source", variant=variant, history_mode="strict_state_only")
+    receipt = publish(src, tmp_path / "canonical")
+    assert receipt["selected_replay_variant"] == variant
+    assert (tmp_path / "canonical/diagnosis_first_source_anchored_repair.json").is_file()
+    assert (tmp_path / "canonical/eedi_same_question_finalfit.json").is_file()
+
+
+def test_checkpoint_and_curriculum_same_question_variants_are_publishable() -> None:
+    assert "same_question_repair_checkpoint_promoted" in SAME_QUESTION_VARIANTS
+    assert "same_question_curriculum_promoted" in SAME_QUESTION_VARIANTS
+    assert "same_question_repair_checkpoint_promoted" in DIAGNOSIS_FIRST_VARIANTS
+    assert "same_question_curriculum_promoted" in DIAGNOSIS_FIRST_VARIANTS
+    assert "same_question_repair_checkpoint_promoted" in STRICT_TAXONOMY_VARIANTS
+    assert "same_question_curriculum_promoted" in STRICT_TAXONOMY_VARIANTS
+
+
+def test_publish_recovers_after_payload_rename_before_receipt(tmp_path: Path) -> None:
+    src = source(tmp_path / "source")
+    dst = tmp_path / "canonical"
+    publish(src, dst)
+    (dst / "canonical_publish_receipt.json").unlink()
+    recovered = publish(src, dst)
+    assert recovered["stage"] == STAGE
+    assert (dst / "canonical_publish_receipt.json").is_file()
+
+
+def test_publish_rejects_incomplete_stranded_destination(tmp_path: Path) -> None:
+    src = source(tmp_path / "source")
+    dst = tmp_path / "canonical"
+    dst.mkdir()
+    with pytest.raises(ValueError, match="Incomplete canonical destination"):
+        publish(src, dst)
+
+
+def test_publish_rejects_missing_metadata_from_published_destination(tmp_path: Path) -> None:
+    src = source(tmp_path / "source")
+    dst = tmp_path / "canonical"
+    publish(src, dst)
+    (dst / "validation_metrics.json").unlink()
+    with pytest.raises(ValueError, match="manifest is incomplete"):
+        publish(src, dst)

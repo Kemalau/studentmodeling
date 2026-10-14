@@ -1,0 +1,224 @@
+# yaml-language-server: $schema=file:///home/v-yuejiali/studentmodeling/workspace/experiments/unified_student_c1/.vscode/amlt-config.schema.json
+description: M3 unified recurrent-state generation-only versus cached behavioral-KD ablation for the M2-selected projection
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-m3-venv
+    - /tmp/studentmodeling-m3-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-m3-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore:
+    - .git/
+    - .vscode/
+    - amlt/
+    - data/
+    - results/
+    - __pycache__/
+    - '*.pyc'
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: m3-generation-only-identity-seed42
+    sku: 80G1-A100
+    sla_tier: Standard
+    command: &run_command |
+      set -euo pipefail
+      export PATH="/tmp/studentmodeling-m3-venv/bin:$$PATH"
+      export PYTHONPATH="$$AMLT_CODE_DIR/scripts$${PYTHONPATH:+:$$PYTHONPATH}"
+      export HF_HOME=/tmp/hf_cache
+      export HF_HUB_CACHE=/tmp/hf_cache/hub
+      export HF_HUB_DISABLE_XET=1
+      export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+      export TRANSFORMERS_VERBOSITY=error
+      export LOCAL_MODEL=/tmp/Qwen3-32B
+      export SOURCE_DATA=/mnt/amulet/studentmodeling/method_small_v1
+      export FULL_ADAPTER=/mnt/amulet/studentmodeling/adapters/qwen3_32b_full_trainvalid_no_t4_strictt6_1ep/final_adapter
+      export TEACHER_CACHE=/mnt/amulet/studentmodeling/world_model_v1/m3/teacher_cache_train_n1200_top256_fixedu4_v2_20260730
+      export UNIFIED_DATA=/tmp/unified_recurrent_method_small_fixedu4_v2_train_n1200
+      export M2_STATE="/mnt/amulet/studentmodeling/checkpoints/recurrent_malrule_cf1_u4_$${PROJECTION_MODE}_seed42_v4_20260730/recurrent_state.pt"
+      export RUN_DIR="/mnt/amulet/studentmodeling/checkpoints/world_model_v1_m3_$${ARM}_$${PROJECTION_MODE}_seed42_fixedu4_v2_20260730"
+      mkdir -p "$$HF_HUB_CACHE" "$$UNIFIED_DATA" "$$RUN_DIR" "$$AMLT_OUTPUT_DIR/model" "$$AMLT_OUTPUT_DIR/metrics"
+
+      available_kb=$$(df --output=avail /tmp | tail -1)
+      test "$$available_kb" -ge 125829120
+      test -f "$$SOURCE_DATA/train.jsonl"
+      test -f "$$SOURCE_DATA/valid.jsonl"
+      test -f "$$FULL_ADAPTER/adapter_model.safetensors"
+      test -f "$$M2_STATE"
+      test "$$(sha256sum "$$SOURCE_DATA/train.jsonl" | cut -d' ' -f1)" = 3813a0044703569c850f09ba4d74eee7bfab1a774466843255bfafe791ef579f
+      test "$$(sha256sum "$$SOURCE_DATA/valid.jsonl" | cut -d' ' -f1)" = 9d758302d3eef0320c5446993b063046fc7f1c6f3ecd417c0ffee1a572e832aa
+      test "$$(sha256sum scripts/build_unified_recurrent_manifest.py | cut -d' ' -f1)" = 8bc822ec33165037dff8353707a037a0edc12679cd67b66885aa94a4288542f6
+      test "$$(sha256sum scripts/select_recurrent_subset.py | cut -d' ' -f1)" = a20b35803a4e8d659ff085bd3c5c9f5e9f4951ab45ad34f5214f640c941be1a2
+      test "$$(sha256sum scripts/train_recurrent_student_m3.py | cut -d' ' -f1)" = deec81e0422245e71a002a0ea1521a911a054d35ee4ff50e52fc4bda68c17863
+      test "$$(sha256sum scripts/recurrent_distillation.py | cut -d' ' -f1)" = fe9e5b756aa986fd8c8e05b0ff79400d1da761096e11d6b258c4bc4da2df8958
+      test "$$(sha256sum scripts/teacher_cache.py | cut -d' ' -f1)" = 04f057df2ccdc174e3094bab1c79d9bdbee4c9c67657615f1e49c3e68903cc4b
+      test "$$(sha256sum scripts/build_teacher_cache.py | cut -d' ' -f1)" = d52b5f17ffbbd033ce2ba27877dbedf9abdaffa4aaaffe8194cbe7bd5a5b7f08
+      test "$$(sha256sum scripts/finalize_teacher_cache.py | cut -d' ' -f1)" = d70a169b26f9e632c2104d90a2f4e07913350f4931424de3429c0a1ff922135e
+      test "$$(sha256sum scripts/recurrent_student_model.py | cut -d' ' -f1)" = 9e0431dccb524f67b401f7ea911e11c96fc3061432ffdc73e0cac2bbc2acc5a0
+      test "$$(sha256sum scripts/train_c1_lora.py | cut -d' ' -f1)" = fc329808f54edff7c12586ed9467801dd287efdf587599f5f456548d3979140e
+
+      python scripts/build_unified_recurrent_manifest.py \
+        --train-jsonl "$$SOURCE_DATA/train.jsonl" \
+        --valid-jsonl "$$SOURCE_DATA/valid.jsonl" \
+        --output-dir /tmp/unified_recurrent_method_small_fixedu4_v2_full \
+        --max-updates 4 \
+        --seed 20260730
+      python scripts/select_recurrent_subset.py \
+        --input-jsonl /tmp/unified_recurrent_method_small_fixedu4_v2_full/train.jsonl \
+        --output-jsonl "$$UNIFIED_DATA/train.jsonl" \
+        --limit 1200 \
+        --seed 20260730
+      python scripts/select_recurrent_subset.py \
+        --input-jsonl /tmp/unified_recurrent_method_small_fixedu4_v2_full/valid.jsonl \
+        --output-jsonl "$$UNIFIED_DATA/valid.jsonl" \
+        --limit 300 \
+        --seed 20260731
+      test "$$(sha256sum "$$UNIFIED_DATA/train.jsonl" | cut -d' ' -f1)" = 6fa105b8635e19fb0acf9f9f145d3fe5f8bd9715927f891d647b298ffb920bc1
+      test "$$(sha256sum "$$UNIFIED_DATA/valid.jsonl" | cut -d' ' -f1)" = 21734008989c8071fad975a542ab195120789ad4aa7630f1bc8c67aa9044e474
+      python scripts/audit_unified_recurrent_manifest.py \
+        --train-jsonl "$$UNIFIED_DATA/train.jsonl" \
+        --valid-jsonl "$$UNIFIED_DATA/valid.jsonl" \
+        --output-json "$$UNIFIED_DATA/audit.json"
+
+      rm -rf "$$LOCAL_MODEL"
+      mkdir -p "$$LOCAL_MODEL"
+      python scripts/copy_model_parallel.py \
+        --source /mnt/amulet/studentmodeling/models/Qwen3-32B \
+        --destination "$$LOCAL_MODEL" \
+        --workers 16
+      test -f "$$LOCAL_MODEL/model.safetensors.index.json"
+      nvidia-smi --query-gpu=index,name,memory.total --format=csv,noheader
+
+      projection_args=()
+      if [[ "$$PROJECTION_MODE" == trainable ]]; then
+        projection_args=(--trainable-projections --state-projection-rank 64)
+      elif [[ "$$PROJECTION_MODE" != identity ]]; then
+        echo "Unknown PROJECTION_MODE=$$PROJECTION_MODE" >&2
+        exit 2
+      fi
+      kd_args=()
+      if [[ "$$ARM" == generation_kd ]]; then
+        if [[ ! -f "$$TEACHER_CACHE/integrity.json" ]]; then
+          mkdir -p "$$TEACHER_CACHE"
+          python -u scripts/build_teacher_cache.py \
+            --model "$$LOCAL_MODEL" \
+            --teacher-adapter "$$FULL_ADAPTER" \
+            --jsonl "$$UNIFIED_DATA/train.jsonl" \
+            --output-dir "$$TEACHER_CACHE" \
+            --state-token-alias '<|vision_pad|>' \
+            --max-length 1536 \
+            --top-k 256 \
+            --shard-size 128
+          python scripts/finalize_teacher_cache.py --cache-dir "$$TEACHER_CACHE"
+        fi
+        python -c "from pathlib import Path; from teacher_cache import TeacherCache; import sys; cache = TeacherCache(Path(sys.argv[1]), expected_source_sha256='6fa105b8635e19fb0acf9f9f145d3fe5f8bd9715927f891d647b298ffb920bc1'); assert len(cache.by_example) == 1200" "$$TEACHER_CACHE"
+        kd_args=(--teacher-cache "$$TEACHER_CACHE" --behavior-kd-weight 0.5 --behavior-kd-temperature 1.0)
+      elif [[ "$$ARM" != generation_only ]]; then
+        echo "Unknown ARM=$$ARM" >&2
+        exit 2
+      fi
+      resume_args=()
+      if [[ ! -f "$$RUN_DIR/completion.json" ]]; then
+        latest=""
+        mapfile -t checkpoints < <(find "$$RUN_DIR" -mindepth 1 -maxdepth 1 -type d -name 'checkpoint-*' | sort -V)
+        for ((i=$${#checkpoints[@]}-1; i>=0; i--)); do
+          candidate="$${checkpoints[$$i]}"
+          if [[ -f "$$candidate/adapter/adapter_model.safetensors" \
+                && -f "$$candidate/recurrent_state.pt" \
+                && -f "$$candidate/checkpoint_completion.json" ]]; then
+            latest="$$candidate/recurrent_state.pt"
+            break
+          fi
+        done
+        [[ -z "$$latest" ]] || resume_args=(--resume-from-checkpoint "$$latest")
+        python -u scripts/train_recurrent_student_m3.py \
+          --model "$$LOCAL_MODEL" \
+          --init-adapter "$$FULL_ADAPTER" \
+          --init-recurrent-state "$$M2_STATE" \
+          --train-jsonl "$$UNIFIED_DATA/train.jsonl" \
+          --valid-jsonl "$$UNIFIED_DATA/valid.jsonl" \
+          --output-dir "$$RUN_DIR" \
+          --state-token-alias '<|vision_pad|>' \
+          --max-length 1536 \
+          --max-steps 1200 \
+          --learning-rate 2e-5 \
+          --generation-weight 1.0 \
+          --consistency-weight 0.25 \
+          --direct-replay-weight 0.25 \
+          --gradient-accumulation-steps 4 \
+          --eval-limit 300 \
+          --save-steps 200 \
+          --seed 42 \
+          "$${projection_args[@]}" \
+          "$${kd_args[@]}" \
+          "$${resume_args[@]}"
+      fi
+      test -f "$$RUN_DIR/completion.json"
+      test -f "$$RUN_DIR/final_adapter/adapter_model.safetensors"
+      test -f "$$RUN_DIR/recurrent_state.pt"
+      cp -r "$$RUN_DIR/final_adapter/." "$$AMLT_OUTPUT_DIR/model/"
+      cp "$$RUN_DIR/recurrent_state.pt" "$$AMLT_OUTPUT_DIR/model/recurrent_state.pt"
+      cp "$$RUN_DIR/validation_metrics.json" "$$AMLT_OUTPUT_DIR/metrics/validation_metrics.json"
+      cp "$$RUN_DIR/training_metrics_by_task_source.json" "$$AMLT_OUTPUT_DIR/metrics/training_metrics_by_task_source.json"
+      cp "$$RUN_DIR/run_config.json" "$$AMLT_OUTPUT_DIR/metrics/run_config.json"
+      cp "$$RUN_DIR/gradient_audit.json" "$$AMLT_OUTPUT_DIR/metrics/gradient_audit.json"
+      cp "$$RUN_DIR/completion.json" "$$AMLT_OUTPUT_DIR/metrics/completion.json"
+      cp "$$UNIFIED_DATA/audit.json" "$$AMLT_OUTPUT_DIR/metrics/data_audit.json"
+      printf '%s\n' 'late_fusion_protocol=answer_anchor_visible_v2' > "$$AMLT_OUTPUT_DIR/metrics/mask_protocol.txt"
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        ARM: generation_only
+        PROJECTION_MODE: identity
+
+  - name: m3-generation-kd-identity-seed42
+    sku: 80G1-A100
+    sla_tier: Standard
+    command: *run_command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        ARM: generation_kd
+        PROJECTION_MODE: identity
+
+  - name: m3-generation-only-trainable-seed42
+    sku: 80G1-A100
+    sla_tier: Standard
+    command: *run_command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        ARM: generation_only
+        PROJECTION_MODE: trainable
+
+  - name: m3-generation-kd-trainable-seed42
+    sku: 80G1-A100
+    sla_tier: Standard
+    command: *run_command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        ARM: generation_kd
+        PROJECTION_MODE: trainable

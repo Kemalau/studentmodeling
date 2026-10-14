@@ -1,0 +1,155 @@
+# Specialized from the approved distributed State8 final-fit Feeds template.
+# Submit exactly one job after the short-screen promotion gate selects its arm.
+description: Promoted high-causal exact one-epoch unified State8 final fit
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-state8-finalfit-venv
+    - /tmp/studentmodeling-state8-finalfit-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-state8-finalfit-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - &base
+    name: state8-highcausal-joint-unified-finalfit-seed42
+    sku: 2x80G8-A100-IB-NvLink
+    process_count_per_node: -1
+    mpi: true
+    sla_tier: Standard
+    command: &command |
+      set -euo pipefail
+      trap 'rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc" "$${BASH_COMMAND}" >&2; exit "$$rc"' ERR
+      bash scripts/run_state8_unified_final_fit.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 345600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-finalfit-venv
+        FINALFIT_VARIANT: highcausal_joint
+
+  - <<: *base
+    name: state8-highcausal-updater-unified-finalfit-seed42
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 345600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-finalfit-venv
+        FINALFIT_VARIANT: highcausal_updater
+
+  - <<: *base
+    name: state8-highcausal-mid-unified-finalfit-seed42
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 345600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-finalfit-venv
+        FINALFIT_VARIANT: highcausal_mid
+
+  - <<: *base
+    name: state8-highcausal-eedi-unified-finalfit-seed42
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 345600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-finalfit-venv
+        FINALFIT_VARIANT: highcausal_eedi
+
+  - <<: *base
+    name: state8-highcausal-taxonomy-unified-finalfit-seed42
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 345600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-finalfit-venv
+        FINALFIT_VARIANT: highcausal_taxonomy
+
+  - <<: *base
+    name: state8-taxonomy-curriculum-t3heavy-unified-finalfit-seed42
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 345600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-finalfit-venv
+        FINALFIT_VARIANT: taxonomy_curriculum_t3heavy
+
+  - <<: *base
+    name: state8-taxonomy-curriculum-balanced-unified-finalfit-seed42
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 345600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-finalfit-venv
+        FINALFIT_VARIANT: taxonomy_curriculum_balanced
+
+  - <<: *base
+    name: state8-taxonomy-curriculum-t3heavy-diag-unified-finalfit-seed42
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 345600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-finalfit-venv
+        FINALFIT_VARIANT: taxonomy_curriculum_t3heavy_diag
+
+  - <<: *base
+    name: state8-taxonomy-curriculum-balanced-diag-unified-finalfit-seed42
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 345600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-finalfit-venv
+        FINALFIT_VARIANT: taxonomy_curriculum_balanced_diag
+
+  - <<: *base
+    name: state8-task-anchor-base-unified-finalfit-seed42
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 345600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-finalfit-venv
+        FINALFIT_VARIANT: task_anchor_base
+
+  - <<: *base
+    name: state8-task-anchor-c4strong-unified-finalfit-seed42
+    command: *command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 345600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-finalfit-venv
+        FINALFIT_VARIANT: task_anchor_c4strong

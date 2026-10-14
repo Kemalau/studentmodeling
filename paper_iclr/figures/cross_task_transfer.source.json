@@ -1,0 +1,14 @@
+{
+  "provenance": "User-provided Table 2 and explicitly supplied Difference values; not re-extracted from experiment artifacts.",
+  "comparison": "USSM minus task-only; same Qwen3-32B backbone and matched target-task supervision exposure",
+  "rounding_note": "Use the reported differences directly. Subtracting the displayed rounded absolute scores does not reproduce every reported difference.",
+  "uncertainty_note": "No uncertainty estimates were supplied; error bars are not available.",
+  "rows": [
+    {"task": "Correctness", "label": "Correctness", "task_only": 0.692, "ussm": 0.688, "gain": -0.004},
+    {"task": "Written response", "label": "Written\nresponse", "task_only": 0.506, "ussm": 0.518, "gain": 0.013},
+    {"task": "Diagnosis", "label": "Diagnosis", "task_only": 0.546, "ussm": 0.566, "gain": 0.021},
+    {"task": "Eedi only", "label": "Eedi only\n(Diagnosis subset)", "task_only": 0.445, "ussm": 0.497, "gain": 0.051},
+    {"task": "Future response", "label": "Future\nresponse", "task_only": 0.770, "ussm": 0.767, "gain": -0.003},
+    {"task": "Persistence", "label": "Persistence", "task_only": 0.863, "ussm": 0.862, "gain": -0.001}
+  ]
+}

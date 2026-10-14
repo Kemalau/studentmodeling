@@ -1,0 +1,78 @@
+{
+  "scope": "Reaggregation of existing label predictions and probabilities; not new generation or semantic judging.",
+  "evaluator": "build_formal_evaluation_matrix.classification_summary / formal_metric_utils.binary_metrics",
+  "records": [
+    {
+      "model": "Qwen3-32B Base",
+      "public_task": "T1",
+      "task": "predict_correctness",
+      "source": "workspace/experiments/unified_student_c1/results/formal_specialist_v1/qwen_amlt/studentmodeling-qwen3-32b-formal-eval-v1-retry4-4a100-20260718/qwen3-32b-formal-evaluation-v1/eval/base_classification/predictions_redacted.jsonl",
+      "sha256": "5a044cf1860b08db14d21834a6dfb0ec1055cd29e82fd7ce32ab93dd7c28c798",
+      "metrics": {
+        "n": 10913,
+        "positive": "correct",
+        "positive_rate": 0.48593420690919087,
+        "accuracy": 0.5445798588838999,
+        "macro_f1": 0.47442852242401456,
+        "nll": 1.7046498878636274,
+        "brier": 0.3895043823637886,
+        "auroc": 0.6337955544619919,
+        "auprc": 0.6099290369659212
+      }
+    },
+    {
+      "model": "Qwen3-32B Base",
+      "public_task": "T5",
+      "task": "predict_error_persistence",
+      "source": "workspace/experiments/unified_student_c1/results/formal_specialist_v1/qwen_amlt/studentmodeling-qwen3-32b-formal-eval-v1-retry4-4a100-20260718/qwen3-32b-formal-evaluation-v1/eval/base_classification/predictions_redacted.jsonl",
+      "sha256": "5a044cf1860b08db14d21834a6dfb0ec1055cd29e82fd7ce32ab93dd7c28c798",
+      "metrics": {
+        "n": 976,
+        "positive": "persistent",
+        "positive_rate": 0.16290983606557377,
+        "accuracy": 0.8411885245901639,
+        "macro_f1": 0.48121958663543746,
+        "nll": 0.740162893558701,
+        "brier": 0.14816706482765177,
+        "auroc": 0.6427488202735887,
+        "auprc": 0.35765749544830633
+      }
+    },
+    {
+      "model": "Unified Qwen3-32B QLoRA",
+      "public_task": "T1",
+      "task": "predict_correctness",
+      "source": "workspace/experiments/unified_student_c1/results/formal_specialist_v1/qwen_amlt/studentmodeling-qwen3-32b-formal-eval-v1-retry4-4a100-20260718/qwen3-32b-formal-evaluation-v1/eval/adapter_classification/predictions_redacted.jsonl",
+      "sha256": "3d5772f8c21adf20c859df52875b4331812386218afc3caa17b069a549bad6e7",
+      "metrics": {
+        "n": 10913,
+        "positive": "correct",
+        "positive_rate": 0.48593420690919087,
+        "accuracy": 0.6875286355722533,
+        "macro_f1": 0.687525778285917,
+        "nll": 0.5716445348238811,
+        "brier": 0.19764179960044725,
+        "auroc": 0.7600779903616256,
+        "auprc": 0.7744580751881863
+      }
+    },
+    {
+      "model": "Unified Qwen3-32B QLoRA",
+      "public_task": "T5",
+      "task": "predict_error_persistence",
+      "source": "workspace/experiments/unified_student_c1/results/formal_specialist_v1/qwen_amlt/studentmodeling-qwen3-32b-formal-eval-v1-retry4-4a100-20260718/qwen3-32b-formal-evaluation-v1/eval/adapter_classification/predictions_redacted.jsonl",
+      "sha256": "3d5772f8c21adf20c859df52875b4331812386218afc3caa17b069a549bad6e7",
+      "metrics": {
+        "n": 976,
+        "positive": "persistent",
+        "positive_rate": 0.16290983606557377,
+        "accuracy": 0.8616803278688525,
+        "macro_f1": 0.6352310950541922,
+        "nll": 0.39615290424948324,
+        "brier": 0.11746985689499852,
+        "auroc": 0.6776132960747635,
+        "auprc": 0.42580140594358956
+      }
+    }
+  ]
+}

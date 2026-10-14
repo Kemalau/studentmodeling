@@ -1,0 +1,55 @@
+# Generated with `amlt template -t Feeds -f <this-file> -n 2 -y`, then specialized.
+description: Hash-bound State8 checkpoint-4000 T3 and compact causal trajectory screen
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-state8-matched-milestone-screen-venv
+    - /tmp/studentmodeling-state8-matched-milestone-screen-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-state8-matched-milestone-screen-venv/bin/python -m pip install -r requirements-feeds.txt
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+jobs:
+  - name: state8-matched-checkpoint4000-t3
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_state8_matched_checkpoint_t3.sh | cut -d' ' -f1)" = 040defd83a31512cc820f9944c474153d490740adfb84ac5f2035c1fe09c07c9
+      bash scripts/run_state8_matched_checkpoint_t3.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env: &common_env
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-matched-milestone-screen-venv
+        STATE8_MATCHED_CHECKPOINT_ROOT: /mnt/amulet/studentmodeling/checkpoints/state8_qualified_teacher_curriculum_seed42_exact5000_rounds1250_kd1_v2_20260805_taxonomy_semantic_v1_diagnosis_first_matched_teacher_seed67_single_ga4/checkpoint-4000
+        STATE8_MATCHED_CHECKPOINT_STEP: '4000'
+        STATE8_MATCHED_ADAPTER_SHA256: '37a759cb2af36328d0c9b6ec357189f1d34a50151c6eb2d9a76ec28fce3685b8'
+        STATE8_MATCHED_STATE_SHA256: '97003b82974a5a205469b731a1118a60658b484c3593b47d9b2fabefd4bc1d74'
+        MATCHED_CHECKPOINT_RECEIPT_SHA256: '3ff70d9079be4b7fd98c1542c9ea070ca0daa75e9e89f31473225f8debbc4181'
+  - name: state8-matched-checkpoint4000-c4
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_state8_matched_checkpoint_milestone_c4.sh | cut -d' ' -f1)" = 4f17b4e8fa02c4c842493f7ec208f4cadf846ae8c103efaafc1f6bdbc6ff0e4e
+      bash scripts/run_state8_matched_checkpoint_milestone_c4.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env: *common_env

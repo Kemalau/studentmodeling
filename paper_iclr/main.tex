@@ -1,0 +1,76 @@
+\documentclass{article}
+
+\usepackage{iclr2026_conference,times}
+\input{math_commands.tex}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{url}
+
+\definecolor{draftblue}{RGB}{35,90,160}
+\newcommand{\model}{\textsc{CGSM}}
+\newcommand{\studentstate}{\texttt{<STUDENT\_STATE>}}
+\newcommand{\draftnote}[1]{\textcolor{draftblue}{[\textbf{Draft:} #1]}}
+
+\title{Beyond Correctness: Causally Grounded Generative Student Modeling\\
+with Recurrent and Intervenable Student States}
+
+\author{Anonymous authors}
+
+% Uncomment only for a camera-ready version.
+% \iclrfinalcopy
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Student modeling is commonly divided into separate problems: predicting
+correctness, forecasting a student's concrete response, diagnosing a
+misconception, and estimating future behavior.  This fragmentation makes it
+difficult to reuse evidence across tasks and limits most models to a fixed
+label space or a task-specific prediction head.  We introduce \model, a
+causally grounded generative student model that expresses these problems
+through one conditional-generation interface and one recurrent student state.
+After every observed interaction, a language-model updater compresses the
+previous state and the new evidence into a continuous state carried by a
+small bank of eight state slots addressed by one special token type.  A
+task-conditioned decoder predicts correctness,
+responses, misconceptions, prospective responses, or error recurrence from
+this state and the query, without direct access to the history.  To make the
+state predictive rather than merely decodable, we combine multi-task
+generation with full-context distillation, recurrent--direct state
+consistency, counterfactual supervision from executable misconceptions, and a
+future-profile ownership objective.  We evaluate the model across six
+educational data sources and separately test predictive sufficiency, temporal
+updating, readable future profiles, state-ownership permutations, and
+within-student stability.  The resulting framework turns student state from a
+post-hoc activation into a compact computational object that can be cached,
+updated, read, and audited.
+\end{abstract}
+
+\input{sections/introduction}
+\input{sections/related_work}
+\input{sections/method}
+\input{sections/experiments}
+\input{sections/conclusion}
+
+\bibliography{references}
+\bibliographystyle{iclr2026_conference}
+
+\appendix
+\section{Task Prompts and Output Schemas}
+\label{app:prompts}
+\draftnote{Add one complete prompt and target example for each protocol.}
+
+\section{Construct Validity and Data Audits}
+\label{app:validity}
+\input{appendix_dataset_task_table}
+\draftnote{Add the remaining construct-validity audit beyond the dataset and
+task protocol tables.}
+
+\end{document}

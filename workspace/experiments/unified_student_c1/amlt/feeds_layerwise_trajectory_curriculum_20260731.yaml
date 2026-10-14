@@ -1,0 +1,221 @@
+# Generated from `amlt template -t Feeds -f amlt/feeds_layerwise_trajectory_curriculum_20260731.yaml -y`.
+# yaml-language-server: $schema=file:///home/v-yuejiali/studentmodeling/workspace/experiments/unified_student_c1/.vscode/amlt-config.schema.json
+description: Frozen-CF1 trajectory-distillation curriculum for a closed layerwise recurrent student state
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-trajectory-curriculum-venv
+    - /tmp/studentmodeling-trajectory-curriculum-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-trajectory-curriculum-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore:
+    - .git/
+    - .vscode/
+    - amlt/
+    - data/
+    - results/
+    - __pycache__/
+    - '*.pyc'
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: trajectory-r64-scale-seed42
+    sku: 80G4-A100
+    process_count_per_node: -1
+    mpi: true
+    sla_tier: Standard
+    command: &curriculum_command |
+      set -euo pipefail
+      export PATH="/tmp/studentmodeling-trajectory-curriculum-venv/bin:$$PATH"
+      export PYTHONPATH="$$AMLT_CODE_DIR/scripts$${PYTHONPATH:+:$$PYTHONPATH}"
+      export HF_HOME=/tmp/hf_cache
+      export HF_HUB_CACHE=/tmp/hf_cache/hub
+      export HF_HUB_DISABLE_XET=1
+      export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+      export TRANSFORMERS_VERBOSITY=error
+      : "$${BRANCH:?BRANCH is required}"
+      : "$${TRANSITION_RANK:?TRANSITION_RANK is required}"
+      : "$${RELATIVE_MSE_WEIGHT:?RELATIVE_MSE_WEIGHT is required}"
+      export LOCAL_MODEL=/tmp/Qwen3-32B
+      export SOURCE_DATA=/mnt/amulet/studentmodeling/method_small_v1
+      export C4_DATA=/mnt/amulet/studentmodeling/c4_fullopen_20260724/malrule_c1_clean
+      export UNIFIED_DATA=/tmp/layerwise_trajectory_unified_u4_v1
+      export CAUSAL_DATA=/tmp/layerwise_trajectory_cf4_u4_v1
+      export INIT_ADAPTER=/mnt/amulet/studentmodeling/checkpoints/state_curriculum_stage_a_cf1_alias_visionpad_seed42_20260727/final_adapter
+      export RUN_DIR="/mnt/amulet/studentmodeling/checkpoints/layerwise_trajectory_curriculum_$${BRANCH}_seed42_n200_20260731"
+      mkdir -p "$$HF_HUB_CACHE" "$$UNIFIED_DATA" "$$CAUSAL_DATA" "$$RUN_DIR" \
+        "$$AMLT_OUTPUT_DIR/model" "$$AMLT_OUTPUT_DIR/metrics" "$$AMLT_OUTPUT_DIR/eval/c4"
+      test "$$(df --output=avail /tmp | tail -1)" -ge 125829120
+      test -f "$$SOURCE_DATA/train.jsonl"
+      test -f "$$SOURCE_DATA/valid.jsonl"
+      test -f "$$C4_DATA/train.jsonl"
+      test -f "$$C4_DATA/val.jsonl"
+      test -f "$$C4_DATA/test_same_template.jsonl"
+      test -f "$$INIT_ADAPTER/adapter_model.safetensors"
+      test "$$(sha256sum "$$SOURCE_DATA/train.jsonl" | cut -d' ' -f1)" = 3813a0044703569c850f09ba4d74eee7bfab1a774466843255bfafe791ef579f
+      test "$$(sha256sum "$$SOURCE_DATA/valid.jsonl" | cut -d' ' -f1)" = 9d758302d3eef0320c5446993b063046fc7f1c6f3ecd417c0ffee1a572e832aa
+      test "$$(sha256sum "$$C4_DATA/train.jsonl" | cut -d' ' -f1)" = 6fa5f4160e4a096db6228eb165136d927d0a72bae5a8e5dce9df5bda71a73dae
+      test "$$(sha256sum "$$C4_DATA/val.jsonl" | cut -d' ' -f1)" = e928dbe191cf85a00b12a78b5b1e4bb8bd8800bd31a19d5310c4e263e3355d25
+      test "$$(sha256sum scripts/train_recurrent_student_m4.py | cut -d' ' -f1)" = a39d0d1aabe97e7df3bc0424e18a556af338ba6bf4f328ea21b921915bd4727f
+      test "$$(sha256sum scripts/layerwise_recurrent_student_model.py | cut -d' ' -f1)" = 1706a01450660c833534e487a8b7aad56a61541ce41cc17ca2c8ed16e2e23d3c
+      test "$$(sha256sum scripts/evaluate_recurrent_causal_gate.py | cut -d' ' -f1)" = d2a0cf7702f3aaf56bc3629af7b63837f739799f47a3b51e5f5076917116f0b2
+      test "$$(sha256sum scripts/build_unified_recurrent_manifest.py | cut -d' ' -f1)" = 8bc822ec33165037dff8353707a037a0edc12679cd67b66885aa94a4288542f6
+      test "$$(sha256sum scripts/audit_unified_recurrent_manifest.py | cut -d' ' -f1)" = 6de4fcab57aa8dbd0b56f07972e341f64b60668474f03069cc47878a80e434a0
+      test "$$(sha256sum scripts/build_recurrent_causal_pairs.py | cut -d' ' -f1)" = 2daed709603a63a487705bce87539b58c7e01d239397758305d3b023f5eb26b7
+      test "$$(sha256sum manifests/cf4_balanced_paired_state_swap_train_seed20260731_v1.json | cut -d' ' -f1)" = 4e7907cf4d74eced4f4c5c2dddf7213a2649cddca081fd2b4a51f35934b35773
+      test "$$(sha256sum manifests/cf4_balanced_paired_state_swap_valid_seed20260801_v1.json | cut -d' ' -f1)" = 1a2f45ced0a123d40e1a9646035b07e3b31203567718e6de982cde24bc45def9
+      test "$$(sha256sum manifests/c4_stage_a_gate_pairs_seed42_n150_v1.json | cut -d' ' -f1)" = edcdb934a65252557f6c569eea9ef7a85e5445549deac9fb4829c3f579e1a9b8
+      python -m unittest discover -s tests -p 'test_train_recurrent_student_m4.py' -v
+      python -m unittest discover -s tests -p 'test_layerwise_recurrent_student_model.py' -v
+      python -m unittest discover -s tests -p 'test_evaluate_recurrent_causal_gate.py' -v
+
+      exec 7>/tmp/layerwise-trajectory-data.lock
+      flock -x 7
+      if [[ ! -f /tmp/layerwise-trajectory-data.complete ]]; then
+        rm -rf "$$UNIFIED_DATA" "$$CAUSAL_DATA"
+        mkdir -p "$$UNIFIED_DATA" "$$CAUSAL_DATA"
+        python scripts/build_unified_recurrent_manifest.py \
+          --train-jsonl "$$SOURCE_DATA/train.jsonl" --valid-jsonl "$$SOURCE_DATA/valid.jsonl" \
+          --output-dir "$$UNIFIED_DATA" --max-updates 4 --seed 20260730
+        python scripts/audit_unified_recurrent_manifest.py \
+          --train-jsonl "$$UNIFIED_DATA/train.jsonl" --valid-jsonl "$$UNIFIED_DATA/valid.jsonl" \
+          --output-json "$$UNIFIED_DATA/audit.json"
+        python scripts/build_recurrent_causal_pairs.py \
+          --train-source "$$C4_DATA/train.jsonl" --valid-source "$$C4_DATA/val.jsonl" \
+          --train-pairs manifests/cf4_balanced_paired_state_swap_train_seed20260731_v1.json \
+          --valid-pairs manifests/cf4_balanced_paired_state_swap_valid_seed20260801_v1.json \
+          --output-dir "$$CAUSAL_DATA" --max-updates 4
+        touch /tmp/layerwise-trajectory-data.complete
+      fi
+      flock -u 7
+      test "$$(sha256sum "$$UNIFIED_DATA/train.jsonl" | cut -d' ' -f1)" = 18f2a05be56a93bb63f5ac552559502f29770158356faf906020911d5e9e2e6d
+      test "$$(sha256sum "$$UNIFIED_DATA/valid.jsonl" | cut -d' ' -f1)" = 9079207606ebab4fe85a47926d8fb38332970af12d78cc647dcda965f4522069
+      test "$$(sha256sum "$$CAUSAL_DATA/train.jsonl" | cut -d' ' -f1)" = 30f68f54120e5a9ada0a37b1dba2b6480de0f8eaeac98d0b7ed7c627429f9766
+      test "$$(sha256sum "$$CAUSAL_DATA/valid.jsonl" | cut -d' ' -f1)" = 8e038c3a60c2e1b420779cd54eb203b12ae5d51544c87a805fe19d47fdbe294e
+
+      exec 6>/tmp/layerwise-trajectory-model.lock
+      flock -x 6
+      if [[ ! -f /tmp/layerwise-trajectory-model.complete ]]; then
+        rm -rf "$$LOCAL_MODEL"
+        mkdir -p "$$LOCAL_MODEL"
+        python scripts/copy_model_parallel.py \
+          --source /mnt/amulet/studentmodeling/models/Qwen3-32B \
+          --destination "$$LOCAL_MODEL" --workers 16
+        test -f "$$LOCAL_MODEL/model.safetensors.index.json"
+        touch /tmp/layerwise-trajectory-model.complete
+      fi
+      flock -u 6
+
+      export CUDA_VISIBLE_DEVICES="$${OMPI_COMM_WORLD_LOCAL_RANK:?MPI local rank is required}"
+      export RANK="$${OMPI_COMM_WORLD_RANK:?MPI rank is required}"
+      export WORLD_SIZE="$${OMPI_COMM_WORLD_SIZE:?MPI world size is required}"
+      export LOCAL_RANK=0
+      rm -rf "$$RUN_DIR"
+      python -u scripts/train_recurrent_student_m4.py \
+        --model "$$LOCAL_MODEL" --init-adapter "$$INIT_ADAPTER" \
+        --state-architecture layerwise --layerwise-operation-checkpointing \
+        --layerwise-transition-only --layerwise-transition-rank "$$TRANSITION_RANK" \
+        --trajectory-curriculum-only --trajectory-cosine-weight 1.0 \
+        --trajectory-relative-mse-weight "$$RELATIVE_MSE_WEIGHT" \
+        --train-jsonl "$$UNIFIED_DATA/train.jsonl" --valid-jsonl "$$UNIFIED_DATA/valid.jsonl" \
+        --causal-train-jsonl "$$CAUSAL_DATA/train.jsonl" --causal-valid-jsonl "$$CAUSAL_DATA/valid.jsonl" \
+        --output-dir "$$RUN_DIR" --state-token-alias '<|vision_pad|>' \
+        --max-length 1536 --learning-rate 1e-4 \
+        --generation-weight 0 --behavior-kd-weight 0 --consistency-weight 1.0 \
+        --direct-replay-weight 0 --causal-weight 0 --causal-trajectory-weight 1.0 \
+        --causal-repeat-fraction 1.0 --gradient-accumulation-steps 1 \
+        --eval-limit 80 --causal-eval-limit 80 --save-steps 25 \
+        --distributed-mpi --distributed-world-size 4 \
+        --diagnostic-stop-after-round 50 --seed 42
+      if [[ "$${OMPI_COMM_WORLD_RANK:-0}" != 0 ]]; then exit 0; fi
+      test -f "$$RUN_DIR/completion.json"
+      test -f "$$RUN_DIR/final_adapter/adapter_model.safetensors"
+      test -f "$$RUN_DIR/recurrent_state.pt"
+      python - "$$RUN_DIR" "$$BRANCH" "$$TRANSITION_RANK" "$$RELATIVE_MSE_WEIGHT" <<'PY'
+      import json, pathlib, sys, torch
+      root = pathlib.Path(sys.argv[1])
+      completion = json.load(open(root / 'completion.json'))
+      config = json.load(open(root / 'run_config.json'))
+      gradient = json.load(open(root / 'gradient_audit.json'))
+      state = torch.load(root / 'recurrent_state.pt', map_location='cpu', weights_only=False)
+      assert completion['status'] == 'diagnostic_complete', completion
+      assert completion['micro_steps'] == 200 and completion['causal_pairs_seen'] == 200, completion
+      assert config['trajectory_curriculum_only'] is True and config['layerwise_transition_only'] is True, config
+      assert config['generation_weight'] == config['behavior_kd_weight'] == config['direct_replay_weight'] == config['causal_weight'] == 0, config
+      assert config['layerwise_transition_rank'] == int(sys.argv[3]), config
+      assert config['trajectory_relative_mse_weight'] == float(sys.argv[4]), config
+      assert gradient['lora']['parameter_tensors'] == 0, gradient
+      assert gradient['layerwise_transition']['gradient_abs_sum'] > 0, gradient
+      assert not gradient['frozen_tensors_with_grad'], gradient
+      assert state['config']['state_architecture'] == 'layerwise', state.keys()
+      receipt = {'status':'trajectory_curriculum_complete','branch':sys.argv[2],
+                 'transition_rank':int(sys.argv[3]),'relative_mse_weight':float(sys.argv[4]),
+                 'optimizer_steps':completion['optimizer_steps'],'remote_run_dir':str(root),
+                 'raw_history_visible_to_decoder':False,'persistent_history_kv_cache':False}
+      (root / 'trajectory_curriculum_receipt.json').write_text(json.dumps(receipt, indent=2, sort_keys=True)+'\n')
+      print(json.dumps(receipt, indent=2, sort_keys=True))
+      PY
+      export CUDA_VISIBLE_DEVICES=0
+      python -u scripts/evaluate_recurrent_causal_gate.py \
+        --model "$$LOCAL_MODEL" --adapter "$$RUN_DIR/final_adapter" \
+        --recurrent-state "$$RUN_DIR/recurrent_state.pt" --state-architecture layerwise \
+        --jsonl "$$C4_DATA/test_same_template.jsonl" \
+        --pair-manifest manifests/c4_stage_a_gate_pairs_seed42_n150_v1.json \
+        --output-json "$$AMLT_OUTPUT_DIR/eval/c4/recurrent_causal_gate.json" \
+        --state-token-alias '<|vision_pad|>' --max-length 1536 --num-pairs 150 --seed 42
+      cp -r "$$RUN_DIR/final_adapter/." "$$AMLT_OUTPUT_DIR/model/"
+      cp "$$RUN_DIR/recurrent_state.pt" "$$AMLT_OUTPUT_DIR/model/recurrent_state.pt"
+      cp "$$RUN_DIR"/*.json "$$AMLT_OUTPUT_DIR/metrics/"
+      cp "$$UNIFIED_DATA/audit.json" "$$AMLT_OUTPUT_DIR/metrics/data_audit.json"
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 86400
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        BRANCH: r64_scale
+        TRANSITION_RANK: '64'
+        RELATIVE_MSE_WEIGHT: '1.0'
+
+  - name: trajectory-r256-scale-seed42
+    sku: 80G4-A100
+    process_count_per_node: -1
+    mpi: true
+    sla_tier: Standard
+    command: *curriculum_command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 86400
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        BRANCH: r256_scale
+        TRANSITION_RANK: '256'
+        RELATIVE_MSE_WEIGHT: '1.0'
+
+  - name: trajectory-r256-cosine-seed42
+    sku: 80G4-A100
+    process_count_per_node: -1
+    mpi: true
+    sla_tier: Standard
+    command: *curriculum_command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 86400
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        BRANCH: r256_cosine
+        TRANSITION_RANK: '256'
+        RELATIVE_MSE_WEIGHT: '0.0'

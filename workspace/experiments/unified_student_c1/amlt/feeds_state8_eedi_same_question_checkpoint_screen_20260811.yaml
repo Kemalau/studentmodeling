@@ -1,0 +1,43 @@
+# Generated from the approved Feeds template lineage; bound hashes are materialized per checkpoint.
+description: Frozen State8 same-question checkpoint T3 and dual-C4 semantic screen
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-state8-eedi-same-question-screen-venv
+    - /tmp/studentmodeling-state8-eedi-same-question-screen-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-state8-eedi-same-question-screen-venv/bin/python -m pip install -r requirements-feeds.txt
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+jobs:
+  - name: state8-eedi-same-question-checkpoint-screen
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_state8_eedi_same_question_checkpoint_screen.sh | cut -d' ' -f1)" = RUNNER_SHA256
+      bash scripts/run_state8_eedi_same_question_checkpoint_screen.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-eedi-same-question-screen-venv
+        CHECKPOINT_STEP: STEP_PENDING
+        CHECKPOINT_ARM: ARM_PENDING
+        CHECKPOINT_ROOT: ROOT_PENDING
+        CHECKPOINT_ADAPTER_SHA256: HASH_PENDING
+        CHECKPOINT_STATE_SHA256: HASH_PENDING
+        CHECKPOINT_RECEIPT_SHA256: HASH_PENDING

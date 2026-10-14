@@ -1,0 +1,41 @@
+# Generated with `amlt template -t Feeds -y`, then specialized.  The watcher
+# replaces only the artifact/receipt hash placeholders after the immutable
+# matched checkpoint has been published.
+description: Corrected matched-final diagnosis C4 with explicit Malrule taxonomy contract
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-matched-final-diagnosis-c4-corrected-venv
+    - /tmp/studentmodeling-matched-final-diagnosis-c4-corrected-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-matched-final-diagnosis-c4-corrected-venv/bin/python -m pip install -r requirements-feeds.txt
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+jobs:
+  - name: state8-matched-final-diagnosis-c4-corrected
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_state8_matched_final_diagnosis_c4_corrected.sh | cut -d' ' -f1)" = 3ef6e1f572b07e9cdf2bd3e1dd2c2ab23c551bb22ae878e2b3f98a37e32cc7fe
+      bash scripts/run_state8_matched_final_diagnosis_c4_corrected.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        EXPECTED_ADAPTER_SHA256: '1eb3d96b1642502eededa5e9c48aea6e37689c07fa444999f1d69ad29e6c851a'
+        EXPECTED_STATE_SHA256: '45f572d04d4336dd16672b48c58f2a0fb2ca37751f02b97c503916dc7aab7ba6'
+        EXPECTED_RECEIPT_SHA256: 'abdd7d71788503efe43dbe1c81a1aa391f2cc5b11964ed187eeff8c13293676f'

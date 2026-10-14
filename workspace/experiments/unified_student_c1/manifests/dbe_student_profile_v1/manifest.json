@@ -1,0 +1,69 @@
+{
+  "chronological_cutoff_fraction": 0.5,
+  "files": {
+    "test": {
+      "path": "manifests/dbe_student_profile_v1/test.jsonl",
+      "rows": 88,
+      "sha256": "d0316d845a6e1be2f4d24418ebdcd22adb579aed5858aa103da6427e506f5b03"
+    },
+    "train": {
+      "path": "manifests/dbe_student_profile_v1/train.jsonl",
+      "rows": 663,
+      "sha256": "50adec7ecf5fb02cf374fb946cc5c31b5a443b61c3a7a5c75fa0ca6a9523a7d0"
+    },
+    "valid": {
+      "path": "manifests/dbe_student_profile_v1/valid.jsonl",
+      "rows": 84,
+      "sha256": "3d8145a0643464cf8c1b24b87487ffb30b5929d689b90eb7a73add95db88bb89"
+    }
+  },
+  "information_boundary": {
+    "encoder": "last max_state_history interactions before cutoff",
+    "profile_target": "interactions after cutoff only",
+    "student_id_visible_to_encoder": false
+  },
+  "kc_vocabulary": [
+    "Cartesian product",
+    "SELECT",
+    "Difference",
+    "Functional dependencies",
+    "union",
+    "Intersection",
+    "Superkey",
+    "Subset",
+    "Candidate key",
+    "Tuple",
+    "Relational Algebra",
+    "Attribute",
+    "Cardinality",
+    "Relation",
+    "Entity",
+    "Entity-Relationship Model",
+    "Data structure",
+    "Relational data model",
+    "CREATE TABLE",
+    "Participation constraints",
+    "Set",
+    "Data type",
+    "Foreign key",
+    "Projection",
+    "Join",
+    "Equality",
+    "Schema",
+    "Equivalent",
+    "Third normal form (3NF)",
+    "Implied"
+  ],
+  "kc_vocabulary_selection": "top frequency from training prefixes only",
+  "max_state_history": 12,
+  "min_eligible_kcs": 4,
+  "min_future_attempts_per_kc": 5,
+  "raw_interactions": 158300,
+  "raw_students": 1193,
+  "seed": 42,
+  "source": "DBE-KT22 real longitudinal interactions",
+  "stage": "dbe_future_validated_student_profile_v1",
+  "status": "complete",
+  "student_disjoint": true,
+  "target_definition": "Per-student KC correctness after the chronological cutoff with Beta(1,1) smoothing; weak/strong KCs are the bottom/top two among KCs with sufficient post-cutoff support."
+}

@@ -1,0 +1,1531 @@
+{
+  "pairs": [
+    {
+      "donor_id": "malrulelib:val:0000143:malrule_next_response",
+      "donor_label": "fractions.natural_number_bias_numerator_only",
+      "donor_target_on_recipient_query": "3/12",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000146:malrule_next_response",
+      "recipient_label": "fractions.denominator_comparison_error",
+      "recipient_target": "3/7, 2/11, 3/12"
+    },
+    {
+      "donor_id": "malrulelib:val:0000128:malrule_next_response",
+      "donor_label": "decimals.whole_number_thinking",
+      "donor_target_on_recipient_query": "74",
+      "family": "decimals",
+      "recipient_id": "malrulelib:val:0000137:malrule_next_response",
+      "recipient_label": "decimals.longer_is_larger",
+      "recipient_target": "0.711"
+    },
+    {
+      "donor_id": "malrulelib:val:0000297:malrule_next_response",
+      "donor_label": "subtraction.borrow_no_decrement",
+      "donor_target_on_recipient_query": "196",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000225:malrule_next_response",
+      "recipient_label": "subtraction.diff_0_n_equals_n",
+      "recipient_target": "16"
+    },
+    {
+      "donor_id": "malrulelib:val:0000117:malrule_next_response",
+      "donor_label": "fractions.multiply_across_for_division",
+      "donor_target_on_recipient_query": "15/4",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000193:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "6"
+    },
+    {
+      "donor_id": "malrulelib:val:0000010:malrule_next_response",
+      "donor_label": "fractions.common_denominator_numerator",
+      "donor_target_on_recipient_query": "4/19",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000209:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "4"
+    },
+    {
+      "donor_id": "malrulelib:val:0000099:malrule_next_response",
+      "donor_label": "subtraction.borrow_from_bottom",
+      "donor_target_on_recipient_query": "5738",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000115:malrule_next_response",
+      "recipient_label": "subtraction.smaller_from_larger",
+      "recipient_target": "5722"
+    },
+    {
+      "donor_id": "malrulelib:val:0000150:malrule_next_response",
+      "donor_label": "subtraction.stops_borrow_at_zero",
+      "donor_target_on_recipient_query": "94",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000225:malrule_next_response",
+      "recipient_label": "subtraction.diff_0_n_equals_n",
+      "recipient_target": "16"
+    },
+    {
+      "donor_id": "malrulelib:val:0000210:malrule_next_response",
+      "donor_label": "decimals.longer_is_larger",
+      "donor_target_on_recipient_query": "0.46",
+      "family": "decimals",
+      "recipient_id": "malrulelib:val:0000282:malrule_next_response",
+      "recipient_label": "decimals.shorter_is_larger",
+      "recipient_target": "0.2"
+    },
+    {
+      "donor_id": "malrulelib:val:0000259:malrule_next_response",
+      "donor_label": "decimals.whole_number_thinking",
+      "donor_target_on_recipient_query": "74",
+      "family": "decimals",
+      "recipient_id": "malrulelib:val:0000137:malrule_next_response",
+      "recipient_label": "decimals.longer_is_larger",
+      "recipient_target": "0.711"
+    },
+    {
+      "donor_id": "malrulelib:val:0000086:malrule_next_response",
+      "donor_label": "subtraction.always_borrow_left",
+      "donor_target_on_recipient_query": "20",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000288:malrule_next_response",
+      "recipient_label": "subtraction.borrow_from_bottom",
+      "recipient_target": "230"
+    },
+    {
+      "donor_id": "malrulelib:val:0000147:malrule_next_response",
+      "donor_label": "fractions.keep_common_denominator_for_multiplication",
+      "donor_target_on_recipient_query": "325/4",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000280:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "650"
+    },
+    {
+      "donor_id": "malrulelib:val:0000264:malrule_next_response",
+      "donor_label": "subtraction.stops_borrow_at_zero",
+      "donor_target_on_recipient_query": "94",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000225:malrule_next_response",
+      "recipient_label": "subtraction.diff_0_n_equals_n",
+      "recipient_target": "16"
+    },
+    {
+      "donor_id": "malrulelib:val:0000072:malrule_next_response",
+      "donor_label": "decimals.longer_is_larger",
+      "donor_target_on_recipient_query": "0.46",
+      "family": "decimals",
+      "recipient_id": "malrulelib:val:0000282:malrule_next_response",
+      "recipient_label": "decimals.shorter_is_larger",
+      "recipient_target": "0.2"
+    },
+    {
+      "donor_id": "malrulelib:val:0000155:malrule_next_response",
+      "donor_label": "fractions.keep_common_denominator_for_multiplication",
+      "donor_target_on_recipient_query": "325/4",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000280:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "650"
+    },
+    {
+      "donor_id": "malrulelib:val:0000116:malrule_next_response",
+      "donor_label": "decimals.whole_number_thinking",
+      "donor_target_on_recipient_query": "74",
+      "family": "decimals",
+      "recipient_id": "malrulelib:val:0000137:malrule_next_response",
+      "recipient_label": "decimals.longer_is_larger",
+      "recipient_target": "0.711"
+    },
+    {
+      "donor_id": "malrulelib:val:0000236:malrule_next_response",
+      "donor_label": "fractions.natural_number_bias_numerator_only",
+      "donor_target_on_recipient_query": "3/12",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000146:malrule_next_response",
+      "recipient_label": "fractions.denominator_comparison_error",
+      "recipient_target": "3/7, 2/11, 3/12"
+    },
+    {
+      "donor_id": "malrulelib:val:0000112:malrule_next_response",
+      "donor_label": "fractions.keep_common_denominator_for_multiplication",
+      "donor_target_on_recipient_query": "136/7",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000186:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "136"
+    },
+    {
+      "donor_id": "malrulelib:val:0000026:malrule_next_response",
+      "donor_label": "fractions.natural_number_bias_numerator_only",
+      "donor_target_on_recipient_query": "5/6",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000105:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "10"
+    },
+    {
+      "donor_id": "malrulelib:val:0000222:malrule_next_response",
+      "donor_label": "subtraction.borrow_from_bottom",
+      "donor_target_on_recipient_query": "5738",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000115:malrule_next_response",
+      "recipient_label": "subtraction.smaller_from_larger",
+      "recipient_target": "5722"
+    },
+    {
+      "donor_id": "malrulelib:val:0000048:malrule_next_response",
+      "donor_label": "subtraction.borrow_from_bottom",
+      "donor_target_on_recipient_query": "4144",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000247:malrule_next_response",
+      "recipient_label": "subtraction.always_borrow_left",
+      "recipient_target": "3024"
+    },
+    {
+      "donor_id": "malrulelib:val:0000070:malrule_next_response",
+      "donor_label": "subtraction.diff_0_n_equals_n",
+      "donor_target_on_recipient_query": "148",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000048:malrule_next_response",
+      "recipient_label": "subtraction.borrow_from_bottom",
+      "recipient_target": "252"
+    },
+    {
+      "donor_id": "malrulelib:val:0000189:malrule_next_response",
+      "donor_label": "fractions.multiply_across_for_division",
+      "donor_target_on_recipient_query": "209/35",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000263:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "0"
+    },
+    {
+      "donor_id": "malrulelib:val:0000182:malrule_next_response",
+      "donor_label": "subtraction.borrow_no_decrement",
+      "donor_target_on_recipient_query": "115",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000289:malrule_next_response",
+      "recipient_label": "subtraction.stops_borrow_at_zero",
+      "recipient_target": "15"
+    },
+    {
+      "donor_id": "malrulelib:val:0000105:malrule_next_response",
+      "donor_label": "fractions.ignore_denominators",
+      "donor_target_on_recipient_query": "0",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000134:malrule_next_response",
+      "recipient_label": "fractions.multiply_across_for_division",
+      "recipient_target": "1/20"
+    },
+    {
+      "donor_id": "malrulelib:val:0000180:malrule_next_response",
+      "donor_label": "fractions.keep_common_denominator_for_multiplication",
+      "donor_target_on_recipient_query": "325/4",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000280:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "650"
+    },
+    {
+      "donor_id": "malrulelib:val:0000130:malrule_next_response",
+      "donor_label": "fractions.common_denominator_numerator",
+      "donor_target_on_recipient_query": "4/19",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000209:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "4"
+    },
+    {
+      "donor_id": "malrulelib:val:0000201:malrule_next_response",
+      "donor_label": "fractions.multiply_across_for_division",
+      "donor_target_on_recipient_query": "49/6",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000286:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "0"
+    },
+    {
+      "donor_id": "malrulelib:val:0000255:malrule_next_response",
+      "donor_label": "fractions.denominator_comparison_error",
+      "donor_target_on_recipient_query": "1/3, 1/6, 3/7",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000281:malrule_next_response",
+      "recipient_label": "fractions.natural_number_bias_numerator_only",
+      "recipient_target": "3/7"
+    },
+    {
+      "donor_id": "malrulelib:val:0000274:malrule_next_response",
+      "donor_label": "fractions.multiply_across_for_division",
+      "donor_target_on_recipient_query": "49/6",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000286:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "0"
+    },
+    {
+      "donor_id": "malrulelib:val:0000092:malrule_next_response",
+      "donor_label": "subtraction.borrow_no_decrement",
+      "donor_target_on_recipient_query": "197",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000011:malrule_next_response",
+      "recipient_label": "subtraction.borrow_from_bottom",
+      "recipient_target": "207"
+    },
+    {
+      "donor_id": "malrulelib:val:0000263:malrule_next_response",
+      "donor_label": "fractions.ignore_denominators",
+      "donor_target_on_recipient_query": "1",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000063:malrule_next_response",
+      "recipient_label": "fractions.natural_number_bias_numerator_only",
+      "recipient_target": "10/4"
+    },
+    {
+      "donor_id": "malrulelib:val:0000146:malrule_next_response",
+      "donor_label": "fractions.denominator_comparison_error",
+      "donor_target_on_recipient_query": "1/9",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000025:malrule_next_response",
+      "recipient_label": "fractions.natural_number_bias_numerator_only",
+      "recipient_target": "equal"
+    },
+    {
+      "donor_id": "malrulelib:val:0000148:malrule_next_response",
+      "donor_label": "subtraction.borrow_from_bottom",
+      "donor_target_on_recipient_query": "45302",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000019:malrule_next_response",
+      "recipient_label": "subtraction.diff_0_n_equals_n",
+      "recipient_target": "35302"
+    },
+    {
+      "donor_id": "malrulelib:val:0000104:malrule_next_response",
+      "donor_label": "subtraction.borrow_from_bottom",
+      "donor_target_on_recipient_query": "6628",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000014:malrule_next_response",
+      "recipient_label": "subtraction.borrow_no_decrement",
+      "recipient_target": "4418"
+    },
+    {
+      "donor_id": "malrulelib:val:0000252:malrule_next_response",
+      "donor_label": "subtraction.borrow_no_decrement",
+      "donor_target_on_recipient_query": "648",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000018:malrule_next_response",
+      "recipient_label": "subtraction.borrow_from_bottom",
+      "recipient_target": "758"
+    },
+    {
+      "donor_id": "malrulelib:val:0000161:malrule_next_response",
+      "donor_label": "decimals.longer_is_larger",
+      "donor_target_on_recipient_query": "0.46",
+      "family": "decimals",
+      "recipient_id": "malrulelib:val:0000282:malrule_next_response",
+      "recipient_label": "decimals.shorter_is_larger",
+      "recipient_target": "0.2"
+    },
+    {
+      "donor_id": "malrulelib:val:0000172:malrule_next_response",
+      "donor_label": "fractions.ignore_denominators",
+      "donor_target_on_recipient_query": "0",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000236:malrule_next_response",
+      "recipient_label": "fractions.natural_number_bias_numerator_only",
+      "recipient_target": "6/9"
+    },
+    {
+      "donor_id": "malrulelib:val:0000243:malrule_next_response",
+      "donor_label": "fractions.common_denominator_numerator",
+      "donor_target_on_recipient_query": "9/14",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000032:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "9"
+    },
+    {
+      "donor_id": "malrulelib:val:0000287:malrule_next_response",
+      "donor_label": "decimals.whole_number_thinking",
+      "donor_target_on_recipient_query": "74",
+      "family": "decimals",
+      "recipient_id": "malrulelib:val:0000137:malrule_next_response",
+      "recipient_label": "decimals.longer_is_larger",
+      "recipient_target": "0.711"
+    },
+    {
+      "donor_id": "malrulelib:val:0000219:malrule_next_response",
+      "donor_label": "fractions.denominator_comparison_error",
+      "donor_target_on_recipient_query": "1/9",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000025:malrule_next_response",
+      "recipient_label": "fractions.natural_number_bias_numerator_only",
+      "recipient_target": "equal"
+    },
+    {
+      "donor_id": "malrulelib:val:0000014:malrule_next_response",
+      "donor_label": "subtraction.borrow_no_decrement",
+      "donor_target_on_recipient_query": "4134",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000247:malrule_next_response",
+      "recipient_label": "subtraction.always_borrow_left",
+      "recipient_target": "3024"
+    },
+    {
+      "donor_id": "malrulelib:val:0000266:malrule_next_response",
+      "donor_label": "subtraction.borrow_no_decrement",
+      "donor_target_on_recipient_query": "118",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000163:malrule_next_response",
+      "recipient_label": "subtraction.stops_borrow_at_zero",
+      "recipient_target": "12"
+    },
+    {
+      "donor_id": "malrulelib:val:0000234:malrule_next_response",
+      "donor_label": "subtraction.stops_borrow_at_zero",
+      "donor_target_on_recipient_query": "51",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000224:malrule_next_response",
+      "recipient_label": "subtraction.smaller_from_larger",
+      "recipient_target": "151"
+    },
+    {
+      "donor_id": "malrulelib:val:0000023:malrule_next_response",
+      "donor_label": "decimals.whole_number_thinking",
+      "donor_target_on_recipient_query": "74",
+      "family": "decimals",
+      "recipient_id": "malrulelib:val:0000137:malrule_next_response",
+      "recipient_label": "decimals.longer_is_larger",
+      "recipient_target": "0.711"
+    },
+    {
+      "donor_id": "malrulelib:val:0000284:malrule_next_response",
+      "donor_label": "subtraction.always_borrow_left",
+      "donor_target_on_recipient_query": "32",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000048:malrule_next_response",
+      "recipient_label": "subtraction.borrow_from_bottom",
+      "recipient_target": "252"
+    },
+    {
+      "donor_id": "malrulelib:val:0000139:malrule_next_response",
+      "donor_label": "subtraction.borrow_no_decrement",
+      "donor_target_on_recipient_query": "197",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000011:malrule_next_response",
+      "recipient_label": "subtraction.borrow_from_bottom",
+      "recipient_target": "207"
+    },
+    {
+      "donor_id": "malrulelib:val:0000165:malrule_next_response",
+      "donor_label": "subtraction.always_borrow_left",
+      "donor_target_on_recipient_query": "3002",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000092:malrule_next_response",
+      "recipient_label": "subtraction.borrow_no_decrement",
+      "recipient_target": "4112"
+    },
+    {
+      "donor_id": "malrulelib:val:0000069:malrule_next_response",
+      "donor_label": "fractions.multiply_across_for_division",
+      "donor_target_on_recipient_query": "49/6",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000286:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "0"
+    },
+    {
+      "donor_id": "malrulelib:val:0000213:malrule_next_response",
+      "donor_label": "subtraction.always_borrow_left",
+      "donor_target_on_recipient_query": "24292",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000019:malrule_next_response",
+      "recipient_label": "subtraction.diff_0_n_equals_n",
+      "recipient_target": "35302"
+    },
+    {
+      "donor_id": "malrulelib:val:0000151:malrule_next_response",
+      "donor_label": "fractions.common_denominator_numerator",
+      "donor_target_on_recipient_query": "2/3",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000283:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "10"
+    },
+    {
+      "donor_id": "malrulelib:val:0000152:malrule_next_response",
+      "donor_label": "fractions.natural_number_bias_numerator_only",
+      "donor_target_on_recipient_query": "3/12",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000146:malrule_next_response",
+      "recipient_label": "fractions.denominator_comparison_error",
+      "recipient_target": "3/7, 2/11, 3/12"
+    },
+    {
+      "donor_id": "malrulelib:val:0000174:malrule_next_response",
+      "donor_label": "subtraction.always_borrow_left",
+      "donor_target_on_recipient_query": "265",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000104:malrule_next_response",
+      "recipient_label": "subtraction.borrow_from_bottom",
+      "recipient_target": "1385"
+    },
+    {
+      "donor_id": "malrulelib:val:0000299:malrule_next_response",
+      "donor_label": "fractions.multiply_across_for_division",
+      "donor_target_on_recipient_query": "81/16",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000107:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "1"
+    },
+    {
+      "donor_id": "malrulelib:val:0000230:malrule_next_response",
+      "donor_label": "fractions.common_denominator_numerator",
+      "donor_target_on_recipient_query": "10/17",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000221:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "10"
+    },
+    {
+      "donor_id": "malrulelib:val:0000016:malrule_next_response",
+      "donor_label": "fractions.natural_number_bias_numerator_only",
+      "donor_target_on_recipient_query": "5/6",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000105:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "10"
+    },
+    {
+      "donor_id": "malrulelib:val:0000206:malrule_next_response",
+      "donor_label": "decimals.whole_number_thinking",
+      "donor_target_on_recipient_query": "74",
+      "family": "decimals",
+      "recipient_id": "malrulelib:val:0000137:malrule_next_response",
+      "recipient_label": "decimals.longer_is_larger",
+      "recipient_target": "0.711"
+    },
+    {
+      "donor_id": "malrulelib:val:0000102:malrule_next_response",
+      "donor_label": "fractions.natural_number_bias_numerator_only",
+      "donor_target_on_recipient_query": "3/12",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000146:malrule_next_response",
+      "recipient_label": "fractions.denominator_comparison_error",
+      "recipient_target": "3/7, 2/11, 3/12"
+    },
+    {
+      "donor_id": "malrulelib:val:0000253:malrule_next_response",
+      "donor_label": "fractions.ignore_denominators",
+      "donor_target_on_recipient_query": "10",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000082:malrule_next_response",
+      "recipient_label": "fractions.common_denominator_numerator",
+      "recipient_target": "10/17"
+    },
+    {
+      "donor_id": "malrulelib:val:0000200:malrule_next_response",
+      "donor_label": "fractions.multiply_across_for_division",
+      "donor_target_on_recipient_query": "15/4",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000193:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "6"
+    },
+    {
+      "donor_id": "malrulelib:val:0000272:malrule_next_response",
+      "donor_label": "subtraction.always_borrow_left",
+      "donor_target_on_recipient_query": "265",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000104:malrule_next_response",
+      "recipient_label": "subtraction.borrow_from_bottom",
+      "recipient_target": "1385"
+    },
+    {
+      "donor_id": "malrulelib:val:0000175:malrule_next_response",
+      "donor_label": "fractions.common_denominator_numerator",
+      "donor_target_on_recipient_query": "7/16",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000095:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "7"
+    },
+    {
+      "donor_id": "malrulelib:val:0000281:malrule_next_response",
+      "donor_label": "fractions.natural_number_bias_numerator_only",
+      "donor_target_on_recipient_query": "5/6",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000105:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "10"
+    },
+    {
+      "donor_id": "malrulelib:val:0000028:malrule_next_response",
+      "donor_label": "fractions.keep_common_denominator_for_multiplication",
+      "donor_target_on_recipient_query": "414/7",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000172:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "414"
+    },
+    {
+      "donor_id": "malrulelib:val:0000235:malrule_next_response",
+      "donor_label": "subtraction.borrow_from_bottom",
+      "donor_target_on_recipient_query": "269",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000224:malrule_next_response",
+      "recipient_label": "subtraction.smaller_from_larger",
+      "recipient_target": "151"
+    },
+    {
+      "donor_id": "malrulelib:val:0000095:malrule_next_response",
+      "donor_label": "fractions.ignore_denominators",
+      "donor_target_on_recipient_query": "0",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000030:malrule_next_response",
+      "recipient_label": "fractions.multiply_across_for_division",
+      "recipient_target": "5/18"
+    },
+    {
+      "donor_id": "malrulelib:val:0000295:malrule_next_response",
+      "donor_label": "subtraction.borrow_no_decrement",
+      "donor_target_on_recipient_query": "196",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000225:malrule_next_response",
+      "recipient_label": "subtraction.diff_0_n_equals_n",
+      "recipient_target": "16"
+    },
+    {
+      "donor_id": "malrulelib:val:0000005:malrule_next_response",
+      "donor_label": "fractions.keep_common_denominator_for_multiplication",
+      "donor_target_on_recipient_query": "414/7",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000172:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "414"
+    },
+    {
+      "donor_id": "malrulelib:val:0000254:malrule_next_response",
+      "donor_label": "fractions.common_denominator_numerator",
+      "donor_target_on_recipient_query": "7/16",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000095:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "7"
+    },
+    {
+      "donor_id": "malrulelib:val:0000126:malrule_next_response",
+      "donor_label": "subtraction.always_borrow_left",
+      "donor_target_on_recipient_query": "45132",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000235:malrule_next_response",
+      "recipient_label": "subtraction.borrow_from_bottom",
+      "recipient_target": "67242"
+    },
+    {
+      "donor_id": "malrulelib:val:0000186:malrule_next_response",
+      "donor_label": "fractions.ignore_denominators",
+      "donor_target_on_recipient_query": "0",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000236:malrule_next_response",
+      "recipient_label": "fractions.natural_number_bias_numerator_only",
+      "recipient_target": "6/9"
+    },
+    {
+      "donor_id": "malrulelib:val:0000192:malrule_next_response",
+      "donor_label": "decimals.longer_is_larger",
+      "donor_target_on_recipient_query": "0.46",
+      "family": "decimals",
+      "recipient_id": "malrulelib:val:0000282:malrule_next_response",
+      "recipient_label": "decimals.shorter_is_larger",
+      "recipient_target": "0.2"
+    },
+    {
+      "donor_id": "malrulelib:val:0000181:malrule_next_response",
+      "donor_label": "subtraction.borrow_from_bottom",
+      "donor_target_on_recipient_query": "272",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000297:malrule_next_response",
+      "recipient_label": "subtraction.borrow_no_decrement",
+      "recipient_target": "172"
+    },
+    {
+      "donor_id": "malrulelib:val:0000286:malrule_next_response",
+      "donor_label": "fractions.ignore_denominators",
+      "donor_target_on_recipient_query": "2",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000010:malrule_next_response",
+      "recipient_label": "fractions.common_denominator_numerator",
+      "recipient_target": "1/10"
+    },
+    {
+      "donor_id": "malrulelib:val:0000227:malrule_next_response",
+      "donor_label": "fractions.ignore_denominators",
+      "donor_target_on_recipient_query": "3",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000074:malrule_next_response",
+      "recipient_label": "fractions.multiply_across_for_division",
+      "recipient_target": "25/2"
+    },
+    {
+      "donor_id": "malrulelib:val:0000247:malrule_next_response",
+      "donor_label": "subtraction.always_borrow_left",
+      "donor_target_on_recipient_query": "62",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000297:malrule_next_response",
+      "recipient_label": "subtraction.borrow_no_decrement",
+      "recipient_target": "172"
+    },
+    {
+      "donor_id": "malrulelib:val:0000268:malrule_next_response",
+      "donor_label": "subtraction.always_borrow_left",
+      "donor_target_on_recipient_query": "265",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000104:malrule_next_response",
+      "recipient_label": "subtraction.borrow_from_bottom",
+      "recipient_target": "1385"
+    },
+    {
+      "donor_id": "malrulelib:val:0000060:malrule_next_response",
+      "donor_label": "subtraction.always_borrow_left",
+      "donor_target_on_recipient_query": "53",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000089:malrule_next_response",
+      "recipient_label": "subtraction.diff_0_n_equals_n",
+      "recipient_target": "143"
+    },
+    {
+      "donor_id": "malrulelib:val:0000120:malrule_next_response",
+      "donor_label": "fractions.keep_common_denominator_for_multiplication",
+      "donor_target_on_recipient_query": "136/7",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000186:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "136"
+    },
+    {
+      "donor_id": "malrulelib:val:0000229:malrule_next_response",
+      "donor_label": "decimals.whole_number_thinking",
+      "donor_target_on_recipient_query": "74",
+      "family": "decimals",
+      "recipient_id": "malrulelib:val:0000137:malrule_next_response",
+      "recipient_label": "decimals.longer_is_larger",
+      "recipient_target": "0.711"
+    },
+    {
+      "donor_id": "malrulelib:val:0000018:malrule_next_response",
+      "donor_label": "subtraction.borrow_from_bottom",
+      "donor_target_on_recipient_query": "132",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000182:malrule_next_response",
+      "recipient_label": "subtraction.borrow_no_decrement",
+      "recipient_target": "122"
+    },
+    {
+      "donor_id": "malrulelib:val:0000250:malrule_next_response",
+      "donor_label": "fractions.multiply_across_for_division",
+      "donor_target_on_recipient_query": "49/6",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000286:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "0"
+    },
+    {
+      "donor_id": "malrulelib:val:0000193:malrule_next_response",
+      "donor_label": "fractions.ignore_denominators",
+      "donor_target_on_recipient_query": "4",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000285:malrule_next_response",
+      "recipient_label": "fractions.common_denominator_numerator",
+      "recipient_target": "2/7"
+    },
+    {
+      "donor_id": "malrulelib:val:0000137:malrule_next_response",
+      "donor_label": "decimals.longer_is_larger",
+      "donor_target_on_recipient_query": "0.46",
+      "family": "decimals",
+      "recipient_id": "malrulelib:val:0000282:malrule_next_response",
+      "recipient_label": "decimals.shorter_is_larger",
+      "recipient_target": "0.2"
+    },
+    {
+      "donor_id": "malrulelib:val:0000267:malrule_next_response",
+      "donor_label": "fractions.natural_number_bias_numerator_only",
+      "donor_target_on_recipient_query": "5/6",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000105:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "10"
+    },
+    {
+      "donor_id": "malrulelib:val:0000077:malrule_next_response",
+      "donor_label": "fractions.natural_number_bias_numerator_only",
+      "donor_target_on_recipient_query": "3/12",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000146:malrule_next_response",
+      "recipient_label": "fractions.denominator_comparison_error",
+      "recipient_target": "3/7, 2/11, 3/12"
+    },
+    {
+      "donor_id": "malrulelib:val:0000074:malrule_next_response",
+      "donor_label": "fractions.multiply_across_for_division",
+      "donor_target_on_recipient_query": "81/16",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000107:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "1"
+    },
+    {
+      "donor_id": "malrulelib:val:0000064:malrule_next_response",
+      "donor_label": "fractions.common_denominator_numerator",
+      "donor_target_on_recipient_query": "10/17",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000221:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "10"
+    },
+    {
+      "donor_id": "malrulelib:val:0000233:malrule_next_response",
+      "donor_label": "decimals.whole_number_thinking",
+      "donor_target_on_recipient_query": "74",
+      "family": "decimals",
+      "recipient_id": "malrulelib:val:0000137:malrule_next_response",
+      "recipient_label": "decimals.longer_is_larger",
+      "recipient_target": "0.711"
+    },
+    {
+      "donor_id": "malrulelib:val:0000009:malrule_next_response",
+      "donor_label": "subtraction.always_borrow_left",
+      "donor_target_on_recipient_query": "852",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000173:malrule_next_response",
+      "recipient_label": "subtraction.borrow_no_decrement",
+      "recipient_target": "1962"
+    },
+    {
+      "donor_id": "malrulelib:val:0000285:malrule_next_response",
+      "donor_label": "fractions.common_denominator_numerator",
+      "donor_target_on_recipient_query": "2/3",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000283:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "10"
+    },
+    {
+      "donor_id": "malrulelib:val:0000002:malrule_next_response",
+      "donor_label": "subtraction.stops_borrow_at_zero",
+      "donor_target_on_recipient_query": "94",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000225:malrule_next_response",
+      "recipient_label": "subtraction.diff_0_n_equals_n",
+      "recipient_target": "16"
+    },
+    {
+      "donor_id": "malrulelib:val:0000202:malrule_next_response",
+      "donor_label": "decimals.longer_is_larger",
+      "donor_target_on_recipient_query": "0.46",
+      "family": "decimals",
+      "recipient_id": "malrulelib:val:0000282:malrule_next_response",
+      "recipient_label": "decimals.shorter_is_larger",
+      "recipient_target": "0.2"
+    },
+    {
+      "donor_id": "malrulelib:val:0000244:malrule_next_response",
+      "donor_label": "decimals.longer_is_larger",
+      "donor_target_on_recipient_query": "0.46",
+      "family": "decimals",
+      "recipient_id": "malrulelib:val:0000282:malrule_next_response",
+      "recipient_label": "decimals.shorter_is_larger",
+      "recipient_target": "0.2"
+    },
+    {
+      "donor_id": "malrulelib:val:0000277:malrule_next_response",
+      "donor_label": "fractions.natural_number_bias_numerator_only",
+      "donor_target_on_recipient_query": "5/6",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000105:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "10"
+    },
+    {
+      "donor_id": "malrulelib:val:0000115:malrule_next_response",
+      "donor_label": "subtraction.smaller_from_larger",
+      "donor_target_on_recipient_query": "195",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000289:malrule_next_response",
+      "recipient_label": "subtraction.stops_borrow_at_zero",
+      "recipient_target": "15"
+    },
+    {
+      "donor_id": "malrulelib:val:0000097:malrule_next_response",
+      "donor_label": "subtraction.stops_borrow_at_zero",
+      "donor_target_on_recipient_query": "32634",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000070:malrule_next_response",
+      "recipient_label": "subtraction.diff_0_n_equals_n",
+      "recipient_target": "48634"
+    },
+    {
+      "donor_id": "malrulelib:val:0000195:malrule_next_response",
+      "donor_label": "subtraction.always_borrow_left",
+      "donor_target_on_recipient_query": "80",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000118:malrule_next_response",
+      "recipient_label": "subtraction.diff_0_n_equals_n",
+      "recipient_target": "110"
+    },
+    {
+      "donor_id": "malrulelib:val:0000011:malrule_next_response",
+      "donor_label": "subtraction.borrow_from_bottom",
+      "donor_target_on_recipient_query": "329",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000238:malrule_next_response",
+      "recipient_label": "subtraction.always_borrow_left",
+      "recipient_target": "9"
+    },
+    {
+      "donor_id": "malrulelib:val:0000157:malrule_next_response",
+      "donor_label": "subtraction.borrow_from_bottom",
+      "donor_target_on_recipient_query": "4322",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000092:malrule_next_response",
+      "recipient_label": "subtraction.borrow_no_decrement",
+      "recipient_target": "4112"
+    },
+    {
+      "donor_id": "malrulelib:val:0000279:malrule_next_response",
+      "donor_label": "fractions.natural_number_bias_numerator_only",
+      "donor_target_on_recipient_query": "5/6",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000105:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "10"
+    },
+    {
+      "donor_id": "malrulelib:val:0000053:malrule_next_response",
+      "donor_label": "subtraction.borrow_from_bottom",
+      "donor_target_on_recipient_query": "269",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000224:malrule_next_response",
+      "recipient_label": "subtraction.smaller_from_larger",
+      "recipient_target": "151"
+    },
+    {
+      "donor_id": "malrulelib:val:0000141:malrule_next_response",
+      "donor_label": "subtraction.borrow_from_bottom",
+      "donor_target_on_recipient_query": "250",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000262:malrule_next_response",
+      "recipient_label": "subtraction.always_borrow_left",
+      "recipient_target": "40"
+    },
+    {
+      "donor_id": "malrulelib:val:0000288:malrule_next_response",
+      "donor_label": "subtraction.borrow_from_bottom",
+      "donor_target_on_recipient_query": "106",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000212:malrule_next_response",
+      "recipient_label": "subtraction.borrow_no_decrement",
+      "recipient_target": "196"
+    },
+    {
+      "donor_id": "malrulelib:val:0000271:malrule_next_response",
+      "donor_label": "decimals.whole_number_thinking",
+      "donor_target_on_recipient_query": "74",
+      "family": "decimals",
+      "recipient_id": "malrulelib:val:0000137:malrule_next_response",
+      "recipient_label": "decimals.longer_is_larger",
+      "recipient_target": "0.711"
+    },
+    {
+      "donor_id": "malrulelib:val:0000232:malrule_next_response",
+      "donor_label": "subtraction.stops_borrow_at_zero",
+      "donor_target_on_recipient_query": "91",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000252:malrule_next_response",
+      "recipient_label": "subtraction.borrow_no_decrement",
+      "recipient_target": "199"
+    },
+    {
+      "donor_id": "malrulelib:val:0000022:malrule_next_response",
+      "donor_label": "subtraction.borrow_no_decrement",
+      "donor_target_on_recipient_query": "142",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000048:malrule_next_response",
+      "recipient_label": "subtraction.borrow_from_bottom",
+      "recipient_target": "252"
+    },
+    {
+      "donor_id": "malrulelib:val:0000043:malrule_next_response",
+      "donor_label": "fractions.natural_number_bias_numerator_only",
+      "donor_target_on_recipient_query": "5/6",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000105:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "10"
+    },
+    {
+      "donor_id": "malrulelib:val:0000118:malrule_next_response",
+      "donor_label": "subtraction.diff_0_n_equals_n",
+      "donor_target_on_recipient_query": "98",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000163:malrule_next_response",
+      "recipient_label": "subtraction.stops_borrow_at_zero",
+      "recipient_target": "12"
+    },
+    {
+      "donor_id": "malrulelib:val:0000030:malrule_next_response",
+      "donor_label": "fractions.multiply_across_for_division",
+      "donor_target_on_recipient_query": "15/4",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000193:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "6"
+    },
+    {
+      "donor_id": "malrulelib:val:0000283:malrule_next_response",
+      "donor_label": "fractions.ignore_denominators",
+      "donor_target_on_recipient_query": "108",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000155:malrule_next_response",
+      "recipient_label": "fractions.keep_common_denominator_for_multiplication",
+      "recipient_target": "36/5"
+    },
+    {
+      "donor_id": "malrulelib:val:0000089:malrule_next_response",
+      "donor_label": "subtraction.diff_0_n_equals_n",
+      "donor_target_on_recipient_query": "6342",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000295:malrule_next_response",
+      "recipient_label": "subtraction.borrow_no_decrement",
+      "recipient_target": "6348"
+    },
+    {
+      "donor_id": "malrulelib:val:0000212:malrule_next_response",
+      "donor_label": "subtraction.borrow_no_decrement",
+      "donor_target_on_recipient_query": "1589",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000148:malrule_next_response",
+      "recipient_label": "subtraction.borrow_from_bottom",
+      "recipient_target": "2699"
+    },
+    {
+      "donor_id": "malrulelib:val:0000065:malrule_next_response",
+      "donor_label": "fractions.denominator_comparison_error",
+      "donor_target_on_recipient_query": "1/9",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000025:malrule_next_response",
+      "recipient_label": "fractions.natural_number_bias_numerator_only",
+      "recipient_target": "equal"
+    },
+    {
+      "donor_id": "malrulelib:val:0000121:malrule_next_response",
+      "donor_label": "decimals.whole_number_thinking",
+      "donor_target_on_recipient_query": "74",
+      "family": "decimals",
+      "recipient_id": "malrulelib:val:0000137:malrule_next_response",
+      "recipient_label": "decimals.longer_is_larger",
+      "recipient_target": "0.711"
+    },
+    {
+      "donor_id": "malrulelib:val:0000224:malrule_next_response",
+      "donor_label": "subtraction.smaller_from_larger",
+      "donor_target_on_recipient_query": "321",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000106:malrule_next_response",
+      "recipient_label": "subtraction.stops_borrow_at_zero",
+      "recipient_target": "281"
+    },
+    {
+      "donor_id": "malrulelib:val:0000004:malrule_next_response",
+      "donor_label": "fractions.natural_number_bias_numerator_only",
+      "donor_target_on_recipient_query": "5/6",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000105:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "10"
+    },
+    {
+      "donor_id": "malrulelib:val:0000031:malrule_next_response",
+      "donor_label": "subtraction.smaller_from_larger",
+      "donor_target_on_recipient_query": "1375",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000104:malrule_next_response",
+      "recipient_label": "subtraction.borrow_from_bottom",
+      "recipient_target": "1385"
+    },
+    {
+      "donor_id": "malrulelib:val:0000196:malrule_next_response",
+      "donor_label": "subtraction.borrow_from_bottom",
+      "donor_target_on_recipient_query": "59133",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000232:malrule_next_response",
+      "recipient_label": "subtraction.stops_borrow_at_zero",
+      "recipient_target": "38933"
+    },
+    {
+      "donor_id": "malrulelib:val:0000080:malrule_next_response",
+      "donor_label": "fractions.denominator_comparison_error",
+      "donor_target_on_recipient_query": "3/5, 3/8, 1/11",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000152:malrule_next_response",
+      "recipient_label": "fractions.natural_number_bias_numerator_only",
+      "recipient_target": "3/8"
+    },
+    {
+      "donor_id": "malrulelib:val:0000134:malrule_next_response",
+      "donor_label": "fractions.multiply_across_for_division",
+      "donor_target_on_recipient_query": "49/6",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000286:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "0"
+    },
+    {
+      "donor_id": "malrulelib:val:0000280:malrule_next_response",
+      "donor_label": "fractions.ignore_denominators",
+      "donor_target_on_recipient_query": "2",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000033:malrule_next_response",
+      "recipient_label": "fractions.common_denominator_numerator",
+      "recipient_target": "2/13"
+    },
+    {
+      "donor_id": "malrulelib:val:0000045:malrule_next_response",
+      "donor_label": "fractions.keep_common_denominator_for_multiplication",
+      "donor_target_on_recipient_query": "68/19",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000136:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "68"
+    },
+    {
+      "donor_id": "malrulelib:val:0000278:malrule_next_response",
+      "donor_label": "fractions.multiply_across_for_division",
+      "donor_target_on_recipient_query": "209/35",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000263:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "0"
+    },
+    {
+      "donor_id": "malrulelib:val:0000221:malrule_next_response",
+      "donor_label": "fractions.ignore_denominators",
+      "donor_target_on_recipient_query": "1",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000143:malrule_next_response",
+      "recipient_label": "fractions.natural_number_bias_numerator_only",
+      "recipient_target": "equal"
+    },
+    {
+      "donor_id": "malrulelib:val:0000239:malrule_next_response",
+      "donor_label": "subtraction.borrow_no_decrement",
+      "donor_target_on_recipient_query": "4696",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000195:malrule_next_response",
+      "recipient_label": "subtraction.always_borrow_left",
+      "recipient_target": "3586"
+    },
+    {
+      "donor_id": "malrulelib:val:0000133:malrule_next_response",
+      "donor_label": "fractions.multiply_across_for_division",
+      "donor_target_on_recipient_query": "15/4",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000193:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "6"
+    },
+    {
+      "donor_id": "malrulelib:val:0000262:malrule_next_response",
+      "donor_label": "subtraction.always_borrow_left",
+      "donor_target_on_recipient_query": "24292",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000019:malrule_next_response",
+      "recipient_label": "subtraction.diff_0_n_equals_n",
+      "recipient_target": "35302"
+    },
+    {
+      "donor_id": "malrulelib:val:0000019:malrule_next_response",
+      "donor_label": "subtraction.diff_0_n_equals_n",
+      "donor_target_on_recipient_query": "132",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000297:malrule_next_response",
+      "recipient_label": "subtraction.borrow_no_decrement",
+      "recipient_target": "172"
+    },
+    {
+      "donor_id": "malrulelib:val:0000113:malrule_next_response",
+      "donor_label": "decimals.whole_number_thinking",
+      "donor_target_on_recipient_query": "74",
+      "family": "decimals",
+      "recipient_id": "malrulelib:val:0000137:malrule_next_response",
+      "recipient_label": "decimals.longer_is_larger",
+      "recipient_target": "0.711"
+    },
+    {
+      "donor_id": "malrulelib:val:0000209:malrule_next_response",
+      "donor_label": "fractions.ignore_denominators",
+      "donor_target_on_recipient_query": "2",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000010:malrule_next_response",
+      "recipient_label": "fractions.common_denominator_numerator",
+      "recipient_target": "1/10"
+    },
+    {
+      "donor_id": "malrulelib:val:0000063:malrule_next_response",
+      "donor_label": "fractions.natural_number_bias_numerator_only",
+      "donor_target_on_recipient_query": "5/6",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000105:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "10"
+    },
+    {
+      "donor_id": "malrulelib:val:0000145:malrule_next_response",
+      "donor_label": "subtraction.always_borrow_left",
+      "donor_target_on_recipient_query": "1734",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000164:malrule_next_response",
+      "recipient_label": "subtraction.borrow_no_decrement",
+      "recipient_target": "12844"
+    },
+    {
+      "donor_id": "malrulelib:val:0000032:malrule_next_response",
+      "donor_label": "fractions.ignore_denominators",
+      "donor_target_on_recipient_query": "6",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000230:malrule_next_response",
+      "recipient_label": "fractions.common_denominator_numerator",
+      "recipient_target": "6/11"
+    },
+    {
+      "donor_id": "malrulelib:val:0000082:malrule_next_response",
+      "donor_label": "fractions.common_denominator_numerator",
+      "donor_target_on_recipient_query": "7/16",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000095:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "7"
+    },
+    {
+      "donor_id": "malrulelib:val:0000246:malrule_next_response",
+      "donor_label": "subtraction.borrow_no_decrement",
+      "donor_target_on_recipient_query": "59382",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000234:malrule_next_response",
+      "recipient_label": "subtraction.stops_borrow_at_zero",
+      "recipient_target": "49722"
+    },
+    {
+      "donor_id": "malrulelib:val:0000100:malrule_next_response",
+      "donor_label": "fractions.multiply_across_for_division",
+      "donor_target_on_recipient_query": "15/4",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000193:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "6"
+    },
+    {
+      "donor_id": "malrulelib:val:0000027:malrule_next_response",
+      "donor_label": "fractions.keep_common_denominator_for_multiplication",
+      "donor_target_on_recipient_query": "2/3",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000253:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "8"
+    },
+    {
+      "donor_id": "malrulelib:val:0000106:malrule_next_response",
+      "donor_label": "subtraction.stops_borrow_at_zero",
+      "donor_target_on_recipient_query": "94",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000212:malrule_next_response",
+      "recipient_label": "subtraction.borrow_no_decrement",
+      "recipient_target": "196"
+    },
+    {
+      "donor_id": "malrulelib:val:0000276:malrule_next_response",
+      "donor_label": "fractions.keep_common_denominator_for_multiplication",
+      "donor_target_on_recipient_query": "68/19",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000136:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "68"
+    },
+    {
+      "donor_id": "malrulelib:val:0000296:malrule_next_response",
+      "donor_label": "subtraction.always_borrow_left",
+      "donor_target_on_recipient_query": "5238",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000295:malrule_next_response",
+      "recipient_label": "subtraction.borrow_no_decrement",
+      "recipient_target": "6348"
+    },
+    {
+      "donor_id": "malrulelib:val:0000225:malrule_next_response",
+      "donor_label": "subtraction.diff_0_n_equals_n",
+      "donor_target_on_recipient_query": "353",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000296:malrule_next_response",
+      "recipient_label": "subtraction.always_borrow_left",
+      "recipient_target": "243"
+    },
+    {
+      "donor_id": "malrulelib:val:0000056:malrule_next_response",
+      "donor_label": "fractions.ignore_denominators",
+      "donor_target_on_recipient_query": "2",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000010:malrule_next_response",
+      "recipient_label": "fractions.common_denominator_numerator",
+      "recipient_target": "1/10"
+    },
+    {
+      "donor_id": "malrulelib:val:0000107:malrule_next_response",
+      "donor_label": "fractions.ignore_denominators",
+      "donor_target_on_recipient_query": "120",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000042:malrule_next_response",
+      "recipient_label": "fractions.keep_common_denominator_for_multiplication",
+      "recipient_target": "120/7"
+    },
+    {
+      "donor_id": "malrulelib:val:0000183:malrule_next_response",
+      "donor_label": "fractions.multiply_across_for_division",
+      "donor_target_on_recipient_query": "49/6",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000286:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "0"
+    },
+    {
+      "donor_id": "malrulelib:val:0000109:malrule_next_response",
+      "donor_label": "subtraction.diff_0_n_equals_n",
+      "donor_target_on_recipient_query": "229",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000106:malrule_next_response",
+      "recipient_label": "subtraction.stops_borrow_at_zero",
+      "recipient_target": "281"
+    },
+    {
+      "donor_id": "malrulelib:val:0000036:malrule_next_response",
+      "donor_label": "subtraction.always_borrow_left",
+      "donor_target_on_recipient_query": "1734",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000164:malrule_next_response",
+      "recipient_label": "subtraction.borrow_no_decrement",
+      "recipient_target": "12844"
+    },
+    {
+      "donor_id": "malrulelib:val:0000289:malrule_next_response",
+      "donor_label": "subtraction.stops_borrow_at_zero",
+      "donor_target_on_recipient_query": "94",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000212:malrule_next_response",
+      "recipient_label": "subtraction.borrow_no_decrement",
+      "recipient_target": "196"
+    },
+    {
+      "donor_id": "malrulelib:val:0000033:malrule_next_response",
+      "donor_label": "fractions.common_denominator_numerator",
+      "donor_target_on_recipient_query": "7/16",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000095:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "7"
+    },
+    {
+      "donor_id": "malrulelib:val:0000238:malrule_next_response",
+      "donor_label": "subtraction.always_borrow_left",
+      "donor_target_on_recipient_query": "4618",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000115:malrule_next_response",
+      "recipient_label": "subtraction.smaller_from_larger",
+      "recipient_target": "5722"
+    },
+    {
+      "donor_id": "malrulelib:val:0000248:malrule_next_response",
+      "donor_label": "subtraction.borrow_no_decrement",
+      "donor_target_on_recipient_query": "103",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000157:malrule_next_response",
+      "recipient_label": "subtraction.borrow_from_bottom",
+      "recipient_target": "113"
+    },
+    {
+      "donor_id": "malrulelib:val:0000125:malrule_next_response",
+      "donor_label": "decimals.whole_number_thinking",
+      "donor_target_on_recipient_query": "74",
+      "family": "decimals",
+      "recipient_id": "malrulelib:val:0000137:malrule_next_response",
+      "recipient_label": "decimals.longer_is_larger",
+      "recipient_target": "0.711"
+    },
+    {
+      "donor_id": "malrulelib:val:0000042:malrule_next_response",
+      "donor_label": "fractions.keep_common_denominator_for_multiplication",
+      "donor_target_on_recipient_query": "136/7",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000186:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "136"
+    },
+    {
+      "donor_id": "malrulelib:val:0000164:malrule_next_response",
+      "donor_label": "subtraction.borrow_no_decrement",
+      "donor_target_on_recipient_query": "2318",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000141:malrule_next_response",
+      "recipient_label": "subtraction.borrow_from_bottom",
+      "recipient_target": "2328"
+    },
+    {
+      "donor_id": "malrulelib:val:0000052:malrule_next_response",
+      "donor_label": "fractions.common_denominator_numerator",
+      "donor_target_on_recipient_query": "2/3",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000283:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "10"
+    },
+    {
+      "donor_id": "malrulelib:val:0000163:malrule_next_response",
+      "donor_label": "subtraction.stops_borrow_at_zero",
+      "donor_target_on_recipient_query": "32634",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000070:malrule_next_response",
+      "recipient_label": "subtraction.diff_0_n_equals_n",
+      "recipient_target": "48634"
+    },
+    {
+      "donor_id": "malrulelib:val:0000265:malrule_next_response",
+      "donor_label": "fractions.ignore_denominators",
+      "donor_target_on_recipient_query": "2",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000010:malrule_next_response",
+      "recipient_label": "fractions.common_denominator_numerator",
+      "recipient_target": "1/10"
+    },
+    {
+      "donor_id": "malrulelib:val:0000025:malrule_next_response",
+      "donor_label": "fractions.natural_number_bias_numerator_only",
+      "donor_target_on_recipient_query": "5/6",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000105:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "10"
+    },
+    {
+      "donor_id": "malrulelib:val:0000081:malrule_next_response",
+      "donor_label": "decimals.longer_is_larger",
+      "donor_target_on_recipient_query": "0.46",
+      "family": "decimals",
+      "recipient_id": "malrulelib:val:0000282:malrule_next_response",
+      "recipient_label": "decimals.shorter_is_larger",
+      "recipient_target": "0.2"
+    },
+    {
+      "donor_id": "malrulelib:val:0000136:malrule_next_response",
+      "donor_label": "fractions.ignore_denominators",
+      "donor_target_on_recipient_query": "0",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000134:malrule_next_response",
+      "recipient_label": "fractions.multiply_across_for_division",
+      "recipient_target": "1/20"
+    },
+    {
+      "donor_id": "malrulelib:val:0000218:malrule_next_response",
+      "donor_label": "subtraction.stops_borrow_at_zero",
+      "donor_target_on_recipient_query": "264",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000139:malrule_next_response",
+      "recipient_label": "subtraction.borrow_no_decrement",
+      "recipient_target": "366"
+    },
+    {
+      "donor_id": "malrulelib:val:0000085:malrule_next_response",
+      "donor_label": "subtraction.always_borrow_left",
+      "donor_target_on_recipient_query": "87",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000011:malrule_next_response",
+      "recipient_label": "subtraction.borrow_from_bottom",
+      "recipient_target": "207"
+    },
+    {
+      "donor_id": "malrulelib:val:0000096:malrule_next_response",
+      "donor_label": "fractions.natural_number_bias_numerator_only",
+      "donor_target_on_recipient_query": "5/6",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000105:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "10"
+    },
+    {
+      "donor_id": "malrulelib:val:0000173:malrule_next_response",
+      "donor_label": "subtraction.borrow_no_decrement",
+      "donor_target_on_recipient_query": "4132",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000165:malrule_next_response",
+      "recipient_label": "subtraction.always_borrow_left",
+      "recipient_target": "3022"
+    },
+    {
+      "donor_id": "malrulelib:val:0000153:malrule_next_response",
+      "donor_label": "subtraction.smaller_from_larger",
+      "donor_target_on_recipient_query": "4492",
+      "family": "subtraction",
+      "recipient_id": "malrulelib:val:0000213:malrule_next_response",
+      "recipient_label": "subtraction.always_borrow_left",
+      "recipient_target": "3388"
+    },
+    {
+      "donor_id": "malrulelib:val:0000231:malrule_next_response",
+      "donor_label": "fractions.multiply_across_for_division",
+      "donor_target_on_recipient_query": "209/35",
+      "family": "fractions",
+      "recipient_id": "malrulelib:val:0000263:malrule_next_response",
+      "recipient_label": "fractions.ignore_denominators",
+      "recipient_target": "0"
+    }
+  ],
+  "seed": 20260731,
+  "source_jsonl": "data/processed/malrule_c1_clean/val.jsonl",
+  "source_sha256": "e928dbe191cf85a00b12a78b5b1e4bb8bd8800bd31a19d5310c4e263e3355d25",
+  "stats": {
+    "max_recipient_reuse": 12,
+    "misses_by_donor_label": {
+      "decimals.ignore_decimal_point": 9,
+      "decimals.right_align_decimals": 12,
+      "decimals.shorter_is_larger": 4,
+      "fractions.add_numerators_denominators": 15,
+      "fractions.subtract_across": 13,
+      "subtraction.decompose_by_place_value_label": 7,
+      "subtraction.no_column_limit": 13
+    },
+    "non_none_donors": 238,
+    "pair_count": 165,
+    "pairs_by_donor_label": {
+      "decimals.longer_is_larger": 8,
+      "decimals.whole_number_thinking": 12,
+      "fractions.common_denominator_numerator": 12,
+      "fractions.denominator_comparison_error": 5,
+      "fractions.ignore_denominators": 18,
+      "fractions.keep_common_denominator_for_multiplication": 11,
+      "fractions.multiply_across_for_division": 16,
+      "fractions.natural_number_bias_numerator_only": 16,
+      "subtraction.always_borrow_left": 18,
+      "subtraction.borrow_from_bottom": 14,
+      "subtraction.borrow_no_decrement": 15,
+      "subtraction.diff_0_n_equals_n": 6,
+      "subtraction.smaller_from_larger": 4,
+      "subtraction.stops_borrow_at_zero": 10
+    },
+    "pairs_by_family": {
+      "decimals": 20,
+      "fractions": 78,
+      "subtraction": 67
+    },
+    "source_rows": 300,
+    "unique_recipients": 72
+  },
+  "task": "malrule_next_response",
+  "version": 1
+}

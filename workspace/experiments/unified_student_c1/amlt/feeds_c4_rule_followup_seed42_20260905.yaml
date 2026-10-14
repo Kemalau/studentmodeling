@@ -1,0 +1,73 @@
+# Derived from accepted feeds_c4_format_diagnostic_seed42_20260905.yaml.
+description: Frozen C4 explicit-rule positive controls and same-menu two-query state
+  dependence; no training
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+  - python -m venv --system-site-packages /tmp/studentmodeling-c4-freegen-venv
+  - /tmp/studentmodeling-c4-freegen-venv/bin/python -m pip install -r requirements-feeds.txt
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore:
+  - '*'
+  - '!requirements-feeds.txt'
+  - '!scripts/'
+  - scripts/*
+  - '!scripts/copy_model_parallel.py'
+  - '!scripts/state_swap_misconception_smoke.py'
+  - '!scripts/c4_freegen_protocol.py'
+  - '!scripts/evaluate_c4_freegen_novel.py'
+  - '!scripts/c4_format_diagnostic.py'
+  - '!scripts/evaluate_c4_format_diagnostic.py'
+  - '!scripts/c4_rule_followup.py'
+  - '!scripts/evaluate_c4_rule_followup.py'
+  - '!scripts/run_c4_rule_followup.sh'
+  - '!tests/'
+  - tests/*
+  - '!tests/test_c4_freegen_decode.py'
+  - '!tests/test_c4_rule_followup.py'
+  - '!manifests/'
+  - manifests/*
+  - '!manifests/c4_rule_followup_seed42_20260905.json'
+  - '!manifests/c4_rule_followup_20260905.sha256'
+  - '!reports/'
+  - reports/*
+  - '!reports/c4_rule_followup_protocol_20260905.md'
+  - __pycache__/
+  - '*.pyc'
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+jobs:
+- name: c4-rule-followup-seed42-shard0
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: bash scripts/run_c4_rule_followup.sh 0
+  submit_args: &id001
+    max_attempts: 2
+    max_run_duration_seconds: 14400
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+- name: c4-rule-followup-seed42-shard1
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: bash scripts/run_c4_rule_followup.sh 1
+  submit_args: *id001
+- name: c4-rule-followup-seed42-shard2
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: bash scripts/run_c4_rule_followup.sh 2
+  submit_args: *id001

@@ -1,0 +1,104 @@
+\section{Related Work}
+\label{sec:related-work}
+
+\subsection{Knowledge tracing and student performance prediction}
+
+Knowledge tracing (KT) estimates a student's evolving knowledge from a sequence
+of learning interactions.  Bayesian Knowledge Tracing represents mastery of a
+knowledge component with a hidden Markov model \citep{corbett1995knowledge},
+while Performance Factors Analysis uses counts of prior successes and failures
+as interpretable predictors \citep{pavlik2009performance}.  Item-response and
+factor models instead explain outcomes through student ability and item
+difficulty \citep{rasch1960probabilistic,vie2019knowledge}.  Neural KT replaces
+hand-specified transitions with recurrent networks \citep{piech2015deep},
+external memories \citep{zhang2017dynamic}, or self-attention
+\citep{pandey2019self,ghosh2020context}.  These models are strong and appropriate
+baselines for correctness prediction, but their standard objective and output
+space remain task-specific: they estimate a binary outcome for an indexed item
+or knowledge component.  Our work does not argue that such models are incapable
+of richer prediction after modification.  Instead, we ask whether correctness,
+concrete responses, misconception text, and prospective responses can be
+handled by one generative interface without adding a separate prediction head
+for every target.
+
+The distinction also motivates our evaluation design.  Standard KT benchmarks
+often emphasize warm-item, new-student prediction, where test students are held
+out but most test items occurred during training.  Text-rich datasets such as
+XES3G5M \citep{liu2023xes3g5m}, DBE-KT22
+\citep{abdelrahman2022dbekt22}, and FoundationalASSIST
+\citep{worden2026foundationalassist} permit models to use problem content in
+addition to identifiers.  We retain student-disjoint temporal tests but report
+protocols by data source and prediction type rather than pooling unlike label
+spaces into a macro-average.
+
+\subsection{Responses, misconceptions, and cognitive diagnosis}
+
+Correctness does not identify the process that generated an answer.  Cognitive
+diagnosis models infer mastery profiles over a predefined skill matrix
+\citep{delatorre2009dina}, while distractor and misconception modeling links
+particular wrong answers to systematic gaps in understanding.  The Diagnostic
+Questions/Eedi benchmark made this connection explicit by associating
+mathematics distractors with expert-authored misconceptions
+\citep{wang2021diagnostic}.  More recently, MalruleLib formalized 101 executable
+mathematical error rules and their step traces \citep{chen2026malrulelib}.  These
+resources support complementary forms of evidence: Eedi provides authentic
+expert labels for observed distractors, whereas MalruleLib provides controlled
+counterfactual behavior and exact rule identity.
+
+Our misconception task differs from ordinary per-example candidate ranking.
+The main protocol either retrieves from the complete misconception taxonomy or
+generates a diagnosis without exposing a candidate set constructed to contain
+the gold label.  Our response tasks similarly distinguish closed-choice
+prediction from open mathematical response generation.  This separation is
+important: retrieving a supplied misconception and generating a student's
+future response are not interchangeable capabilities, even when both can be
+scored with semantic similarity.
+
+\subsection{Language models as knowledge tracers and simulated students}
+
+Recent work incorporates pretrained language models into KT to represent
+question semantics and address cold-start items.  Language Model Can Do
+Knowledge Tracing adapts language-model representations to KT
+\citep{lee2024language}; CLST aligns a generative language model with a student
+tracer for cold-start mitigation \citep{jung2024clst}; and SINKT combines
+language-model semantics with structural information for inductive KT
+\citep{fu2024sinkt}.  This line of work primarily retains correctness as the
+prediction target.  It demonstrates the value of language semantics for KT but
+does not by itself unify correctness with open responses and misconception
+diagnosis.
+
+A related line asks LLMs to act as students.  Sonkar and Baraniuk
+\citeyearpar{sonkar2023deduction} probe whether LLMs follow provided student
+evidence under perturbations.  Agent-based approaches condition LLMs on coarse
+cognitive levels to generate imperfect behavior \citep{wu2025embracing}.
+Contemporaneous work emphasizes that plausible generations are insufficient
+evidence of valid student simulation and calls for comparisons against real
+student behavior and stronger controls \citep{yuan2026valid}.  We share this
+concern but study a different setting: the model is trained over actual student
+histories and multiple predictive targets, rather than prompted to enact a
+persona or ability level.  We also test whether history-dependent information
+is localized in an internal state that can be intervened on.
+
+\subsection{Probing and intervening on internal representations}
+
+Linear probes are widely used to identify information encoded in neural
+representations, but probe accuracy can reflect information that the model does
+not use for its prediction.  Control tasks and selectivity analyses help
+separate representation content from probe capacity \citep{hewitt2019designing},
+while counterfactual removal or intervention tests whether an encoded feature is
+behaviorally relevant \citep{elazar2021amnesic,ravfogel2021counterfactual}.
+Accordingly, we do not treat a decodable student attribute as sufficient
+evidence for a functional student state.
+
+Our architecture goes beyond extracting a token activation from a complete
+history.  It recurrently updates a compact continuous state and removes the raw
+history from the prediction path.  Full-context distillation tests whether this
+state preserves behaviorally useful information, while future-profile
+supervision ties the state to later student outcomes.  At evaluation, a frozen
+readout receives no history or student ID; permuting state ownership across
+held-out students therefore tests whether the student-specific representation
+matters.  Disjoint-history views test within-student stability, and population
+and same-window outcome baselines test incremental utility.  We separately
+report donor, same-profile, random, and no-op text-transport interventions as
+diagnostics, without requiring arbitrary cross-student latent transplants to be
+in distribution.

@@ -1,0 +1,106 @@
+# Generated with `amlt template -t Feeds -f <path> -n 4 -y`, then specialized.
+description: Hash-bound read-only trajectory screen for five diagnosis-task-anchor milestones
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-state8-taskanchor-milestone-venv
+    - /tmp/studentmodeling-state8-taskanchor-milestone-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-state8-taskanchor-milestone-venv/bin/python -m pip install -r requirements-feeds.txt
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+jobs:
+  - name: state8-taskanchor-milestone-200
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: &screen_command |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_state8_taskanchor_milestone_screen.sh | cut -d' ' -f1)" = 520da36d9fe23f35712a490c90aba36ce59ce2220becdea712f14b609e7a04f0
+      test "$$(sha256sum scripts/audit_state8_taskanchor_milestone.py | cut -d' ' -f1)" = 363316b2b7d49af0f5448666fab0592acbae42dc1214a0ca164bc7c226da210b
+      bash scripts/run_state8_taskanchor_milestone_screen.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-taskanchor-milestone-venv
+        MILESTONE_STEP: '200'
+        MILESTONE_ADAPTER_SHA256: '515eb25884b1ef7425f78fd3e10a836ba8c917ef83a3281ad6c4148f6d332776'
+        MILESTONE_STATE_SHA256: '35892e7b063e35483a69abca20d1a2990328475f56f144660469939c9dbac3d4'
+        MILESTONE_RECEIPT_SHA256: 'ec3dd7fabbb4c5a56d5ef02f914cd6fd69d8c351584e2535b5e1b4008103f8fd'
+  - name: state8-taskanchor-milestone-400
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *screen_command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-taskanchor-milestone-venv
+        MILESTONE_STEP: '400'
+        MILESTONE_ADAPTER_SHA256: '68463cbfda450fb040d0395a197cadc32cc1bf1e191bb739bd31fa41b16aa15a'
+        MILESTONE_STATE_SHA256: '07273777637acc6f6cd1a18503856f9325945af31a6fa73e000d559c65d63ad6'
+        MILESTONE_RECEIPT_SHA256: 'ed0de7b2a3510437a13cef14773147db690f6b0c1264aa53354b114995d65fe8'
+  - name: state8-taskanchor-milestone-600
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *screen_command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-taskanchor-milestone-venv
+        MILESTONE_STEP: '600'
+        MILESTONE_ADAPTER_SHA256: '1d2097e0190cd4493ac38465468e36dda97b0c6c3a25dd87a219f08d6cf65336'
+        MILESTONE_STATE_SHA256: '367140ddfdc7e4390b7f4e3c234a21d3475d3a937303d714d91228068248a185'
+        MILESTONE_RECEIPT_SHA256: '97e5858b309f36ac766290d8ef83e2ac1666bd2b0e49570b668d8f74a90baf28'
+  - name: state8-taskanchor-milestone-800
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *screen_command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-taskanchor-milestone-venv
+        MILESTONE_STEP: '800'
+        MILESTONE_ADAPTER_SHA256: 'b6402ac9d18cbfb448ed1d963b35115845d5c2f4e0ad70e4999a20c79e038cbe'
+        MILESTONE_STATE_SHA256: 'de973db5cd1a53b371f0ce70f6153ba925b3acdd140fe9015f99079f0f201a17'
+        MILESTONE_RECEIPT_SHA256: '579118a1347c6befc76d19fc0d6e3cf0a97b065831cde41a26eec8317005ecbb'
+  - name: state8-taskanchor-milestone-1000
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *screen_command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-taskanchor-milestone-venv
+        MILESTONE_STEP: '1000'
+        MILESTONE_ADAPTER_SHA256: 'ca0bd238a60178a72fe282bc700e772b57b4abc7356310465e8c88c8f59b478d'
+        MILESTONE_STATE_SHA256: '898c85e30af80c392bdcbfcf159c1b4442e391602cd00b34d22ed9d9bfabb9cf'
+        MILESTONE_RECEIPT_SHA256: '4d41ba3278782503f07b9d3501296a99df36258386654b1b40979d5cccddc2d3'

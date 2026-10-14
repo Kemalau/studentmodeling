@@ -1,0 +1,40 @@
+# Reuses the approved Feeds template lineage and immutable project environment.
+description: Full-LoRA State8 identical-query Eedi causal twins performance arm
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-state8-eedi-same-question-full-venv
+    - /tmp/studentmodeling-state8-eedi-same-question-full-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-state8-eedi-same-question-full-venv/bin/python -m pip install -r requirements-feeds.txt
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+jobs:
+  - name: state8-eedi-same-question-full-mse1-seed3071
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_state8_eedi_same_question_causal_repair.sh | cut -d' ' -f1)" = f52f59787423437e180e88f17323509ae5174371236c980a1ee8c3b0f3503217
+      bash scripts/run_state8_eedi_same_question_causal_repair.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 172800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-eedi-same-question-full-venv
+        SOURCE_ANCHOR_MODE: full_mse1
+        EXPECTED_STUDENT_ADAPTER_SHA256: 73b6633759febc6ccddac8e81d8715b512a86c3410cf6d2f160b48610d59c558
+        EXPECTED_STUDENT_STATE_SHA256: 05dd9377584301293ba319ef7cd3bc93ec64f820c171f51abee593185a495aba

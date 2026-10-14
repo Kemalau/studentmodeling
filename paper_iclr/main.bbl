@@ -1,0 +1,197 @@
+\begin{thebibliography}{23}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Abdelrahman et~al.(2022)Abdelrahman, Abdelfattah, Wang, and
+  Lin]{abdelrahman2022dbekt22}
+Ghodai Abdelrahman, Sherif Abdelfattah, Qing Wang, and Yu~Lin.
+\newblock {DBE-KT22}: A knowledge tracing dataset based on online student
+  evaluation.
+\newblock \emph{arXiv preprint arXiv:2208.12651}, 2022.
+\newblock URL \url{https://arxiv.org/abs/2208.12651}.
+
+\bibitem[Chen et~al.(2026)Chen, Liu, and Sonkar]{chen2026malrulelib}
+Xinghe Chen, Naiming Liu, and Shashank Sonkar.
+\newblock {MalruleLib}: Large-scale executable misconception reasoning with
+  step traces for modeling student thinking in mathematics.
+\newblock \emph{arXiv preprint arXiv:2601.03217}, 2026.
+\newblock URL \url{https://arxiv.org/abs/2601.03217}.
+\newblock Accepted to ACL 2026 Main Conference.
+
+\bibitem[Corbett \& Anderson(1995)Corbett and Anderson]{corbett1995knowledge}
+Albert~T. Corbett and John~R. Anderson.
+\newblock Knowledge tracing: Modeling the acquisition of procedural knowledge.
+\newblock \emph{User Modeling and User-Adapted Interaction}, 4\penalty0
+  (4):\penalty0 253--278, 1995.
+\newblock \doi{10.1007/BF01099821}.
+
+\bibitem[de~la Torre(2009)]{delatorre2009dina}
+Jimmy de~la Torre.
+\newblock {DINA} model and parameter estimation: A didactic.
+\newblock \emph{Journal of Educational and Behavioral Statistics}, 34\penalty0
+  (1):\penalty0 115--130, 2009.
+\newblock \doi{10.3102/1076998607309474}.
+
+\bibitem[Elazar et~al.(2021)Elazar, Ravfogel, Jacovi, and
+  Goldberg]{elazar2021amnesic}
+Yanai Elazar, Shauli Ravfogel, Alon Jacovi, and Yoav Goldberg.
+\newblock Amnesic probing: Behavioral explanation with amnesic counterfactuals.
+\newblock \emph{Transactions of the Association for Computational Linguistics},
+  9:\penalty0 160--175, 2021.
+\newblock \doi{10.1162/tacl_a_00359}.
+
+\bibitem[Fu et~al.(2024)Fu, Guan, Du, Lin, Xia, Zhang, Tang, Wang, and
+  Yu]{fu2024sinkt}
+Lingyue Fu, Hao Guan, Kounianhua Du, Jianghao Lin, Wei Xia, Weinan Zhang,
+  Ruiming Tang, Yasheng Wang, and Yong Yu.
+\newblock {SINKT}: A structure-aware inductive knowledge tracing model with
+  large language model.
+\newblock In \emph{Proceedings of the 33rd ACM International Conference on
+  Information and Knowledge Management}, 2024.
+\newblock \doi{10.1145/3627673.3679760}.
+
+\bibitem[Ghosh et~al.(2020)Ghosh, Heffernan, and Lan]{ghosh2020context}
+Aritra Ghosh, Neil Heffernan, and Andrew~S. Lan.
+\newblock Context-aware attentive knowledge tracing.
+\newblock In \emph{Proceedings of the 26th ACM SIGKDD International Conference
+  on Knowledge Discovery and Data Mining}, pp.\  2330--2339, 2020.
+\newblock \doi{10.1145/3394486.3403282}.
+
+\bibitem[Hewitt \& Liang(2019)Hewitt and Liang]{hewitt2019designing}
+John Hewitt and Percy Liang.
+\newblock Designing and interpreting probes with control tasks.
+\newblock In \emph{Proceedings of the 2019 Conference on Empirical Methods in
+  Natural Language Processing and the 9th International Joint Conference on
+  Natural Language Processing}, pp.\  2733--2743, 2019.
+\newblock \doi{10.18653/v1/D19-1275}.
+
+\bibitem[Jung et~al.(2024)Jung, Yoo, Yoon, and Jang]{jung2024clst}
+Heeseok Jung, Jaesang Yoo, Yohaan Yoon, and Yeonju Jang.
+\newblock {CLST}: Cold-start mitigation in knowledge tracing by aligning a
+  generative language model as a students' knowledge tracer.
+\newblock \emph{arXiv preprint arXiv:2406.10296}, 2024.
+\newblock URL \url{https://arxiv.org/abs/2406.10296}.
+
+\bibitem[Lee et~al.(2024)Lee, Bae, Kim, Lee, Park, Ahn, Lee, Stratton, and
+  Kim]{lee2024language}
+Unggi Lee, Jiyeong Bae, Dohee Kim, Sookbun Lee, Jaekwon Park, Taekyung Ahn,
+  Gunho Lee, Damji Stratton, and Hyeoncheol Kim.
+\newblock Language model can do knowledge tracing: Simple but effective method
+  to integrate language model and knowledge tracing task.
+\newblock \emph{arXiv preprint arXiv:2406.02893}, 2024.
+\newblock URL \url{https://arxiv.org/abs/2406.02893}.
+
+\bibitem[Liu et~al.(2023)Liu, Liu, Guo, Chen, Huang, Zhao, Tang, Luo, and
+  Weng]{liu2023xes3g5m}
+Zitao Liu, Qiongqiong Liu, Teng Guo, Jiahao Chen, Shuyan Huang, Xiangyu Zhao,
+  Jiliang Tang, Weiqi Luo, and Jian Weng.
+\newblock {XES3G5M}: A knowledge tracing benchmark dataset with auxiliary
+  information.
+\newblock In \emph{Advances in Neural Information Processing Systems Datasets
+  and Benchmarks Track}, pp.\  32958--32970, 2023.
+\newblock \doi{10.52202/075280-1429}.
+
+\bibitem[Pandey \& Karypis(2019)Pandey and Karypis]{pandey2019self}
+Shalini Pandey and George Karypis.
+\newblock A self-attentive model for knowledge tracing.
+\newblock In \emph{Proceedings of the 12th International Conference on
+  Educational Data Mining}, pp.\  384--389, 2019.
+\newblock URL \url{https://arxiv.org/abs/1907.06837}.
+
+\bibitem[Pavlik et~al.(2009)Pavlik, Cen, and Koedinger]{pavlik2009performance}
+Philip~I. Pavlik, Hao Cen, and Kenneth~R. Koedinger.
+\newblock Performance factors analysis---a new alternative to knowledge
+  tracing.
+\newblock In \emph{Proceedings of the 14th International Conference on
+  Artificial Intelligence in Education}, pp.\  531--538, 2009.
+\newblock \doi{10.3233/978-1-60750-028-5-531}.
+
+\bibitem[Piech et~al.(2015)Piech, Bassen, Huang, Ganguli, Sahami, Guibas, and
+  Sohl-Dickstein]{piech2015deep}
+Chris Piech, Jonathan Bassen, Jonathan Huang, Surya Ganguli, Mehran Sahami,
+  Leonidas~J. Guibas, and Jascha Sohl-Dickstein.
+\newblock Deep knowledge tracing.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~28, 2015.
+\newblock URL
+  \url{https://proceedings.neurips.cc/paper/2015/hash/bac9162b47c56fc8a4d2a519803d51b3-Abstract.html}.
+
+\bibitem[Rasch(1960)]{rasch1960probabilistic}
+Georg Rasch.
+\newblock \emph{Probabilistic Models for Some Intelligence and Attainment
+  Tests}.
+\newblock Danish Institute for Educational Research, 1960.
+
+\bibitem[Ravfogel et~al.(2021)Ravfogel, Prasad, Linzen, and
+  Goldberg]{ravfogel2021counterfactual}
+Shauli Ravfogel, Grusha Prasad, Tal Linzen, and Yoav Goldberg.
+\newblock Counterfactual interventions reveal the causal effect of relative
+  clause representations on agreement prediction.
+\newblock In \emph{Proceedings of the 25th Conference on Computational Natural
+  Language Learning}, pp.\  194--209, 2021.
+\newblock \doi{10.18653/v1/2021.CoNLL-1.15}.
+
+\bibitem[Sonkar \& Baraniuk(2023)Sonkar and Baraniuk]{sonkar2023deduction}
+Shashank Sonkar and Richard~G. Baraniuk.
+\newblock Deduction under perturbed evidence: Probing student simulation
+  capabilities of large language models.
+\newblock \emph{arXiv preprint arXiv:2305.14507}, 2023.
+\newblock URL \url{https://arxiv.org/abs/2305.14507}.
+
+\bibitem[Vie \& Kashima(2019)Vie and Kashima]{vie2019knowledge}
+Jill-J{\^e}nn Vie and Hisashi Kashima.
+\newblock Knowledge tracing machines: Factorization machines for knowledge
+  tracing.
+\newblock In \emph{Proceedings of the AAAI Conference on Artificial
+  Intelligence}, volume~33, pp.\  750--757, 2019.
+\newblock \doi{10.1609/aaai.v33i01.3301750}.
+
+\bibitem[Wang et~al.(2021)Wang, Lamb, Saveliev, Cameron, Zaykov,
+  Hern{\'a}ndez-Lobato, Turner, Baraniuk, Barton, Peyton~Jones, Woodhead, and
+  Zhang]{wang2021diagnostic}
+Zichao Wang, Angus Lamb, Evgeny Saveliev, Pashmina Cameron, Yordan Zaykov,
+  Jos{\'e}~Miguel Hern{\'a}ndez-Lobato, Richard~E. Turner, Richard~G. Baraniuk,
+  Craig Barton, Simon Peyton~Jones, Simon Woodhead, and Cheng Zhang.
+\newblock Results and insights from diagnostic questions: The {NeurIPS} 2020
+  education challenge.
+\newblock \emph{arXiv preprint arXiv:2104.04034}, 2021.
+\newblock URL \url{https://arxiv.org/abs/2104.04034}.
+
+\bibitem[Worden et~al.(2026)Worden, Heffernan, Heffernan, and
+  Sonkar]{worden2026foundationalassist}
+Eamon Worden, Cristina Heffernan, Neil Heffernan, and Shashank Sonkar.
+\newblock {FoundationalASSIST}: An educational dataset for foundational
+  knowledge tracing and pedagogical grounding of large language models.
+\newblock In \emph{Proceedings of the International Conference on Artificial
+  Intelligence in Education}, 2026.
+\newblock \doi{10.1007/978-3-032-29755-6_36}.
+\newblock URL \url{https://arxiv.org/abs/2602.00070}.
+
+\bibitem[Wu et~al.(2025)Wu, Chen, Lin, Li, Zhu, Li, Kuang, and
+  Wu]{wu2025embracing}
+Tao Wu, Jingyuan Chen, Wang Lin, Mengze Li, Yumeng Zhu, Ang Li, Kun Kuang, and
+  Fei Wu.
+\newblock Embracing imperfection: Simulating students with diverse cognitive
+  levels using {LLM}-based agents.
+\newblock \emph{arXiv preprint arXiv:2505.19997}, 2025.
+\newblock URL \url{https://arxiv.org/abs/2505.19997}.
+
+\bibitem[Yuan et~al.(2026)Yuan, Xiao, Li, Xuan, Tong, Diab, and
+  Mitchell]{yuan2026valid}
+Zhihao Yuan, Yunze Xiao, Ming Li, Weihao Xuan, Richard Tong, Mona~T. Diab, and
+  Tom~M. Mitchell.
+\newblock Towards valid student simulation with large language models.
+\newblock \emph{arXiv preprint arXiv:2601.05473}, 2026.
+\newblock URL \url{https://arxiv.org/abs/2601.05473}.
+
+\bibitem[Zhang et~al.(2017)Zhang, Shi, King, and Yeung]{zhang2017dynamic}
+Jiani Zhang, Xingjian Shi, Irwin King, and Dit-Yan Yeung.
+\newblock Dynamic key-value memory networks for knowledge tracing.
+\newblock In \emph{Proceedings of the 26th International Conference on World
+  Wide Web}, pp.\  765--774, 2017.
+\newblock \doi{10.1145/3038912.3052580}.
+
+\end{thebibliography}

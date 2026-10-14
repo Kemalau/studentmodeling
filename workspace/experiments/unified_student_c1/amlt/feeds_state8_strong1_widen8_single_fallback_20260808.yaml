@@ -1,0 +1,66 @@
+# Generated with `amlt template -t Feeds -y`, then specialized as a one-A100
+# topology fallback for the hash-pinned strong-one-slot-to-State8 bridge.
+description: Resumable 4-hour single-A100 GA4 fallback for the full State8 bridge recipe
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-state8-widen-bridge-single-venv
+    - /tmp/studentmodeling-state8-widen-bridge-single-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-state8-widen-bridge-single-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: state8-strong1-widen8-single-lr5e7-seed60
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      trap 'rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc" "$${BASH_COMMAND}" >&2; exit "$$rc"' ERR
+      bash scripts/run_state8_qualified_teacher_curriculum.sh
+    submit_args:
+      max_attempts: 2
+      # Short backfill-friendly slices resume from the same remote atomic
+      # checkpoint namespace; this changes scheduling only, not the recipe.
+      max_run_duration_seconds: 14400
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-widen-bridge-single-venv
+        STATE8_REPLAY_VARIANT: t3_heavy
+        STATE8_KD_VARIANT: highkd
+        STATE8_CURRICULUM_NAMESPACE: taxonomy_semantic_v1
+        TRAIN_ENTRYPOINT: scripts/train_state8_taxonomy_teacher_curriculum.py
+        FORMAL_EVALUATOR: scripts/evaluate_recurrent_formal_protocols_taxonomy.py
+        STATE8_CURRICULUM_LABEL_WEIGHT: '4.0'
+        STATE8_SINGLE_DEVICE_FALLBACK: '1'
+        # Recovery cadence only: 200 is GA=4 aligned, keeps the required
+        # 1000-step curriculum milestones, and bounds service-slice replay.
+        STATE8_SAVE_STEPS: '200'
+        STATE8_STUDENT_ROOT: /mnt/amulet/studentmodeling/diagnostics/layerwise_task_retention_service_recovery/eedi_full_open_t3/state_path/lr5e-7_start17000_stop4500_08945e930bc8b9a55e57a41d4656612e3dfce99b8544c88068110a74a1a22da9_b926ee1acc6bf8a098693cef8705f88c739be214629dcea723daed6a0827c440_b5e7a5c301280df64083dadf20273902747bcf8ea4e4cdd03de3e49d4e53187a/checkpoint-round-4500
+        STATE8_STUDENT_MODEL_DIR: /mnt/amulet/studentmodeling/diagnostics/layerwise_task_retention_service_recovery/eedi_full_open_t3/state_path/lr5e-7_start17000_stop4500_08945e930bc8b9a55e57a41d4656612e3dfce99b8544c88068110a74a1a22da9_b926ee1acc6bf8a098693cef8705f88c739be214629dcea723daed6a0827c440_b5e7a5c301280df64083dadf20273902747bcf8ea4e4cdd03de3e49d4e53187a/checkpoint-round-4500/adapter
+        STATE8_STUDENT_STATE_PATH: /mnt/amulet/studentmodeling/diagnostics/layerwise_task_retention_service_recovery/eedi_full_open_t3/state_path/lr5e-7_start17000_stop4500_08945e930bc8b9a55e57a41d4656612e3dfce99b8544c88068110a74a1a22da9_b926ee1acc6bf8a098693cef8705f88c739be214629dcea723daed6a0827c440_b5e7a5c301280df64083dadf20273902747bcf8ea4e4cdd03de3e49d4e53187a/checkpoint-round-4500/recurrent_state.pt
+        STATE8_STUDENT_RECEIPT: /mnt/amulet/studentmodeling/diagnostics/layerwise_task_retention_service_recovery/eedi_full_open_t3/state_path/lr5e-7_start17000_stop4500_08945e930bc8b9a55e57a41d4656612e3dfce99b8544c88068110a74a1a22da9_b926ee1acc6bf8a098693cef8705f88c739be214629dcea723daed6a0827c440_b5e7a5c301280df64083dadf20273902747bcf8ea4e4cdd03de3e49d4e53187a/checkpoint-round-4500/checkpoint_completion.json
+        STATE8_STUDENT_INIT_CAPACITY: '1'
+        STATE8_STUDENT_INIT_TAG: strong1_round4500
+        STATE8_STUDENT_INIT_ADAPTER_SHA256: 827532591bbcc5587bc78a0108463dac43ceab8c702ee6f60e120c68a2afe482
+        STATE8_STUDENT_INIT_STATE_SHA256: 701ed585383d919bdfe9956ddbbfe870b2dcf323a3ae4adde257cf2365e419da
+        STATE8_LEARNING_RATE: '5e-7'
+        STATE8_RUN_SUFFIX: strong1_widen8_single_lr5e7_seed60
+        TRAIN_SEED: '60'

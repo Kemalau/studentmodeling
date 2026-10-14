@@ -1,0 +1,37 @@
+{
+  "num_pairs": 5,
+  "pairs": [
+    {
+      "donor_id": "malrulelib:test_same_template:0000203:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000054:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000032:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000280:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000155:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000225:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000245:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000085:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000010:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000224:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000019:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000114:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000211:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000203:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000205:malrule_next_response"
+    }
+  ],
+  "same_malrule_seed": 1051,
+  "seed": 42,
+  "source_jsonl": "data/processed/malrule_c1_clean/test_same_template.jsonl",
+  "source_sha256": "079f7634cc54dfd55dfc234503bb5925ab734b1ca74aa2f2a9a17cc4375a2c2f",
+  "swap_target": "response",
+  "task": "malrule_next_response",
+  "version": "1-smoke-first5"
+}

@@ -1,0 +1,100 @@
+% Requires: \usepackage{booktabs}; \usepackage{graphicx}
+% Counts are the post-filtering rows actually used by the unified training and
+% formal-evaluation manifests (not the larger raw/source-level datasets).
+\begin{table*}[t]
+\centering
+\caption{Datasets and task protocols in the unified student-modeling benchmark.
+$N_{\mathrm{tr}}$, $N_{\mathrm{va}}$, and $N_{\mathrm{te}}$ are post-filtering
+example counts.  Real educational logs and controlled synthetic data are
+reported separately; a dash denotes that a source does not instantiate the
+task.}
+\label{tab:appendix_dataset_task_map}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lllp{4.0cm}rrrl@{}}
+\toprule
+Task & Source & Data type & Protocol / target & $N_{\mathrm{tr}}$ & $N_{\mathrm{va}}$ & $N_{\mathrm{te}}$ & Primary metric \\
+\midrule
+\textbf{T1: correctness}
+ & DBE-KT22 & real, temporal & next-interaction first-response correctness; new-student/warm-item & 3,515 & 221 & 225 & Accuracy, AUROC \\
+ & Eedi Response & real, non-temporal & held-out response conditioned on the same student's profile & 15,736 & 984 & 984 & Accuracy, AUROC \\
+ & FoundationalASSIST & real, temporal & identifiable first-response correctness after support/privacy filtering & 30,009 & 1,863 & 1,882 & Accuracy, AUROC \\
+ & XES3G5M & real, temporal & next-interaction correctness; official temporal test students & 52,009 & 2,888 & 7,222 & Accuracy, AUROC \\
+ & MalRule & synthetic & systematic-rule correctness; same- and cross-template tests & 3,000 & 300 & 600 & Accuracy \\
+\addlinespace
+\textbf{T2: response}
+ & DBE-KT22 & real, temporal & selected-option generation & 3,472 & 218 & 223 & Choice Acc. / MathEq \\
+ & Eedi Response & real, non-temporal & profile-held-out option generation & 15,736 & 984 & 984 & Choice Acc. / MathEq \\
+ & FoundationalASSIST & real, temporal & privacy-filtered structured mathematical first-response generation & 29,995 & 1,864 & 1,886 & MathEq \\
+ & MalRule & synthetic & executable systematic-error response; same- and cross-template tests & 3,000 & 300 & 600 & MathEq \\
+\addlinespace
+\textbf{T3: diagnosis}
+ & Eedi-Mining & real, response-level & open diagnosis against a 2,587-label expert misconception taxonomy; official fold 4 test & 3,476 & 0 & 894 & Semantic judge; retrieval MRR/$R@k$ \\
+ & MalRule & synthetic & executable misconception identity; same- and cross-template tests & 3,000 & 300 & 600 & Label Acc.; semantic judge \\
+\addlinespace
+\textbf{T4: prospective behavior}
+ & DBE-KT22 & real, temporal & correctness and selected response on a specified item at $\Delta=3$ & 3,186 & 200 & 200 & JointMath; CorrAcc \\
+ & FoundationalASSIST & real, temporal & correctness and open response on a specified item at $\Delta\in\{1,3,5\}$ & 70,811 & 4,403 & 4,400 & JointMath; CorrAcc \\
+\addlinespace
+\textbf{T5: error persistence}
+ & DBE-KT22 & real, temporal & same question and same wrong option recurs within the next three same-question records & 114 & 15 & 12 & AUROC, AUPRC, Acc. \\
+ & FoundationalASSIST & real, temporal & exact normalized wrong first response recurs within the next three same-question records & 7,272 & 974 & 964 & AUROC, AUPRC, Acc. \\
+\midrule
+\multicolumn{4}{r}{\textbf{Total unique task examples}} & \textbf{244,331} & \textbf{15,514} & \textbf{21,676} & \\
+\bottomrule
+\end{tabular}%
+}
+\vspace{2pt}
+\begin{minipage}{0.99\textwidth}\footnotesize
+\textit{Protocol notes.} All real longitudinal splits are student-disjoint.
+Eedi Response lacks timestamps in the public mirror and is therefore a
+non-temporal profile-prediction protocol, not next-step KT. Eedi-Mining is a
+response-level diagnosis set and contains no longitudinal student history.
+MalRule is controlled synthetic evidence used for sanity checks,
+cross-template generalization, transfer, and mechanism experiments; it is not
+pooled with real data when making real-world performance claims. T6
+(future-KC-performance band; legacy T4) is an appendix-only proxy and is not
+included in the headline T1--T5 benchmark. Training counts use the original
+training partition; the final one-epoch fit merged train and validation to
+259,845 rows, while the frozen 21,676-row test set was never used for training.
+\end{minipage}
+\end{table*}
+
+\begin{table}[t]
+\centering
+\caption{Appendix-only T6 future-KC-performance proxy.  The target is the
+three-way band of correctness over up to five subsequent opportunities on the
+same KC; it is not a direct latent-mastery label and is excluded from the
+headline T1--T5 totals.}
+\label{tab:appendix_t6_proxy}
+\begin{tabular}{@{}lrrrl@{}}
+\toprule
+Source & $N_{\mathrm{tr}}$ & $N_{\mathrm{va}}$ & $N_{\mathrm{te}}$ & Primary metrics \\
+\midrule
+DBE-KT22 & 2,217 & 139 & 131 & Macro-F1, balanced Acc., QWK \\
+XES3G5M & 20,561 & 1,131 & 2,808 & Macro-F1, balanced Acc., QWK \\
+\midrule
+Total & 22,778 & 1,270 & 2,939 & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table*}[t]
+\centering
+\caption{Source-level scope and split construction. Question and student
+counts describe the processed source before the final context-length filter.}
+\label{tab:appendix_dataset_scope}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lp{3.0cm}rrlp{6.2cm}@{}}
+\toprule
+Source & Tasks used & Students & Questions / labels & History cap & Split and scope \\
+\midrule
+DBE-KT22 & T1, T2, T4, T5 & 1,193 & 212 questions & 6 & 954/119/120 train/validation/test students; temporal new-student, predominantly warm-item evaluation; multiple-choice database-education interactions. \\
+Eedi Response & T1, T2 & 4,918 & 445 questions & 6 & 3,934/492/492 users; user-disjoint deterministic split. The mirror omits timestamps, so held-out examples measure profile-conditioned prediction rather than temporal forecasting. \\
+FoundationalASSIST & T1, T2, T4, T5 & 5,000 & 2,986 questions & 12 & 4,000/500/500 students; temporal student-disjoint split. Free-text targets are conservatively filtered to privacy-safe structured mathematics; $\Delta=1,3,5$ for T4. \\
+XES3G5M & T1 & 18,066 & 4,137 questions & 6 & 13,008/1,445/3,613 students; official temporal test users. The data record correctness but not the student's selected response, so they do not instantiate headline T2 or strict T5. \\
+Eedi-Mining & T3 & -- & 2,587 labels & -- & 4,370 question--wrong-answer diagnosis queries; folds 0--3 (3,476) train and official fold 4 (894) test. No student sequence is present. \\
+MalRule & T1, T2, T3 & synthetic & 21 rules; 132 surfaces & 4 & 3,000/300/600 synthetic profiles; the test combines 300 same-template and 300 cross-template profiles across fractions, decimals, and subtraction. \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

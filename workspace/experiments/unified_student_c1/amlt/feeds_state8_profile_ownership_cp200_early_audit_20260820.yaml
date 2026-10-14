@@ -1,0 +1,56 @@
+# Filled from an AMLT 11.14.2 `amlt template -t Feeds` template and the
+# project-approved immutable State8 environment/storage bindings.
+description: Read-only held-out ownership audit of frozen State8 checkpoint 200
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-state8-profile-ownership-audit-venv
+    - /tmp/studentmodeling-state8-profile-ownership-audit-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-state8-profile-ownership-audit-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore:
+    - .git/
+    - .vscode/
+    - .pytest_cache/
+    - amlt/
+    - data/
+    - results/
+    - reports/
+    - state8_exact_scientific_rescue_bundle_20260808/
+    - state8_midpoint_diagnosis_first_bundle_20260808/
+    - strong1_rescue_bundle_20260808/
+    - task_anchor_bundle_20260808/
+    - __pycache__/
+    - '*.pyc'
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: state8-profile-ownership-cp200-early-audit
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_state8_profile_ownership_checkpoint_audit.sh | cut -d' ' -f1)" = 203e9c318169a38c24bd7fa7438f2409d7048d4f412e72009e904df364a88549
+      bash scripts/run_state8_profile_ownership_checkpoint_audit.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-profile-ownership-audit-venv

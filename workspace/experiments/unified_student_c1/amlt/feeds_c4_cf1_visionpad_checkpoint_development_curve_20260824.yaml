@@ -1,0 +1,67 @@
+# yaml-language-server: $schema=file:///home/v-yuejiali/studentmodeling/workspace/experiments/unified_student_c1/.vscode/amlt-config.schema.json
+description: Strict CF1 plus vision-pad six-checkpoint task-probe-causal development curves over three training seeds
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-c4-checkpoint-curve-venv
+    - /tmp/studentmodeling-c4-checkpoint-curve-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-c4-checkpoint-curve-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: /tmp/c4_strict3seed_frozen_code_v1
+  ignore:
+    - .git/
+    - .vscode/
+    - amlt/
+    - data/
+    - results/
+    - __pycache__/
+    - '*.pyc'
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: c4-cf1-visionpad-checkpoint-curve-seed13
+    sku: 80G1-A100
+    sla_tier: Standard
+    command: bash scripts/run_c4_cf1_visionpad_checkpoint_curve_seed.sh
+    submit_args: &curve_submit
+      max_attempts: 1
+      max_run_duration_seconds: 172800
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        TRAIN_SEED: '13'
+        SOURCE_RUN_TAG: strict3seed_v2_20260824
+
+  - name: c4-cf1-visionpad-checkpoint-curve-seed42
+    sku: 80G1-A100
+    sla_tier: Standard
+    command: bash scripts/run_c4_cf1_visionpad_checkpoint_curve_seed.sh
+    submit_args:
+      <<: *curve_submit
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        TRAIN_SEED: '42'
+        SOURCE_RUN_TAG: strict3seed_v2_20260824
+
+  - name: c4-cf1-visionpad-checkpoint-curve-seed97
+    sku: 80G1-A100
+    sla_tier: Standard
+    command: bash scripts/run_c4_cf1_visionpad_checkpoint_curve_seed.sh
+    submit_args:
+      <<: *curve_submit
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        TRAIN_SEED: '97'
+        SOURCE_RUN_TAG: strict3seed_v2_20260824

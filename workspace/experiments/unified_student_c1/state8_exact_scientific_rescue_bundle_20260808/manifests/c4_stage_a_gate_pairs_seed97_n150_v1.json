@@ -1,0 +1,762 @@
+{
+  "num_pairs": 150,
+  "pairs": [
+    {
+      "donor_id": "malrulelib:test_same_template:0000295:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000163:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000131:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000047:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000225:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000096:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000120:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000030:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000174:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000096:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000241:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000030:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000197:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000273:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000266:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000015:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000279:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000065:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000203:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000144:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000026:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000024:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000181:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000108:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000138:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000051:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000047:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000160:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000131:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000019:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000286:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000203:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000073:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000058:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000051:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000110:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000115:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000225:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000002:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000080:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000299:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000047:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000122:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000233:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000138:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000015:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000108:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000230:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000295:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000092:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000195:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000035:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000155:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000119:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000110:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000268:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000196:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000143:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000296:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000133:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000080:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000174:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000030:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000030:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000225:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000096:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000015:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000296:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000057:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000227:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000058:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000069:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000094:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000138:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000295:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000096:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000195:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000004:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000030:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000207:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000196:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000008:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000196:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000122:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000104:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000045:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000046:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000268:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000187:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000132:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000080:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000115:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000195:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000057:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000210:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000030:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000192:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000019:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000177:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000088:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000082:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000018:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000018:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000054:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000048:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000092:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000225:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000085:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000230:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000242:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000051:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000092:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000065:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000041:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000174:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000040:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000024:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000069:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000120:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000114:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000041:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000119:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000225:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000137:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000046:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000045:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000223:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000209:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000002:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000030:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000019:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000187:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000094:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000163:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000006:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000058:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000114:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000019:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000082:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000211:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000270:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000129:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000226:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000035:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000069:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000233:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000226:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000097:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000203:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000021:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000227:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000142:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000138:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000278:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000177:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000187:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000226:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000131:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000041:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000142:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000268:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000129:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000227:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000041:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000065:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000146:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000082:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000188:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000002:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000242:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000051:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000058:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000093:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000110:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000116:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000069:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000115:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000206:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000131:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000132:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000160:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000278:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000080:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000058:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000225:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000119:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000278:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000069:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000206:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000018:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000286:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000167:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000224:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000115:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000129:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000279:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000195:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000268:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000181:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000002:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000225:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000223:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000024:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000119:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000227:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000009:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000277:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000143:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000114:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000120:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000196:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000002:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000119:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000035:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000092:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000207:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000295:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000133:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000110:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000206:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000024:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000225:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000197:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000032:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000111:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000233:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000299:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000245:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000230:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000207:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000122:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000226:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000129:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000004:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000035:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000065:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000280:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000085:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000009:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000093:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000278:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000195:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000092:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000002:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000065:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000187:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000199:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000196:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000195:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000225:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000115:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000004:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000227:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000296:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000093:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000206:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000065:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000131:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000223:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000051:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000133:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000114:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000030:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000142:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000092:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000224:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000233:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000114:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000008:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000108:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000196:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000181:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000278:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000223:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000110:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000242:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000018:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000032:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000111:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000002:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000030:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000295:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000210:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000177:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000187:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000035:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000163:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000081:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000205:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000032:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000054:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000279:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000155:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000225:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000223:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000129:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000069:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000155:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000277:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000245:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000116:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000278:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000199:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000120:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000002:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000119:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000226:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000245:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000009:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000116:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000206:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000069:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000030:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000006:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000131:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000030:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000009:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000296:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000174:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000278:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000080:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000223:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000133:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000299:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000160:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000119:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000085:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000207:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000094:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000108:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000040:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000041:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000177:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000206:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000057:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000047:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000192:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000242:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000093:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000209:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000280:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000120:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000051:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000024:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000002:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000205:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000191:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000298:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000223:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000195:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000206:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000080:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000096:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000024:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000188:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000144:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000198:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000065:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000024:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000010:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000187:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000181:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000230:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000241:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000080:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000008:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000155:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000120:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000131:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000233:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000278:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000094:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000226:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000192:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000024:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000041:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000155:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000015:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000187:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000155:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000119:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000120:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000277:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000047:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000207:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000155:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000192:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000058:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000278:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000094:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000196:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000133:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000277:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000181:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000295:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000035:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000143:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000210:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000116:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000199:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000210:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000241:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000160:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000019:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000132:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000119:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000224:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000116:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000226:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000094:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000199:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000119:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000019:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000006:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000132:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000119:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000040:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000085:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000296:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000009:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000205:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000222:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000162:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000069:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000132:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000041:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000082:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000193:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000200:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000122:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000224:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000138:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000110:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000279:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000187:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000187:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000057:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000133:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000295:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000225:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000010:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000192:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000009:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000057:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000230:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000142:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000233:malrule_next_response"
+    },
+    {
+      "donor_id": "malrulelib:test_same_template:0000199:malrule_next_response",
+      "recipient_id": "malrulelib:test_same_template:0000187:malrule_next_response",
+      "samemal_id": "malrulelib:test_same_template:0000081:malrule_next_response"
+    }
+  ],
+  "same_malrule_seed": 1106,
+  "seed": 97,
+  "source_jsonl": "data/processed/malrule_c1_clean/test_same_template.jsonl",
+  "source_sha256": "079f7634cc54dfd55dfc234503bb5925ab734b1ca74aa2f2a9a17cc4375a2c2f",
+  "swap_target": "response",
+  "task": "malrule_next_response",
+  "version": 1
+}

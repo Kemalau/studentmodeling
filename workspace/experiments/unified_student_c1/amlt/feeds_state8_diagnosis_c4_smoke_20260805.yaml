@@ -1,0 +1,103 @@
+# Generated from the Feeds Singularity template for an exploratory diagnosis-C4 gate.
+description: Closed State8 natural-language diagnosis intervention smoke
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-state8-diagnosis-c4-venv
+    - /tmp/studentmodeling-state8-diagnosis-c4-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-state8-diagnosis-c4-venv/bin/python -m pip install -r requirements-feeds.txt
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: state8-v5-diagnosis-c4-smoke-seed42
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      trap 'rc=$$?; printf "FAILED line=%s rc=%s command=%s\n" "$${LINENO}" "$$rc" "$${BASH_COMMAND}" >&2; exit "$$rc"' ERR
+      export PATH="/tmp/studentmodeling-state8-diagnosis-c4-venv/bin:$$PATH"
+      export PYTHONPATH="$$AMLT_CODE_DIR/scripts$${PYTHONPATH:+:$$PYTHONPATH}"
+      export HF_HOME=/tmp/hf_cache
+      export HF_HUB_CACHE=/tmp/hf_cache/hub
+      export HF_HUB_DISABLE_XET=1
+      export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+      export TRANSFORMERS_VERBOSITY=error
+      export LOCAL_MODEL=/tmp/Qwen3-32B
+      export CHECKPOINT=/mnt/amulet/studentmodeling/diagnostics/state8_natural_dualpath_samerule_v5_immutable/model
+      export RECEIPT=/mnt/amulet/studentmodeling/diagnostics/state8_natural_dualpath_samerule_v5_immutable/metrics/immutable_receipt.json
+      export C4_DATA=/mnt/amulet/studentmodeling/c4_fullopen_20260724/malrule_c1_clean/test_same_template.jsonl
+      export PAIRS=manifests/c4_stage_a_gate_pairs_seed42_n150_v1.json
+      export OUT="$$AMLT_OUTPUT_DIR/eval/diagnosis_c4"
+      mkdir -p "$$HF_HUB_CACHE" "$$OUT"
+      test -f "$$CHECKPOINT/adapter_model.safetensors"
+      test -f "$$CHECKPOINT/recurrent_state.pt"
+      test -f "$$RECEIPT"
+      test -f "$$C4_DATA"
+      test -f "$$PAIRS"
+      test "$$(df --output=avail /tmp | tail -1)" -ge 83886080
+      test "$$(sha256sum "$$PAIRS" | cut -d' ' -f1)" = edcdb934a65252557f6c569eea9ef7a85e5445549deac9fb4829c3f579e1a9b8
+      test "$$(sha256sum scripts/evaluate_recurrent_diagnosis_c4.py | cut -d' ' -f1)" = ddb078f812259f455926fca892c40d3c96f45a2720723ca384712ef2429a29da
+      python - "$$CHECKPOINT" "$$RECEIPT" <<'PY'
+      import hashlib,json,pathlib,sys
+      root=pathlib.Path(sys.argv[1]); receipt=json.load(open(sys.argv[2]))
+      def digest(path):
+          h=hashlib.sha256()
+          with open(path,'rb') as f:
+              for chunk in iter(lambda:f.read(1024*1024),b''): h.update(chunk)
+          return h.hexdigest()
+      observed={'adapter_model':digest(root/'adapter_model.safetensors'),
+                'recurrent_state':digest(root/'recurrent_state.pt')}
+      assert receipt['stage']=='state8_v5_immutable_publish_v1' and receipt['status']=='complete',receipt
+      assert receipt['state_shape']==[64,8,5120],receipt
+      assert receipt['raw_history_visible_to_decoder'] is False,receipt
+      assert receipt['persistent_history_kv_cache'] is False,receipt
+      assert receipt['sha256']==observed,(receipt,observed)
+      PY
+      python -m pytest -q tests/test_evaluate_recurrent_diagnosis_c4.py tests/test_t3_judge_utils.py
+      rm -rf "$$LOCAL_MODEL"; mkdir -p "$$LOCAL_MODEL"
+      python scripts/copy_model_parallel.py \
+        --source /mnt/amulet/studentmodeling/models/Qwen3-32B \
+        --destination "$$LOCAL_MODEL" --workers 16
+      test -f "$$LOCAL_MODEL/model.safetensors.index.json"
+      nvidia-smi --query-gpu=index,name,memory.total --format=csv,noheader
+      python -u scripts/evaluate_recurrent_diagnosis_c4.py \
+        --model "$$LOCAL_MODEL" --adapter "$$CHECKPOINT" \
+        --recurrent-state "$$CHECKPOINT/recurrent_state.pt" \
+        --state-architecture layerwise --jsonl "$$C4_DATA" \
+        --pair-manifest "$$PAIRS" --output-dir "$$OUT" \
+        --state-token-alias '<|vision_pad|>' --max-length 1536 \
+        --max-new-tokens 160 --num-pairs 20 --seed 42
+      python - "$$OUT/metrics.json" <<'PY'
+      import json,sys
+      x=json.load(open(sys.argv[1]))
+      assert x['stage']=='state8_closed_diagnosis_c4_smoke_v1',x
+      assert x['num_pairs']==20 and x['state_shape']==[64,8,5120],x
+      assert x['raw_history_visible_to_decoder'] is False,x
+      assert x['persistent_history_kv_cache'] is False,x
+      assert x['artifact_sha256']=={
+       'adapter_model':'51b8f06b4e5f04f0a0ba2d32b09989cb9831f904cee24b07cc71f469d8f8b866',
+       'recurrent_state':'76f85515a27ab794fbe75b6ca7c10d99fe67bff6d969237fc66a3b6bda416c98'},x
+      PY
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 21600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml

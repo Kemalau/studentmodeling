@@ -1,0 +1,118 @@
+{
+  "dataset_source": "XES3G5M real longitudinal interactions",
+  "interpretation_contract": {
+    "coverage": "identifiability diagnostic, not a model score",
+    "unseen_kcs": "future transfer beyond directly observed KC evidence; keep separate from observed-support ownership",
+    "visible_history_rate_ownership_sanity": "data-only positive-control baseline, not State8 evidence"
+  },
+  "manifest_dir": "manifests/xes_state8_profile_confirmatory_v1",
+  "manifest_sha256": "917f81d4d0bb9e8768efaa3e11c5993184979bdc68143e7f9c10bd863606b769",
+  "model_loaded": false,
+  "splits": {
+    "test": {
+      "cutoff_position": {
+        "maximum": 271,
+        "median": 125.0,
+        "minimum": 69
+      },
+      "future_supported_cells": 2171,
+      "future_weakness_visible_history_coverage": 0.12339055793991416,
+      "ownership_sanity_scope": "future-supported KCs also observed in the exact updater-visible history",
+      "rows": 466,
+      "seen_fraction_of_future_supported_cells": 0.11239060340856748,
+      "seen_future_supported_cells": 244,
+      "sha256": "aa4f08f11453372d32229de2cb4fa7547f1de90379d6feffcfbe58de1c7fb1a2",
+      "students_with_no_future_weakness_seen": 360,
+      "students_with_no_future_weakness_seen_rate": 0.7725321888412017,
+      "unseen_future_supported_cells": 1927,
+      "visible_history_length": {
+        "maximum": 12,
+        "mean_fraction_of_prefix": 0.09955116124614657,
+        "median": 12.0,
+        "minimum": 12
+      },
+      "visible_history_rate_ownership_sanity": {
+        "delta_permuted_mean_minus_native": 0.04697439387737329,
+        "native_rmse": 0.24410428317983018,
+        "p_one_sided": 0.0004997501249375312,
+        "permuted_rmse_ci95": [
+          0.2816627813328042,
+          0.3001252572899843
+        ],
+        "permuted_rmse_mean": 0.29107867705720347,
+        "replicates": 2000
+      }
+    },
+    "train": {
+      "cutoff_position": {
+        "maximum": 258,
+        "median": 132.0,
+        "minimum": 65
+      },
+      "future_supported_cells": 3731,
+      "future_weakness_visible_history_coverage": 0.10875,
+      "ownership_sanity_scope": "future-supported KCs also observed in the exact updater-visible history",
+      "rows": 800,
+      "seen_fraction_of_future_supported_cells": 0.10694183864915573,
+      "seen_future_supported_cells": 399,
+      "sha256": "0df123f919eeb00b8aa1902ba8fa72f67f68a5b254e9c799cf93a9a03a06a4c0",
+      "students_with_no_future_weakness_seen": 643,
+      "students_with_no_future_weakness_seen_rate": 0.80375,
+      "unseen_future_supported_cells": 3332,
+      "visible_history_length": {
+        "maximum": 12,
+        "mean_fraction_of_prefix": 0.09724016989984548,
+        "median": 12.0,
+        "minimum": 12
+      },
+      "visible_history_rate_ownership_sanity": {
+        "delta_permuted_mean_minus_native": 0.08526740129307447,
+        "native_rmse": 0.20611089538948912,
+        "p_one_sided": 0.0004997501249375312,
+        "permuted_rmse_ci95": [
+          0.284865167289049,
+          0.29784000797262106
+        ],
+        "permuted_rmse_mean": 0.2913782966825636,
+        "replicates": 2000
+      }
+    },
+    "valid": {
+      "cutoff_position": {
+        "maximum": 235,
+        "median": 129.5,
+        "minimum": 69
+      },
+      "future_supported_cells": 941,
+      "future_weakness_visible_history_coverage": 0.105,
+      "ownership_sanity_scope": "future-supported KCs also observed in the exact updater-visible history",
+      "rows": 200,
+      "seen_fraction_of_future_supported_cells": 0.1179596174282678,
+      "seen_future_supported_cells": 111,
+      "sha256": "72947f89e7d4ba5571120e0c7c90c3f723ad3f37d176061e7b77accff3610145",
+      "students_with_no_future_weakness_seen": 163,
+      "students_with_no_future_weakness_seen_rate": 0.815,
+      "unseen_future_supported_cells": 830,
+      "visible_history_length": {
+        "maximum": 12,
+        "mean_fraction_of_prefix": 0.0977677391508343,
+        "median": 12.0,
+        "minimum": 12
+      },
+      "visible_history_rate_ownership_sanity": {
+        "delta_permuted_mean_minus_native": 0.07023031199475976,
+        "native_rmse": 0.22480901904404554,
+        "p_one_sided": 0.0004997501249375312,
+        "permuted_rmse_ci95": [
+          0.28286123379768646,
+          0.30717545597461027
+        ],
+        "permuted_rmse_mean": 0.2950393310388053,
+        "replicates": 2000
+      }
+    }
+  },
+  "stage": "state8_profile_information_boundary_audit_v1",
+  "status": "complete",
+  "test_labels_used_for_fitting": false
+}

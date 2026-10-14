@@ -1,0 +1,83 @@
+# Generated from `amlt template -t Feeds -f amlt/feeds_layerwise_checkpoint_persistence_probe_20260801.yaml -y`.
+# yaml-language-server: $schema=file:///home/v-yuejiali/studentmodeling/workspace/experiments/unified_student_c1/.vscode/amlt-config.schema.json
+description: Read-write persistence probe for large atomic checkpoints on the approved student store
+
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+
+jobs:
+  - name: layerwise-checkpoint-persistence-probe
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: |
+      set -euo pipefail
+      export PROBE_DIR=/mnt/amulet/studentmodeling/diagnostics/layerwise_checkpoint_persistence_probe_20260801
+      export PAYLOAD_BYTES=134217728
+      mkdir -p "$$PROBE_DIR" "$$AMLT_OUTPUT_DIR/metrics"
+      rm -f "$$PROBE_DIR/direct.bin" "$$PROBE_DIR/atomic.bin" "$$PROBE_DIR/atomic.bin.partial" "$$PROBE_DIR/receipt.json"
+      python - <<'PY'
+      import hashlib, json, os, pathlib
+      root = pathlib.Path(os.environ['PROBE_DIR'])
+      size = int(os.environ['PAYLOAD_BYTES'])
+      block = bytes((index % 251 for index in range(1024 * 1024)))
+      direct = root / 'direct.bin'
+      atomic = root / 'atomic.bin'
+      temporary = root / 'atomic.bin.partial'
+      for path in (direct, temporary):
+          digest = hashlib.sha256()
+          with path.open('wb') as handle:
+              for _ in range(size // len(block)):
+                  handle.write(block)
+                  digest.update(block)
+              handle.flush()
+              os.fsync(handle.fileno())
+          if path == direct:
+              direct_digest = digest.hexdigest()
+          else:
+              atomic_digest = digest.hexdigest()
+      temporary.replace(atomic)
+      directory_fd = os.open(root, os.O_RDONLY)
+      try:
+          os.fsync(directory_fd)
+      finally:
+          os.close(directory_fd)
+      assert direct.stat().st_size == size and atomic.stat().st_size == size
+      assert direct_digest == atomic_digest
+      receipt = {
+          'status': 'passed',
+          'bytes': size,
+          'sha256': direct_digest,
+          'direct': str(direct),
+          'atomic': str(atomic),
+          'partial_absent': not temporary.exists(),
+      }
+      (root / 'receipt.json').write_text(json.dumps(receipt, indent=2, sort_keys=True) + '\n')
+      print(json.dumps(receipt, sort_keys=True))
+      PY
+      test -f "$$PROBE_DIR/direct.bin"
+      test -f "$$PROBE_DIR/atomic.bin"
+      test ! -e "$$PROBE_DIR/atomic.bin.partial"
+      cp "$$PROBE_DIR/receipt.json" "$$AMLT_OUTPUT_DIR/metrics/receipt.json"
+    submit_args:
+      max_attempts: 1
+      max_run_duration_seconds: 3600
+      env:
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml

@@ -1,0 +1,55 @@
+# Generated with `amlt template -t Feeds -f <path> -n 1 -y`, then specialized.
+description: Hash-bound State8 checkpoint-2000 random-neutral causal rescue screen
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+    - python -m venv --system-site-packages /tmp/studentmodeling-state8-matched-cp2000-rescue-venv
+    - /tmp/studentmodeling-state8-matched-cp2000-rescue-venv/bin/python -m pip install --upgrade pip
+    - /tmp/studentmodeling-state8-matched-cp2000-rescue-venv/bin/python -m pip install -r requirements-feeds.txt
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore: [.git/, .vscode/, amlt/, data/, results/, __pycache__/, '*.pyc']
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+jobs:
+  - name: state8-matched-cp2000-rescue-semantic-preserve
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: &rescue_command |
+      set -euo pipefail
+      test "$$(sha256sum scripts/run_state8_matched_checkpoint2000_rescue.sh | cut -d' ' -f1)" = c04d4059c8f94a4cb3b1146f2ef470c8943acf5b44e8e665c422265e45bd29ab
+      bash scripts/run_state8_matched_checkpoint2000_rescue.sh
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 86400
+      env: &common_env
+        _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+        VENV_ROOT: /tmp/studentmodeling-state8-matched-cp2000-rescue-venv
+        MATCHED_CHECKPOINT_ROOT: /mnt/amulet/studentmodeling/checkpoints/state8_qualified_teacher_curriculum_seed42_exact5000_rounds1250_kd1_v2_20260805_taxonomy_semantic_v1_diagnosis_first_matched_teacher_seed67_single_ga4/checkpoint-2000
+        EXPECTED_STUDENT_ADAPTER_SHA256: '95a36705a12a166be19db4134000546beb7e6dda9caf22670cc1a9f7d9844c73'
+        EXPECTED_STUDENT_STATE_SHA256: '48af05a9e162c8beabc838548887f2c8bb6136297d4ad5d64899492f1ab2414b'
+        STATE8_RESCUE_MODE: semantic_preserve
+        RUN_TAG: matched_cp2000_semantic_preserve_v1
+  - name: state8-matched-cp2000-rescue-causal-taskanchor
+    sku: 80G1-A100
+    process_count_per_node: 1
+    mpi: false
+    sla_tier: Standard
+    command: *rescue_command
+    submit_args:
+      max_attempts: 2
+      max_run_duration_seconds: 86400
+      env:
+        <<: *common_env
+        STATE8_RESCUE_MODE: causal_taskanchor
+        RUN_TAG: matched_cp2000_causal_taskanchor_v1

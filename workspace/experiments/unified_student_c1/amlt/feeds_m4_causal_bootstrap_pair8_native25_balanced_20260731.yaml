@@ -1,0 +1,140 @@
+description: 'Eight-pair recurrent causal bootstrap diagnostic: sequence-sum preference,
+  native-anchor 0.25 first quarter, balanced directional tail'
+target:
+  service: manifold
+  name: Feeds
+  workspace_name: CS-NewsAndFeeds-Singularity@rg-cs-newsandfeeds-singularity
+environment:
+  image: amlt-sing/acpt-torch2.8.x-py3.10-cuda12.6-ubuntu22.04:20260615T232545258
+  setup:
+  - python -m venv --system-site-packages /tmp/studentmodeling-m4-pair-overfit-venv
+  - /tmp/studentmodeling-m4-pair-overfit-venv/bin/python -m pip install --upgrade
+    pip
+  - /tmp/studentmodeling-m4-pair-overfit-venv/bin/python -m pip install -r requirements-feeds.txt
+code:
+  local_dir: $CONFIG_DIR/..
+  ignore:
+  - .git/
+  - .vscode/
+  - amlt/
+  - data/
+  - results/
+  - __pycache__/
+  - '*.pyc'
+storage:
+  student_store:
+    storage_account_name: csnewsandfeeds4150361735
+    container_name: amulet
+    mount_dir: /mnt/amulet
+    is_output: true
+jobs:
+- name: m4-pair8-overfit-sum-bootstrap-native25-balanced-seed42
+  sku: 80G1-A100
+  process_count_per_node: 1
+  mpi: false
+  sla_tier: Standard
+  command: "set -euo pipefail\nexport PATH=\"/tmp/studentmodeling-m4-pair-overfit-venv/bin:$$PATH\"\
+    \nexport PYTHONPATH=\"$$AMLT_CODE_DIR/scripts$${PYTHONPATH:+:$$PYTHONPATH}\"\n\
+    export HF_HOME=/tmp/hf_cache\nexport HF_HUB_CACHE=/tmp/hf_cache/hub\nexport HF_HUB_DISABLE_XET=1\n\
+    export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True\nexport TRANSFORMERS_VERBOSITY=error\n\
+    export LOCAL_MODEL=/tmp/Qwen3-32B\nexport SOURCE_DATA=/mnt/amulet/studentmodeling/method_small_v1\n\
+    export BASE_DATA=/mnt/amulet/studentmodeling/c4_fullopen_20260724/malrule_c1_clean\n\
+    export UNIFIED_DATA=/tmp/unified_recurrent_method_small_fixedu4_v2_full\nexport\
+    \ CAUSAL_DATA=/tmp/recurrent_causal_pairs_v1\nexport PAIR8_DATA=/tmp/recurrent_causal_pair8_seed42\n\
+    export M3_RUN_DIR=/mnt/amulet/studentmodeling/checkpoints/world_model_v1_m3_generation_kd_trainable_seed42_fixedu4_v2_20260730\n\
+    export RUN_DIR=\"/mnt/amulet/studentmodeling/diagnostics/world_model_v1_m4_$${BRANCH}_seed42_20260731\"\
+    \nmkdir -p \"$$HF_HUB_CACHE\" \"$$UNIFIED_DATA\" \"$$CAUSAL_DATA\" \"$$PAIR8_DATA\"\
+    \ \"$$RUN_DIR\" \\\n  \"$$AMLT_OUTPUT_DIR/model\" \"$$AMLT_OUTPUT_DIR/metrics\"\
+    \ \"$$AMLT_OUTPUT_DIR/eval\"\ntest \"$$(df --output=avail /tmp | tail -1)\" -ge\
+    \ 125829120\ntest -f \"$$SOURCE_DATA/train.jsonl\"\ntest -f \"$$SOURCE_DATA/valid.jsonl\"\
+    \ntest -f \"$$BASE_DATA/train.jsonl\"\ntest -f \"$$BASE_DATA/val.jsonl\"\ntest\
+    \ -f \"$$M3_RUN_DIR/final_adapter/adapter_model.safetensors\"\ntest -f \"$$M3_RUN_DIR/recurrent_state.pt\"\
+    \ntest \"$$(sha256sum scripts/train_recurrent_student_m4.py | cut -d' ' -f1)\"\
+    \ = 865c12219deb23cf9db145c797244969721fce80323050dcd987b33d96cbfb1b\ntest \"\
+    $$(sha256sum scripts/recurrent_student_model.py | cut -d' ' -f1)\" = 9e0431dccb524f67b401f7ea911e11c96fc3061432ffdc73e0cac2bbc2acc5a0\n\
+    test \"$$(sha256sum scripts/build_unified_recurrent_manifest.py | cut -d' ' -f1)\"\
+    \ = 8bc822ec33165037dff8353707a037a0edc12679cd67b66885aa94a4288542f6\ntest \"\
+    $$(sha256sum scripts/audit_unified_recurrent_manifest.py | cut -d' ' -f1)\" =\
+    \ 6de4fcab57aa8dbd0b56f07972e341f64b60668474f03069cc47878a80e434a0\ntest \"$$(sha256sum\
+    \ scripts/build_recurrent_causal_pairs.py | cut -d' ' -f1)\" = 2daed709603a63a487705bce87539b58c7e01d239397758305d3b023f5eb26b7\n\
+    python -m unittest discover -s tests -p 'test_train_recurrent_student_m4.py' -v\n\
+    python -m unittest discover -s tests -p 'test_recurrent_student_model.py' -v\n\
+    \npython scripts/build_unified_recurrent_manifest.py \\\n  --train-jsonl \"$$SOURCE_DATA/train.jsonl\"\
+    \ \\\n  --valid-jsonl \"$$SOURCE_DATA/valid.jsonl\" \\\n  --output-dir \"$$UNIFIED_DATA\"\
+    \ \\\n  --max-updates 4 \\\n  --seed 20260730\npython scripts/audit_unified_recurrent_manifest.py\
+    \ \\\n  --train-jsonl \"$$UNIFIED_DATA/train.jsonl\" \\\n  --valid-jsonl \"$$UNIFIED_DATA/valid.jsonl\"\
+    \ \\\n  --output-json \"$$UNIFIED_DATA/audit.json\"\npython scripts/build_recurrent_causal_pairs.py\
+    \ \\\n  --train-source \"$$BASE_DATA/train.jsonl\" \\\n  --valid-source \"$$BASE_DATA/val.jsonl\"\
+    \ \\\n  --train-pairs manifests/cf_paired_state_swap_train_seed20260730_v1.json\
+    \ \\\n  --valid-pairs manifests/cf_paired_state_swap_valid_seed20260731_v1.json\
+    \ \\\n  --output-dir \"$$CAUSAL_DATA\" \\\n  --max-updates 4\npython - \"$$CAUSAL_DATA/train.jsonl\"\
+    \ \"$$PAIR8_DATA/train.jsonl\" \"$$PAIR8_DATA/valid.jsonl\" <<'PY'\nimport pathlib,\
+    \ sys\nsource, train, valid = map(pathlib.Path, sys.argv[1:])\nrows = source.read_text(encoding='utf-8').splitlines()[:8]\n\
+    assert len(rows) == 8 and all(row.strip() for row in rows)\npayload = '\\n'.join(rows)\
+    \ + '\\n'\ntrain.write_text(payload, encoding='utf-8')\nvalid.write_text(payload,\
+    \ encoding='utf-8')\nPY\ntest \"$$(wc -l < \"$$PAIR8_DATA/train.jsonl\")\" -eq\
+    \ 8\ncmp -s \"$$PAIR8_DATA/train.jsonl\" \"$$PAIR8_DATA/valid.jsonl\"\n\nrm -rf\
+    \ \"$$LOCAL_MODEL\"\nmkdir -p \"$$LOCAL_MODEL\"\npython scripts/copy_model_parallel.py\
+    \ \\\n  --source /mnt/amulet/studentmodeling/models/Qwen3-32B \\\n  --destination\
+    \ \"$$LOCAL_MODEL\" \\\n  --workers 16\ntest -f \"$$LOCAL_MODEL/model.safetensors.index.json\"\
+    \nnvidia-smi --query-gpu=index,name,memory.total --format=csv,noheader\n\nif [[\
+    \ ! -f \"$$RUN_DIR/completion.json\" ]]; then\n  python -u scripts/train_recurrent_student_m4.py\
+    \ \\\n    --model \"$$LOCAL_MODEL\" \\\n    --init-adapter \"$$M3_RUN_DIR/final_adapter\"\
+    \ \\\n    --init-recurrent-state \"$$M3_RUN_DIR/recurrent_state.pt\" \\\n    --train-jsonl\
+    \ \"$$UNIFIED_DATA/train.jsonl\" \\\n    --valid-jsonl \"$$UNIFIED_DATA/valid.jsonl\"\
+    \ \\\n    --causal-train-jsonl \"$$PAIR8_DATA/train.jsonl\" \\\n    --causal-valid-jsonl\
+    \ \"$$PAIR8_DATA/valid.jsonl\" \\\n    --output-dir \"$$RUN_DIR\" \\\n    --state-token-alias\
+    \ '<|vision_pad|>' \\\n    --max-length 1536 \\\n    --learning-rate 1e-4 \\\n\
+    \    --generation-weight 0.0 \\\n    --behavior-kd-weight 0.0 \\\n    --consistency-weight\
+    \ 0.0 \\\n    --direct-replay-weight 0.0 \\\n    --causal-weight 1.0 \\\n    --causal-margin\
+    \ 0.5 \\\n    --causal-preference-reduction \"$$PREFERENCE_REDUCTION\" \\\n  \
+    \  --causal-objective-mode \"$$OBJECTIVE_MODE\" \\\n    --causal-bootstrap-fraction\
+    \ \"$$BOOTSTRAP_FRACTION\" \\\n    --causal-bootstrap-native-weight \"$$BOOTSTRAP_NATIVE_WEIGHT\"\
+    \ \\\n    --causal-bootstrap-donor-weight \"$$BOOTSTRAP_DONOR_WEIGHT\" \\\n  \
+    \  --causal-repeat-fraction 1.0 \\\n    --gradient-accumulation-steps 1 \\\n \
+    \   --trainable-projections \\\n    --state-projection-rank 64 \\\n    --eval-limit\
+    \ 8 \\\n    --causal-eval-limit 8 \\\n    --save-steps 50 \\\n    --diagnostic-max-micro-steps\
+    \ 200 \\\n    --seed 42\nfi\ntest -f \"$$RUN_DIR/completion.json\"\ntest -f \"\
+    $$RUN_DIR/final_adapter/adapter_model.safetensors\"\ntest -f \"$$RUN_DIR/recurrent_state.pt\"\
+    \npython - \"$$RUN_DIR\" \"$$BRANCH\" \"$$PREFERENCE_REDUCTION\" <<'PY'\nimport\
+    \ json, pathlib, sys\nroot, branch, reduction = pathlib.Path(sys.argv[1]), sys.argv[2],\
+    \ sys.argv[3]\ncompletion = json.loads((root / 'completion.json').read_text(encoding='utf-8'))\n\
+    config = json.loads((root / 'run_config.json').read_text(encoding='utf-8'))\n\
+    history = json.loads((root / 'trainer_history.json').read_text(encoding='utf-8'))\n\
+    causal = [row for row in history if row.get('causal_pair_id')]\nassert completion.get('status')\
+    \ == 'diagnostic_complete', completion\nassert completion.get('micro_steps') ==\
+    \ 200, completion\nassert completion.get('causal_pairs_seen') == 200, completion\n\
+    assert completion.get('unique_causal_pairs_seen') == 8, completion\nassert config.get('causal_preference_reduction')\
+    \ == reduction, config\nassert float(config.get('causal_weight')) == 1.0, config\n\
+    assert config.get('causal_repeat_fraction') == 1.0, config\npayload = {\n    'branch':\
+    \ branch,\n    'preference_reduction': reduction,\n    'causal_rows_total': len(causal),\n\
+    \    'objective_mode': config['causal_objective_mode'],\n    'objective_phase_counts':\
+    \ {\n        phase: sum(x.get('causal_objective_phase') == phase for x in causal)\n\
+    \        for phase in sorted({x.get('causal_objective_phase') for x in causal})\n\
+    \    },\n    'state_relative_delta_first_50': sum(float(x['causal_state_relative_delta'])\
+    \ for x in causal[:50]) / 50,\n    'state_relative_delta_last_50': sum(float(x['causal_state_relative_delta'])\
+    \ for x in causal[-50:]) / 50,\n    'margin_loss_first_50': sum(float(x['causal_margin_loss'])\
+    \ for x in causal[:50]) / 50,\n    'margin_loss_last_50': sum(float(x['causal_margin_loss'])\
+    \ for x in causal[-50:]) / 50,\n    'margin_loss_last': float(causal[-1]['causal_margin_loss']),\n\
+    \    'causal_validation': json.loads((root / 'causal_validation_metrics.json').read_text(encoding='utf-8')),\n\
+    }\n(root / 'pair_overfit_summary.json').write_text(json.dumps(payload, indent=2,\
+    \ sort_keys=True) + '\\n', encoding='utf-8')\nprint(json.dumps(payload, indent=2,\
+    \ sort_keys=True))\nPY\ncp -r \"$$RUN_DIR/final_adapter/.\" \"$$AMLT_OUTPUT_DIR/model/\"\
+    \ncp \"$$RUN_DIR/recurrent_state.pt\" \"$$AMLT_OUTPUT_DIR/model/recurrent_state.pt\"\
+    \ncp \"$$RUN_DIR/completion.json\" \"$$AMLT_OUTPUT_DIR/metrics/completion.json\"\
+    \ncp \"$$RUN_DIR/run_config.json\" \"$$AMLT_OUTPUT_DIR/metrics/run_config.json\"\
+    \ncp \"$$RUN_DIR/training_metrics.json\" \"$$AMLT_OUTPUT_DIR/metrics/training_metrics.json\"\
+    \ncp \"$$RUN_DIR/causal_validation_metrics.json\" \"$$AMLT_OUTPUT_DIR/metrics/causal_validation_metrics.json\"\
+    \ncp \"$$RUN_DIR/pair_overfit_summary.json\" \"$$AMLT_OUTPUT_DIR/metrics/pair_overfit_summary.json\"\
+    \n"
+  submit_args:
+    max_attempts: 2
+    max_run_duration_seconds: 43200
+    env:
+      _AZUREML_SINGULARITY_JOB_UAI: rankfun_aml
+      BRANCH: pair8_sum_bootstrap_native25_balanced
+      PREFERENCE_REDUCTION: sum
+      OBJECTIVE_MODE: bootstrap_then_directional
+      BOOTSTRAP_FRACTION: '0.25'
+      BOOTSTRAP_NATIVE_WEIGHT: '0.25'
+      BOOTSTRAP_DONOR_WEIGHT: '1.0'
